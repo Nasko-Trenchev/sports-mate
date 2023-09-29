@@ -1,0 +1,17 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+.navBar {
+    background-color: whitesmoke;
+    color: black;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
+.links {
+    font-family: 'Inter', sans-serif;
+    font-style: italic;
+    font-weight: bold;
+    text-decoration: none;
+    color: black;
+}
