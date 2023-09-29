@@ -1,12 +1,10 @@
 import { AppBar, Toolbar, IconButton, Typography, Stack, Button, Badge } from "@mui/material";
 import { StyledEngineProvider } from '@mui/material/styles';
-import { NavLink, useNavigate, Link } from 'react-router-dom';
-import DeliveryDiningIcon from '@mui/icons-material/DeliveryDining';
+import { NavLink, useNavigate } from 'react-router-dom';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import InstagramIcon from '@mui/icons-material/Instagram';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-
+import SportsSoccerSharpIcon from '@mui/icons-material/SportsSoccerSharp';
 import classes from './NavigationHeader.module.css';
 
 
@@ -19,10 +17,10 @@ export default function NavigationHeader() {
             <AppBar position="static" className={classes["navBar"]}>
                 <Toolbar>
                     <IconButton size="large" edge='start' color="inherit" aria-label="logo" onClick={() => { navigate('/') }}>
-                        <DeliveryDiningIcon />
+                        <SportsSoccerSharpIcon />
                     </IconButton>
                     <Typography variant="h6" component='div' sx={{ flexGrow: 1, fontFamily: 'Inter sans-serif', fontSize: '24px', fontStyle: 'italic' }}>
-                        <NavLink to={'/'} className={classes['links']}>SportsBuddy</NavLink>
+                        <NavLink to={'/'} className={classes['links']}>SportsMate</NavLink>
                     </Typography>
 
                     <Stack direction={'row'}>
@@ -31,7 +29,7 @@ export default function NavigationHeader() {
                             <Button color="inherit"><NavLink to={'/'} className={classes['links']}>Home</NavLink></Button>
                             <Button color="inherit"><NavLink to={'/logout'} className={classes['links']}>Logout</NavLink></Button>
                         </>
-                        :
+                        {/* : */}
                         <>
                             <Button color="inherit"><NavLink to={'/register'} className={classes['links']}>Register</NavLink></Button>
                             <Button color="inherit"><NavLink to={'/login'} className={classes['links']}>Login</NavLink></Button>
