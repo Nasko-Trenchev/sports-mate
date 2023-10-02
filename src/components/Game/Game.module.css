@@ -1,0 +1,17 @@
+.game {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    height: 70px;
+}
+
+.imgContainer {
+    height: 65px;
+    padding: 0.7em;
+}
+
+.imgContainer img {
+    display: block;
+    height: 100%;
+}

@@ -1,0 +1,10 @@
+h1,
+h2 {
+    text-align: center;
+}
+
+.gamesContainer {
+    width: 70%;
+    margin: auto;
+    border: 1px solid black;
+}
