@@ -9,7 +9,7 @@ const FootBall: React.FC = () => {
 
     return (
         <>
-            <h1>There are ... upcoming events</h1>
+            <h1>There are ... upcoming Football events</h1>
             <h2>Find your spot</h2>
             <p>Search bar</p>
             <h2>Currently opened groups</h2>

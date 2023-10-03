@@ -7,14 +7,10 @@ import SportsBasketballIcon from '@mui/icons-material/SportsBasketball';
 import SportsVolleyballIcon from '@mui/icons-material/SportsVolleyball';
 import classes from './HomePage.module.css';
 import SportItem from "../Layout/SportItem";
-import img from '../../assets/sportPitches.webp';
 
 const HomePage = () => {
     return (
         <StyledEngineProvider>
-            {/* <div className={classes.image}>
-                <img src={img} alt="img" />
-            </div> */}
             <motion.div className={classes.mainContainer}
                 initial={{ opacity: 0, y: -50 }}
                 animate={{ opacity: 1, y: 0 }}

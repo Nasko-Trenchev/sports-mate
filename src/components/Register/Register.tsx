@@ -15,7 +15,6 @@ export const Register = () => {
     });
 
     const { user } = UserAuth();
-    console.log(user)
 
     const email = user?.email;
     const { createUser } = UserAuth();
