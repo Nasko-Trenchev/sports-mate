@@ -4,7 +4,6 @@ h2 {
 }
 
 .gamesContainer {
-    width: 70%;
+    width: 70vw;
     margin: auto;
-    border: 1px solid black;
 }

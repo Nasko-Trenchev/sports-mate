@@ -20,15 +20,11 @@ const useNotification = () => {
         setActionOption({ message: message, color: color, open: true })
     };
 
-    const handleClose = (event: React.SyntheticEvent | Event, reason?: string) => {
+    const handleClose = (event: React.SyntheticEvent | Event, reason?: string, color?: colorType) => {
         if (reason === 'clickaway') {
             return;
         }
-        setActionOption({
-            message: '',
-            color: undefined,
-            open: false
-        })
+        setActionOption({ message: '', color: color, open: false })
     };
 
     return {

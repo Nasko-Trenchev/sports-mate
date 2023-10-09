@@ -1,4 +1,4 @@
-import FootBall from "../components/Football/Football";
+import FootBall from "../components/Football/Event";
 
 const FootBallPage = () => {
     return (

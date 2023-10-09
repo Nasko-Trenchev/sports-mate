@@ -1,4 +1,5 @@
-import classes from './Football.module.css'
+import classes from './Event.module.css'
+import { Stack, Divider } from "@mui/material";
 import Game from '../Game/Game'
 
 const CoverImageList = [
@@ -14,9 +15,15 @@ const FootBall: React.FC = () => {
             <p>Search bar</p>
             <h2>Currently opened groups</h2>
 
-            <div className={classes.gamesContainer}>
+            <Stack
+                direction={"column"}
+                divider={<Divider orientation="horizontal" sx={{ color: "black" }} flexItem />}
+                spacing={0}
+                className={classes.gamesContainer}>
                 <Game />
-            </div>
+                <Game />
+                <Game />
+            </Stack>
 
         </>
     )

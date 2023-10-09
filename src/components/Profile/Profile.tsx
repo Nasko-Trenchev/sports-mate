@@ -8,7 +8,7 @@ import useNotification from '../../hooks/notification';
 
 const Profile = () => {
 
-    const passwordRef = useRef<HTMLInputElement | null>(null);
+    const newPassword = useRef<HTMLInputElement | null>(null);
     const { openNotification, closeNotification, actionOption } = useNotification();
 
     const auth = getAuth();
@@ -18,12 +18,13 @@ const Profile = () => {
 
     const handlePasswordReset = () => {
 
-        updatePassword(user, passwordRef.current?.value as string).then(() => {
+        updatePassword(user, newPassword.current?.value as string).then(() => {
             // Update successful.
             openNotification("Password was changed successfully", 'success');
         }).catch((error) => {
             // An error ocurred
             // ...
+
             const userProvidedPassword = prompt("Please type in your old password again")
 
             const credential = EmailAuthProvider.credential(
@@ -41,26 +42,25 @@ const Profile = () => {
         })
     }
 
-
     return (
         <div>
             <h1>Profile name</h1>
-            <label htmlFor="password" >Password</label>
-            <input type="text" id='password' ref={passwordRef} />
+            <label htmlFor="password-new">New password</label>
+            <input type="text" id="password-new" ref={newPassword} />
             <div>
                 <button onClick={handlePasswordReset}>Enter </button>
             </div>
             <Snackbar
                 open={actionOption.open}
                 autoHideDuration={2000}
-                onClose={closeNotification}
+                onClose={closeNotification.bind(actionOption.color)}
                 anchorOrigin={{
                     vertical: 'bottom',
                     horizontal: 'center'
                 }}
 
             >
-                <SnackbarAlert onClose={closeNotification} severity={actionOption.color || undefined}>
+                <SnackbarAlert onClose={closeNotification.bind(actionOption.color)} severity={actionOption.color}>
                     {actionOption.message}
                 </SnackbarAlert>
             </Snackbar>
