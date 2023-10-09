@@ -7,3 +7,7 @@ h2 {
     width: 70vw;
     margin: auto;
 }
+
+.createButton {
+   text-align: center;
+}
