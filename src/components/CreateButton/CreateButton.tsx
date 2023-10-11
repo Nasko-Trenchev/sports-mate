@@ -1,12 +1,14 @@
-import classes from './CreateEvent.module.css';
+import classes from './CreateButton.module.css';
 import { motion } from 'framer-motion';
 import { Button } from '@mui/material'
-import { NavLink } from 'react-router-dom';
+import { NavLink, useParams } from 'react-router-dom';
 
-const CreateEvent = () => {
+const CreateButton = () => {
+
+    const param = useParams();
     return (
         <div>
-            <NavLink to={"create"} className={({ isActive, isPending }) =>
+            <NavLink to={`create`} className={({ isActive, isPending }) =>
                 isPending ? `${classes.pending}` : isActive ? `${classes.active}` : ""
             }>
                 <motion.div
@@ -19,4 +21,4 @@ const CreateEvent = () => {
 }
 
 
-export default CreateEvent;
+export default CreateButton;

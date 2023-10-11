@@ -1,5 +1,4 @@
 import classes from './Game.module.css';
-import { Timestamp } from "firebase/firestore"
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import StarsIcon from '@mui/icons-material/Stars';
@@ -8,17 +7,7 @@ import { motion } from 'framer-motion'
 import { Button } from '@mui/material';
 import { Sport } from '../../util/sportTypes';
 
-const Game: React.FC<{
-    data: {
-        Image: string
-        Location: string,
-        Owner: string,
-        Players: string[],
-        SkillLevel: string,
-        Time: Timestamp,
-        id: string,
-    }
-}> = (props) => {
+const Game: React.FC<{ data: Sport }> = (props) => {
 
     return (
         <div className={classes.game}>
@@ -48,7 +37,7 @@ const Game: React.FC<{
             <div>
             </div>
             <div className={classes.gameSpots}>
-                <p>7/8 spots filled</p>
+                <p>{props.data.Players.length}/{props.data.PlayersCount} spots filled</p>
             </div>
             <motion.div whileHover={{ scale: 1.1 }}>
                 <Button variant='outlined' size='small' sx={{

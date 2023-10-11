@@ -1,21 +1,23 @@
 import classes from './Event.module.css'
-import { Stack, Divider, Button } from "@mui/material";
-import { useLoaderData } from 'react-router-dom';
-import CreateEvent from '../CreateEvent/CreateEvent';
+import { Stack, Divider } from "@mui/material";
+import { useLoaderData, useParams, useRouteLoaderData } from 'react-router-dom';
+import CreateEvent from '../CreateButton/CreateButton';
 import Game from '../Game/Game'
-import { Sport } from '../../util/sportTypes';
+import { Sports } from '../../util/sportTypes';
 
-const CoverImageList = [
-    "https://t3.ftcdn.net/jpg/00/34/24/96/360_F_34249698_Oun7sm6fNLKUXpAtzgue06sTMyHSxwgB.jpg",
-    "https://img.freepik.com/premium-photo/green-soccer-field-football-field-top-view-with-realistic-grass-texture-realistic-football-pitch_167120-261.jpg"
-]
 const Event: React.FC = () => {
+    const params = useParams();
+    const data = useRouteLoaderData('sport-details') as Sports
 
-    const data = useLoaderData() as Sport
+    if (data.length === 0) {
+        return (
+            <h1>There aren`t any events for this sport yet</h1>
+        )
+    }
 
     return (
         <>
-            <h1>There are {data.length} upcoming Football events</h1>
+            <h1>There {data.length > 1 ? "are" : "is"} {data.length} upcoming {params.sport} {data.length > 1 ? "events" : "event"}</h1>
             <div className={classes.createButton}>
                 <CreateEvent />
             </div>
