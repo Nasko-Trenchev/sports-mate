@@ -5,13 +5,15 @@ import { Select, Box, InputLabel, Button } from '@mui/material'
 import MenuItem from '@mui/material/MenuItem';
 import { Sport } from '../../util/sportTypes';
 import { Timestamp } from 'firebase/firestore'
-import { footballFields, footballFieldsImage } from '../../util/constants';
+import { footballFields, footballFieldsImage, tennisFields } from '../../util/constants';
 import { auth } from '../../config/firebase';
-import { useSubmit } from "react-router-dom";
+import { useSubmit, useParams } from "react-router-dom";
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { MobileDateTimePicker } from '@mui/x-date-pickers/MobileDateTimePicker';
+import FieldSelector from '../Selectors/FieldSelector';
+import CountSelector from '../Selectors/CountSelector';
 
 const timestamp = Timestamp.now();
 
@@ -77,9 +79,21 @@ const CreateEvent = () => {
     const [formState, dispatchFormState] = useReducer(formReducer, reducerInitialValue);
 
     const submit = useSubmit()
+    const params = useParams();
+    let field: string[];
+
+    switch(params.sport){
+        case 'football': 
+        field = footballFields
+        break;
+        case 'tennis' : field = tennisFields
+        break;
+        case 'basketball': field = []
+        break;
+        default: field = footballFields
+    }
 
     const submitHandler = () => {
-        console.log("yes")
         submit({
             Image: `${formState.Image}`,
             Location: `${formState.Location}`,
@@ -111,7 +125,7 @@ const CreateEvent = () => {
                         <MenuItem value={"Professional"}>Professional</MenuItem>
                     </Select>
 
-                    <InputLabel id="field">Football field</InputLabel>
+                    {/* <InputLabel id="field">Football field</InputLabel>
                     <Select
                         labelId="field"
                         id="field"
@@ -128,21 +142,32 @@ const CreateEvent = () => {
                                 {field}
                             </MenuItem>
                         ))}
-                    </Select>
+                    </Select> */}
+                    <FieldSelector
+                     id="field" 
+                     dispatch={(e) =>dispatchFormState({ type: "FIELD", payload: e.target.value })}
+                     fields={field}
+                     />
 
-                    <InputLabel id="count">Count</InputLabel>
+                    {/* <InputLabel id="count">Count</InputLabel>
                     <Select
                         labelId="count"
                         id="count"
                         value={formState.PlayersCount}
                         label="count"
                         name='count'
-                        onChange={(e) => dispatchFormState({ type: "COUNT", payload: e.target.value as string })}
+                        onChange={(e) => dispatchFormState({ type: "COUNT", payload: e.target.value })}
                     >
                         <MenuItem value={10}>10</MenuItem>
                         <MenuItem value={12}>12</MenuItem>
                         <MenuItem value={18}>18</MenuItem>
-                    </Select>
+                    </Select> */}
+                    <CountSelector 
+                    id='count' 
+                    sport={params.sport!}
+                    value={formState.PlayersCount}
+                    dispatch={(e) =>dispatchFormState({ type: "COUNT", payload: e.target.value })}
+                    />
                     <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale='en'>
                         <DemoContainer components={['DateTimePicker']}>
                             <MobileDateTimePicker

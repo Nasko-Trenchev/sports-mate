@@ -4,6 +4,10 @@ export const footballFields = [
     "RD Sport - РД Спорт Изкуствени Футболни терени"
 ]
 
+export const tennisFields = [
+    "Tennis ground"
+]
+
 export const footballFieldsImage = [
     {
         location: "Sofia Sport 1",
