@@ -21,11 +21,13 @@ export async function action({ params, request }: ActionFunctionArgs) {
 
     const jsonTime = data.get('Time') as string;
 
-    let regex = new RegExp(/[0-9]{3,}/gm)
+    const timeAsTimeStamp = Timestamp.fromDate(new Date(jsonTime));
 
-    let matches = regex.exec(jsonTime)![0]
+    // let regex = new RegExp(/[0-9]{3,}/gm)
 
-    let time = new Timestamp(Number(matches), 0)
+    // let matches = regex.exec(jsonTime)![0]
+
+    // let time = new Timestamp(Number(matches), 0)
 
 
     const docRef = await addDoc(collection(db, `${params.sport}`), {
@@ -34,7 +36,7 @@ export async function action({ params, request }: ActionFunctionArgs) {
         Owner: data.get('Owner'),
         Players: arrayUnion(data.get('Players')),
         SkillLevel: data.get('SkillLevel'),
-        Time: time,
+        Time: timeAsTimeStamp,
         PlayersCount: Number(data.get('PlayersCount')),
     });
 

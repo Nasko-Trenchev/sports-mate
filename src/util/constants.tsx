@@ -1,7 +1,7 @@
 
 export const footballFields = [
     "Sofia Sport 1",
-    "RD Sport - РД Спорт Изкуствени Футболни терени"
+    "RD Sport"
 ]
 
 export const tennisFields = [

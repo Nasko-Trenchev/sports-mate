@@ -8,14 +8,17 @@ interface FieldSelectorProps {
     id: string,
     dispatch: (e: SelectChangeEvent<any>) => void,
     fields: string[],
-    value: string
+    value: string,
+    onOpen: (e: object) => void,
+    hasError: boolean,
+
 }
 
 const FieldSelector: React.FC<FieldSelectorProps> = (props) => {
 
     return (
         <div className={classes.selector}>
-            <FormControl sx={{ m: 1, minWidth: 300 }}>
+            <FormControl required sx={{ m: 1, minWidth: 320 }} error={props.hasError}>
                 <InputLabel id="field-label">Select location</InputLabel>
                 <Select
                     labelId="field-label"
@@ -25,6 +28,7 @@ const FieldSelector: React.FC<FieldSelectorProps> = (props) => {
                     name={props.id}
                     onChange={(e) => props.dispatch(e)}
                     className={classes.selectElement}
+                    onOpen={props.onOpen}
                 >
                     {props.fields.map((field) => (
                         <MenuItem

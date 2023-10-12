@@ -19,12 +19,13 @@ const CountSelector: React.FC<CountSelectorProps> = (props) => {
 
     return (
         <>
-            <FormControl sx={{ m: 1, minWidth: 300 }}>
+            <FormControl required sx={{ m: 1, minWidth: 320 }}>
                 <InputLabel id="count-label">Select players count</InputLabel>
                 <Select
                     labelId="count-label"
                     id={props.id}
                     label="Select players count"
+                    value={props.value}
                     name={props.id}
                     onChange={(e) => props.dispatch(e)}
                 >
