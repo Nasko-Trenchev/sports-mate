@@ -1,7 +1,7 @@
 import classes from './CreateEvent.module.css'
 import { Form } from 'react-router-dom';
 import { useReducer } from 'react'
-import { Select, Box, InputLabel, Button } from '@mui/material'
+import { Select, Box, InputLabel, Button, FormControl, FormHelperText, Container } from '@mui/material'
 import MenuItem from '@mui/material/MenuItem';
 import { Sport } from '../../util/sportTypes';
 import { Timestamp } from 'firebase/firestore'
@@ -22,7 +22,7 @@ const reducerInitialValue = {
     Location: '',
     Owner: '',
     Players: [],
-    SkillLevel: 'Beginner',
+    SkillLevel: '',
     Time: timestamp,
     id: '',
     PlayersCount: 0,
@@ -108,14 +108,16 @@ const CreateEvent = () => {
 
     return (
         <>
-            <Box sx={{ minWidth: 120 }}>
-                <Form>
-                    <InputLabel id="skill">Skill</InputLabel>
+            <Box className={classes.createContainer}>
+                <h1>Create {`${params.sport}`} event</h1>
+                <Form className={classes.formContainer}>
+                    <FormControl sx={{ m: 1, minWidth: 300 }}>
+                    <InputLabel id="skill-label">Select skill level</InputLabel>
                     <Select
-                        labelId="skill"
+                        labelId="skill-label"
                         id="skill"
                         value={formState.SkillLevel}
-                        label="skill"
+                        label="Select skill level"
                         name='skill'
                         onChange={(e) => dispatchFormState({ type: "SKILL", payload: e.target.value })}
                     >
@@ -124,44 +126,15 @@ const CreateEvent = () => {
                         <MenuItem value={"Expert"}>Expert</MenuItem>
                         <MenuItem value={"Professional"}>Professional</MenuItem>
                     </Select>
+                    <FormHelperText>Select a supported field from the list</FormHelperText>
+                    </FormControl>
 
-                    {/* <InputLabel id="field">Football field</InputLabel>
-                    <Select
-                        labelId="field"
-                        id="field"
-                        value={formState.Location}
-                        label="field"
-                        name='field'
-                        onChange={(e) => dispatchFormState({ type: "FIELD", payload: e.target.value })}
-                    >
-                        {footballFields.map((field) => (
-                            <MenuItem
-                                key={field}
-                                value={field}
-                            >
-                                {field}
-                            </MenuItem>
-                        ))}
-                    </Select> */}
-                    <FieldSelector
+                    <FieldSelector 
                      id="field" 
                      dispatch={(e) =>dispatchFormState({ type: "FIELD", payload: e.target.value })}
                      fields={field}
+                     value={formState.Location}
                      />
-
-                    {/* <InputLabel id="count">Count</InputLabel>
-                    <Select
-                        labelId="count"
-                        id="count"
-                        value={formState.PlayersCount}
-                        label="count"
-                        name='count'
-                        onChange={(e) => dispatchFormState({ type: "COUNT", payload: e.target.value })}
-                    >
-                        <MenuItem value={10}>10</MenuItem>
-                        <MenuItem value={12}>12</MenuItem>
-                        <MenuItem value={18}>18</MenuItem>
-                    </Select> */}
                     <CountSelector 
                     id='count' 
                     sport={params.sport!}
@@ -171,9 +144,10 @@ const CreateEvent = () => {
                     <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale='en'>
                         <DemoContainer components={['DateTimePicker']}>
                             <MobileDateTimePicker
-                                label="Basic date time picker"
+                            sx={{minWidth: 300, m: 1}}
+                                label="Select date "
                                 value={formState.Time}
-                                onChange={(newValue) => dispatchFormState({ type: "TIME", payload: newValue })}
+                                onChange={(newValue) => dispatchFormState({ type: "TIME", payload: newValue })}                   
                             />
                         </DemoContainer>
                     </LocalizationProvider>

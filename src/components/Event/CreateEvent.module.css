@@ -1,0 +1,13 @@
+.createContainer {
+    width: 75%;
+    height: 50%;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.formContainer {
+    width: 40%;
+}
