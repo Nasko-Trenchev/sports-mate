@@ -28,7 +28,7 @@ export type CreateSport = {
     Owner: string | null | undefined,
     Players: string[],
     SkillLevel: string,
-    Time: Date,
+    Time: string,
     id: string,
     PlayersCount: number,
 }

@@ -6,6 +6,9 @@ import { footballFields, footballFieldsImage, tennisFields } from '../../util/co
 import { auth } from '../../config/firebase';
 import { useSubmit, useParams, Form } from "react-router-dom";
 import dayjs from 'dayjs';
+import Snackbar from '@mui/material/Snackbar';
+import { SnackbarAlert } from '../Alert/Alert';
+import useNotification from '../../hooks/notification';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -13,7 +16,6 @@ import { MobileDateTimePicker } from '@mui/x-date-pickers/MobileDateTimePicker';
 import { StyledEngineProvider } from '@mui/material/styles'
 import FieldSelector from '../Selectors/FieldSelector';
 import CountSelector from '../Selectors/CountSelector';
-import { StaticDatePicker } from '@mui/x-date-pickers';
 
 const date = new Date();
 
@@ -23,7 +25,7 @@ const reducerInitialValue = {
     Owner: '',
     Players: [],
     SkillLevel: '',
-    Time: new Date(),
+    Time: '',
     id: '',
     PlayersCount: '',
 }
@@ -76,11 +78,14 @@ const CreateEvent = () => {
     const [formErrors, setFormErrors] = useState({
         "locationError": false,
         "skillError": false,
-        "countError": false
+        "countError": false,
+        'dateError': false
     })
 
     const submit = useSubmit()
     const params = useParams();
+    const { openNotification, closeNotification, actionOption } = useNotification();
+
     let field: string[];
 
     switch (params.sport) {
@@ -96,17 +101,29 @@ const CreateEvent = () => {
 
     const submitHandler = () => {
 
-        if (formState.Location === '') {
-            setFormErrors((state) => ({ ...state, "locationError": true }))
-        }
-        if (formState.SkillLevel === '') {
-            setFormErrors((state) => ({ ...state, "skillError": true }))
-        }
-        if (formState.PlayersCount === '') {
-            setFormErrors((state) => ({ ...state, "countError": true }))
+        if (formState.Location === '' || formState.SkillLevel === '' || formState.PlayersCount === '' || formState.Time === '') {
+            if (formState.SkillLevel === '') {
+                setFormErrors((state) => ({ ...state, "skillError": true }))
+            }
+            if (formState.PlayersCount === '') {
+                setFormErrors((state) => ({ ...state, "countError": true }))
+            }
+            if (formState.Location === '') {
+                setFormErrors((state) => ({ ...state, "locationError": true }))
+            }
+            if (formState.Time === '') {
+                setFormErrors((state) => ({ ...state, "dateError": true }))
+                openNotification("Please select the date for the event", 'error');
+                return;
+            }
+            openNotification("Please fill in all the required fields", 'error');
+            return;
         }
 
-        if (Object.values(formErrors).some(x => x === true)) {
+        if (!(Object.values(formErrors).some(x => x !== false))) {
+
+            openNotification("Sucessfully created event", 'success');
+
             submit({
                 Image: `${formState.Image}`,
                 Location: `${formState.Location}`,
@@ -159,14 +176,24 @@ const CreateEvent = () => {
                         sport={params.sport!}
                         value={formState.PlayersCount}
                         dispatch={(e) => dispatchFormState({ type: "COUNT", payload: e.target.value })}
+                        hasError={formErrors.countError}
+                        onOpen={(e) => setFormErrors((state) => ({ ...state, "countError": false }))}
                     />
                     <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale='en'>
                         <DemoContainer components={['DateTimePicker']} sx={{ m: 1 }}>
                             <MobileDateTimePicker
+                                slotProps={{
+                                    textField: {
+                                        error: formErrors.dateError
+                                    },
+                                }}
                                 sx={{ maxWidth: 320 }}
-                                label="Select date "
+                                onOpen={() => setFormErrors((state) => ({ ...state, "dateError": false }))}
+                                onError={() => setFormErrors((state) => ({ ...state, "dateError": true }))}
+                                label="Select date"
                                 defaultValue={dayjs(date)}
                                 onChange={(newValue) => dispatchFormState({ type: "TIME", payload: newValue })}
+                                minDateTime={dayjs(date)}
                             />
                         </DemoContainer>
                         <FormHelperText className={classes.formHelper}>Select date and time for the event</FormHelperText>
@@ -176,6 +203,20 @@ const CreateEvent = () => {
                     </div>
                 </Form>
             </Box>
+            <Snackbar
+                open={actionOption.open}
+                autoHideDuration={2000}
+                onClose={closeNotification.bind(actionOption.color)}
+                anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'center'
+                }}
+
+            >
+                <SnackbarAlert onClose={closeNotification.bind(actionOption.color)} severity={actionOption.color}>
+                    {actionOption.message}
+                </SnackbarAlert>
+            </Snackbar>
         </StyledEngineProvider >
     )
 }

@@ -7,7 +7,9 @@ interface CountSelectorProps {
     id: string,
     dispatch: (e: SelectChangeEvent<any>) => void,
     sport: string,
-    value?: string | number
+    value?: string | number,
+    onOpen: (e: object) => void,
+    hasError: boolean,
 }
 
 const CountSelector: React.FC<CountSelectorProps> = (props) => {
@@ -19,7 +21,7 @@ const CountSelector: React.FC<CountSelectorProps> = (props) => {
 
     return (
         <>
-            <FormControl required sx={{ m: 1, minWidth: 320 }}>
+            <FormControl error={props.hasError} required sx={{ m: 1, minWidth: 320 }}>
                 <InputLabel id="count-label">Select players count</InputLabel>
                 <Select
                     labelId="count-label"
@@ -28,6 +30,7 @@ const CountSelector: React.FC<CountSelectorProps> = (props) => {
                     value={props.value}
                     name={props.id}
                     onChange={(e) => props.dispatch(e)}
+                    onOpen={props.onOpen}
                 >
                     {props.sport === 'football' &&
                         footballCount.map((count) => (
