@@ -1,7 +1,7 @@
 import Event from "../components/Event/Event";
 import { LoaderFunctionArgs, redirect } from "react-router-dom";
 import { db } from "../config/firebase";
-import { collection, getDocs, arrayUnion, doc   , updateDoc, arrayRemove } from "firebase/firestore";
+import { collection, getDocs, arrayUnion, doc, updateDoc, arrayRemove, deleteDoc } from "firebase/firestore";
 import { ActionFunctionArgs } from "react-router-dom";
 
 import { Sports } from "../util/sportTypes";
@@ -35,16 +35,18 @@ export async function action({ params, request }: ActionFunctionArgs) {
 
     const docRef = doc(db, `${sport}`, `${id}`);
 
-
     if (action === "Join event") {
         await updateDoc(docRef, {
             Players: arrayUnion(userEmail)
         })
     }
-    else {
+    else if (action === "Leave event") {
         await updateDoc(docRef, {
             Players: arrayRemove(userEmail)
         })
+    }
+    else {
+        await deleteDoc(docRef);
     }
 
 
