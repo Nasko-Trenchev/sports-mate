@@ -1,6 +1,6 @@
 import classes from './Event.module.css'
 import { Stack, Divider } from "@mui/material";
-import { useLoaderData, useParams, useRouteLoaderData } from 'react-router-dom';
+import { useParams, useRouteLoaderData } from 'react-router-dom';
 import CreateEvent from '../CreateButton/CreateButton';
 import Game from '../Game/Game'
 import { Sports } from '../../util/sportTypes';

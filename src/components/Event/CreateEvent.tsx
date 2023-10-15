@@ -48,6 +48,8 @@ const formReducer = (state: CreateSport, action: ReducerAction) => {
         }
         case "FIELD": {
             const image = footballFieldsImage.find(x => x.location === payload)
+            console.log(image)
+            console.log(payload)
             return {
                 ...state,
                 Location: payload,
@@ -113,8 +115,6 @@ const CreateEvent = () => {
             }
             if (formState.Time === '') {
                 setFormErrors((state) => ({ ...state, "dateError": true }))
-                openNotification("Please select the date for the event", 'error');
-                return;
             }
             openNotification("Please fill in all the required fields", 'error');
             return;
@@ -190,16 +190,16 @@ const CreateEvent = () => {
                                 sx={{ maxWidth: 320 }}
                                 onOpen={() => setFormErrors((state) => ({ ...state, "dateError": false }))}
                                 onError={() => setFormErrors((state) => ({ ...state, "dateError": true }))}
+                                onChange={(newValue) => dispatchFormState({ type: "TIME", payload: newValue })}
                                 label="Select date"
                                 defaultValue={dayjs(date)}
-                                onChange={(newValue) => dispatchFormState({ type: "TIME", payload: newValue })}
                                 minDateTime={dayjs(date)}
                             />
                         </DemoContainer>
                         <FormHelperText className={classes.formHelper}>Select date and time for the event</FormHelperText>
                     </LocalizationProvider>
-                    <div>
-                        <Button onClick={submitHandler} className={classes.createBtn}>Submit</Button>
+                    <div className={classes.createBtn}>
+                        <Button variant="contained" onClick={submitHandler} sx={{marginTop: 3}}>Submit</Button>
                     </div>
                 </Form>
             </Box>

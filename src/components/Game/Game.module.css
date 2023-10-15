@@ -1,36 +1,50 @@
 .game {
-    display: flex;
+    /* display: flex;
     flex-direction: row;
     justify-content: space-evenly;
     align-items: center;
     height: 10vh;
     padding: 1em;
     background-image: linear-gradient(to right, #0f0c29, #302b63, #24243e);
+    color: rgb(255, 255, 255); */
+    display: grid;
+    grid-template-columns: 1.2fr 1.1fr 1.1fr 0.8fr 1fr;
+    grid-template-rows: 100px;
+    background-image: linear-gradient(to right, #0f0c29, #302b63, #24243e);
     color: rgb(255, 255, 255);
+    justify-items: flex-start;
+    align-items: center;
 }
 
 .imgContainer {
     height: 10vh;
+    width: 10vw;
     padding: 1em;
+    display: block;
+    justify-self: center;
+    border-radius: 1em;
 }
 
 .imgContainer img {
-    display: block;
-    border-radius: 0.5em;
+    width: 100%;
     height: 100%;
+    object-fit: fill;
+    border-radius: 0.5em;
 }
 
 .gameSpots {
     flex: 0 1 10%;
     font-size: 0.9em;
+    justify-self: center;
 }
 
 .mainAreas {
     flex: 0 1 20%;
     display: flex;
+    justify-self: flex-start;
     flex-direction: column;
     justify-content: center;
-    
+
 }
 
 .flexItem {
@@ -40,3 +54,10 @@
     gap: 1em;
 }
 
+.detailsBtn {
+    justify-self: center;
+}
+
+.detailsBtn button {
+    min-width: 135px;
+}

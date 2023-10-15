@@ -1,6 +1,6 @@
 import { createBrowserRouter } from 'react-router-dom';
 import RootLayout from '../pages/Root';
-import { loader as sportsLoader } from '../pages/EventPage';
+import { loader as sportsLoader, action as sportAction } from '../pages/EventPage';
 // import { action as creatAction } from '../components/Event/CreateEvent';
 import { action as createAction } from '../pages/CreatePage';
 import ErrorPage from '../pages/ErrorPage';
@@ -29,7 +29,7 @@ const router = createBrowserRouter([
                 loader: sportsLoader,
                 children: [
                     {
-                        index: true, element: <EventPage />
+                        index: true, element: <EventPage />, action: sportAction
                     },
                     { path: 'create', element: <CreatePage />, action: createAction },
                 ]

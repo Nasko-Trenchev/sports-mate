@@ -46,7 +46,7 @@ export default function Login() {
                         name='email'
                         variant='outlined'
                         size='small'
-                        required value={null}
+                        required value={undefined}
                         onChange={onUserInput}
                     />
                     <TextField
@@ -55,7 +55,7 @@ export default function Login() {
                         name='password'
                         type='password'
                         size='small'
-                        required value={null}
+                        required value={undefined}
                         onChange={onUserInput}
                     />
                     <Button variant='contained' size='medium' onClick={onSubmit}>Login</Button>
