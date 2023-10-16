@@ -2,20 +2,51 @@ import classes from './Profile.module.css';
 import Snackbar from '@mui/material/Snackbar';
 import { SnackbarAlert } from '../Alert/Alert';
 import { getAuth, updatePassword, reauthenticateWithCredential, EmailAuthProvider } from "firebase/auth";
-import { useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { auth } from '../../config/firebase';
+import { useRouteLoaderData } from 'react-router-dom';
 import useNotification from '../../hooks/notification';
+import { profileData } from '../../pages/ProfilePage';
+import { storage } from '../../config/firebase';
+import { ref, uploadBytes, listAll, getDownloadURL } from 'firebase/storage'
 
 
 const Profile = () => {
+
+    const [imageUpload, setImageUpload] = useState<File>();
+    const [image, setImage] = useState('')
 
     const newPassword = useRef<HTMLInputElement | null>(null);
     const { openNotification, closeNotification, actionOption } = useNotification();
 
     const auth = getAuth();
-
+    const data = useRouteLoaderData('profile-data') as profileData;
     const user = auth.currentUser!;
 
+    useEffect(() => {
+        const listRef = ref(storage, `ProfileImages/${auth?.currentUser?.email}`);
+        getDownloadURL(listRef).then((data) => setImage(data))
+    }, [])
 
+
+    const handleImageInputChange = (event: React.FormEvent) => {
+        const files = (event.target as HTMLInputElement).files
+
+        if (files && files.length > 0) {
+            setImageUpload(files[0])
+        }
+    }
+
+    const handleUpload = async () => {
+        if (imageUpload === null || imageUpload === undefined) {
+            return
+        }
+        else {
+            const imageRef = ref(storage, `ProfileImages/${auth?.currentUser?.email}`)
+            await uploadBytes(imageRef, imageUpload)
+        }
+
+    }
     const handlePasswordReset = () => {
 
         updatePassword(user, newPassword.current?.value as string).then(() => {
@@ -44,9 +75,14 @@ const Profile = () => {
 
     return (
         <div>
-            <h1>Profile name</h1>
+            <h1>{data.username}`s profile</h1>
             <label htmlFor="password-new">New password</label>
             <input type="text" id="password-new" ref={newPassword} />
+            <input type="file" onChange={(e) => handleImageInputChange(e)} />
+            <button onClick={handleUpload}>Upload image</button>
+            <div>
+                <img src={image} alt="" />
+            </div>
             <div>
                 <button onClick={handlePasswordReset}>Enter </button>
             </div>

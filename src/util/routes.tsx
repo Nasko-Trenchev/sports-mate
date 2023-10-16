@@ -1,7 +1,7 @@
 import { createBrowserRouter } from 'react-router-dom';
 import RootLayout from '../pages/Root';
 import { loader as sportsLoader, action as sportAction } from '../pages/EventPage';
-// import { action as creatAction } from '../components/Event/CreateEvent';
+import { loader as profileLoader } from '../pages/ProfilePage';
 import { action as createAction } from '../pages/CreatePage';
 import ErrorPage from '../pages/ErrorPage';
 import HomePage from '../components/HomePage/HomePage';
@@ -22,7 +22,7 @@ const router = createBrowserRouter([
             { path: 'login', element: <LoginPage /> },
             { path: 'register', element: <RegisterPage /> },
             { path: 'logout', element: <Logout /> },
-            { path: 'profile', element: <ProfilePage /> },
+            { path: 'profile', element: <ProfilePage />, id:'profile-data', loader: profileLoader },
             {
                 path: ':sport',
                 id: 'sport-details',

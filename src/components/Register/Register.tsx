@@ -3,6 +3,8 @@ import { useState } from 'react';
 import { useNavigate, NavLink } from 'react-router-dom';
 import { StyledEngineProvider } from '@mui/material/styles';
 import { UserAuth } from '../../contexts/UserContext';
+import { setDoc, doc } from 'firebase/firestore';
+import { db, auth } from '../../config/firebase';
 import { User, getAuth, sendEmailVerification, sendPasswordResetEmail } from "firebase/auth";
 
 import styles from './Register.module.css';
@@ -12,6 +14,7 @@ export const Register = () => {
         email: '',
         password: '',
         rePassword: '',
+        username: ''
     });
 
     const { user } = UserAuth();
@@ -30,6 +33,11 @@ export const Register = () => {
     const onSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
         try {
             await createUser(formInput.email, formInput.password)
+            await setDoc(doc(db, "users", `${auth?.currentUser?.uid}`), {
+                username: formInput.username,
+                email: formInput.email
+            });
+
             navigate('/');
         } catch (error) {
             console.log(error)
@@ -37,6 +45,7 @@ export const Register = () => {
                 email: '',
                 password: '',
                 rePassword: '',
+                username: ''
             })
         }
     }
@@ -74,6 +83,15 @@ export const Register = () => {
                         label='E-mail'
                         helperText="Please type in your E-mail"
                         name='email'
+                        variant='outlined'
+                        size='small'
+                        required value={null}
+                        onChange={onUserInput}
+                    />
+                    <TextField
+                        label='Username'
+                        helperText="Please type in your username"
+                        name='username'
                         variant='outlined'
                         size='small'
                         required value={null}
