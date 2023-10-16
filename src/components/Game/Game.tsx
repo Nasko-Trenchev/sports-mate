@@ -8,23 +8,33 @@ import { Button } from '@mui/material';
 import { Sport } from '../../util/sportTypes';
 import { UserAuth } from '../../contexts/UserContext';
 import { useSubmit, useParams, useNavigate } from "react-router-dom";
+import Snackbar from '@mui/material/Snackbar';
+import { SnackbarAlert } from '../Alert/Alert';
 import AlertDialog from '../Alert/AlertDialog';
 import useDialog from '../../hooks/dialog';
+import useNotification from '../../hooks/notification';
+import { hoursLeft } from '../../util/helperFunctions';
 
 
 const Game: React.FC<{ data: Sport }> = (props) => {
 
-    const { user } = UserAuth();
     const submit = useSubmit();
     const params = useParams();
+    const { user } = UserAuth();
     const navigate = useNavigate()
-
+    const { openNotification, closeNotification, actionOption } = useNotification();
     const { closeDialog, open, openDialog } = useDialog();
+
+    const { timeLeft } = hoursLeft(props.data.Time.toDate())
+
 
     const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
         if (!user) {
             navigate("/login")
             return;
+        }
+        if (e.currentTarget.textContent === "Confirm") {
+            openNotification("Event cancelled successfully", 'success');
         }
         submit({
             action: `${e.currentTarget.textContent}`,
@@ -47,7 +57,7 @@ const Game: React.FC<{ data: Sport }> = (props) => {
                     </div>
                     <div className={classes.flexItem}>
                         <AccessTimeIcon />
-                        <p>{props.data.Time.toDate().toDateString()}</p>
+                        <p>{props.data.Time.toDate().toLocaleString('it-It').replace(",", " at")}</p>
                     </div>
                 </div>
                 <div className={classes.mainAreas}>
@@ -62,6 +72,7 @@ const Game: React.FC<{ data: Sport }> = (props) => {
                 </div>
                 <div className={classes.gameSpots}>
                     <p>{props.data.Players.length}/{props.data.PlayersCount} spots filled</p>
+                    <p>{timeLeft}</p>
                 </div>
                 {props.data.Owner === user?.email ?
                     <motion.div whileHover={{ scale: 1.1 }} className={classes.detailsBtn}>
@@ -98,6 +109,19 @@ const Game: React.FC<{ data: Sport }> = (props) => {
                 confirm={(e) => handleClick(e)}
                 cancel={closeDialog}
             />
+            <Snackbar
+                open={actionOption.open}
+                autoHideDuration={3000}
+                onClose={closeNotification.bind(actionOption.color)}
+                anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'center'
+                }}
+            >
+                <SnackbarAlert onClose={closeNotification.bind(actionOption.color)} severity={actionOption.color}>
+                    {actionOption.message}
+                </SnackbarAlert>
+            </Snackbar>
 
         </>
     )

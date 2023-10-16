@@ -22,7 +22,7 @@ const AlertDialog: React.FC<alertActions> = (props) => {
     const theme = useTheme();
     const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
     return (
-        <Dialog fullScreen={fullScreen}
+        <Dialog fullScreen={fullScreen} maxWidth="xs"
             open={props.open}
             onClose={props.cancel}
             aria-labelledby="alert-dialog-title"
