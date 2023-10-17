@@ -1,4 +1,5 @@
 import { Timestamp } from "firebase/firestore"
+import { profileData } from "../pages/ProfilePage"
 
 export type Sport = {
     Image: string | undefined,
@@ -31,4 +32,9 @@ export type CreateSport = {
     Time: string,
     id: string,
     PlayersCount: number,
+}
+
+export type combinedProfileData = {
+    profile : profileData,
+    image: string,
 }
