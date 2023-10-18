@@ -5,7 +5,8 @@ import { updatePassword, reauthenticateWithCredential, EmailAuthProvider } from 
 import { StyledEngineProvider } from '@mui/material/styles';
 import { auth } from '../../config/firebase';
 import { useRef, useState } from 'react';
-import { useRouteLoaderData } from 'react-router-dom';
+import { Button } from '@mui/material';
+import { useRouteLoaderData, NavLink } from 'react-router-dom';
 import useNotification from '../../hooks/notification';
 import { storage } from '../../config/firebase';
 import { ref, uploadBytes } from 'firebase/storage'
@@ -19,6 +20,8 @@ const Profile = () => {
     const { openNotification, closeNotification, actionOption } = useNotification();
 
     const { image, profile } = useRouteLoaderData('profile-data') as combinedProfileData
+
+    const fileInput = useRef<HTMLInputElement | null>(null);
 
     const handleImageInputChange = (event: React.FormEvent) => {
         const files = (event.target as HTMLInputElement).files
@@ -73,15 +76,49 @@ const Profile = () => {
                 <h1>{profile.username}</h1>
             </div>
             <div className={classes.profileContainer}>
+                <div>
+                    <p>Games played 3</p>
+                </div>
+                <Button variant='contained'><NavLink to={'settings'} className={classes['links']}>Settings</NavLink></Button>
+
+                {/* <div>
+                    <p>{imageUpload?.name}</p>
+                    {!imageUpload ? (
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            onClick={() => fileInput.current!.click()}
+                        >
+                            upload file
+                        </Button>
+                    ) : (
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            onClick={handleUpload}
+                        >
+                            Save file
+                        </Button>
+                    )}
+
+
+
+                    <input
+                        ref={fileInput}
+                        type="file"
+                        style={{ display: 'none' }}
+                        onChange={(e) => handleImageInputChange(e)}
+                    />
+                </div>
                 <label htmlFor="password-new">New password</label>
                 <input type="text" id="password-new" ref={newPassword} />
                 <input type="file" onChange={(e) => handleImageInputChange(e)} />
                 <button onClick={handleUpload}>Upload image</button>
                 <div>
                     <button onClick={handlePasswordReset}>Enter </button>
-                </div>
+                </div> */}
             </div>
-            <Snackbar
+            {/* <Snackbar
                 open={actionOption.open}
                 autoHideDuration={2000}
                 onClose={closeNotification.bind(actionOption.color)}
@@ -94,7 +131,8 @@ const Profile = () => {
                 <SnackbarAlert onClose={closeNotification.bind(actionOption.color)} severity={actionOption.color}>
                     {actionOption.message}
                 </SnackbarAlert>
-            </Snackbar>
+            </Snackbar> */}
+
         </StyledEngineProvider>
     )
 }

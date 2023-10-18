@@ -9,6 +9,7 @@ import EventPage from '../pages/EventPage';
 import LoginPage from '../pages/LoginPage';
 import CreatePage from '../pages/CreatePage';
 import RegisterPage from '../pages/RegisterPage';
+import ProfileSettingsPage from '../pages/ProfileSettingsPage';
 import ProfilePage from '../pages/ProfilePage';
 import Logout from '../pages/LogoutPage';
 
@@ -22,7 +23,13 @@ const router = createBrowserRouter([
             { path: 'login', element: <LoginPage /> },
             { path: 'register', element: <RegisterPage /> },
             { path: 'logout', element: <Logout /> },
-            { path: 'profile', element: <ProfilePage />, id:'profile-data', loader: profileLoader },
+            {
+                path: 'profile', id: 'profile-data', loader: profileLoader,
+                children: [
+                    { index: true, element: <ProfilePage /> },
+                    { path: 'settings', element: <ProfileSettingsPage /> }
+                ]
+            },
             {
                 path: ':sport',
                 id: 'sport-details',
