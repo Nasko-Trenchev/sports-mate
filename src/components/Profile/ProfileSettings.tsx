@@ -11,6 +11,7 @@ import useNotification from '../../hooks/notification';
 import { storage } from '../../config/firebase';
 import { ref, uploadBytes } from 'firebase/storage'
 import { styled } from '@mui/material/styles';
+import { imageTypes } from '../../util/constants';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 
 const VisuallyHiddenInput = styled('input')({
@@ -50,11 +51,18 @@ const ProfileSettings = () => {
 
     const handleImageInputChange = (event: React.FormEvent) => {
 
-        ///Check the file that is uploaded - it`s type!!!!
         const files = (event.target as HTMLInputElement).files
 
         if (files && files.length > 0) {
-            setImageUpload(files[0])
+
+            const fileExtension = files[0].name.split('.').pop();
+            console.log(fileExtension)
+            if (imageTypes.some(extension => extension === fileExtension?.toLowerCase())) {
+                setImageUpload(files[0])
+            }
+            else {
+                openNotification(`Unsupported imgage format! Accepted formats: jpg, jpeg, jfif, pjpeg, pjp, png, webp, avif, apng, gif`, 'error');
+            }
         }
     }
 
@@ -129,14 +137,14 @@ const ProfileSettings = () => {
         </div>
         <Snackbar
             open={actionOption.open}
-            autoHideDuration={2000}
-            onClose={closeNotification.bind(actionOption.color)}
+            autoHideDuration={4000}
+            onClose={closeNotification}
             anchorOrigin={{
                 vertical: 'bottom',
                 horizontal: 'center'
             }}
         >
-            <SnackbarAlert onClose={closeNotification.bind(actionOption.color)} severity={actionOption.color}>
+            <SnackbarAlert onClose={closeNotification} severity={actionOption.color}>
                 {actionOption.message}
             </SnackbarAlert>
         </Snackbar>

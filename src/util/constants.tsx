@@ -1,4 +1,7 @@
 
+
+export const imageTypes = ["jpg", "jpeg", "jfif", "pjpeg", "pjp", "png", "webp", "avif", "apng", "gif"]
+
 export const footballFields = [
     "Sofia Sport 1",
     "RD Sport"
