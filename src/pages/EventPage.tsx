@@ -3,7 +3,6 @@ import { LoaderFunctionArgs, redirect } from "react-router-dom";
 import { db } from "../config/firebase";
 import { collection, getDocs, arrayUnion, doc, updateDoc, arrayRemove, deleteDoc } from "firebase/firestore";
 import { ActionFunctionArgs } from "react-router-dom";
-
 import { Sports } from "../util/sportTypes";
 
 
@@ -19,7 +18,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     try {
         const data = await getDocs(currentSportRef);
         const filteredData = data.docs.map((doc) => ({ ...doc.data(), id: doc.id })) as Sports;
-        return filteredData;
+        return filteredData.sort((a, b) => Number(a.Time) - Number(b.Time));
     } catch (error) {
         console.log(error)
     }

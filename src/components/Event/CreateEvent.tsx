@@ -2,7 +2,7 @@ import classes from './CreateEvent.module.css'
 import { useReducer, useState } from 'react'
 import { Select, Box, InputLabel, Button, FormControl, FormHelperText, MenuItem } from '@mui/material'
 import { CreateSport } from '../../util/sportTypes';
-import { footballFields, footballFieldsImage, tennisFields } from '../../util/constants';
+import { FootballFields, FootballFieldsImage, TennisFields } from '../../util/constants';
 import { auth } from '../../config/firebase';
 import { useSubmit, useParams, Form } from "react-router-dom";
 import dayjs from 'dayjs';
@@ -14,6 +14,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { MobileDateTimePicker } from '@mui/x-date-pickers/MobileDateTimePicker';
 import { StyledEngineProvider } from '@mui/material/styles'
+import { getField } from '../../util/helperFunctions';
 import FieldSelector from '../Selectors/FieldSelector';
 import CountSelector from '../Selectors/CountSelector';
 
@@ -47,7 +48,7 @@ const formReducer = (state: CreateSport, action: ReducerAction) => {
             }
         }
         case "FIELD": {
-            const image = footballFieldsImage.find(x => x.location === payload)
+            const image = FootballFieldsImage.find(x => x.location === payload)
             console.log(image)
             console.log(payload)
             return {
@@ -88,18 +89,7 @@ const CreateEvent = () => {
     const params = useParams();
     const { openNotification, closeNotification, actionOption } = useNotification();
 
-    let field: string[];
-
-    switch (params.sport) {
-        case 'football':
-            field = footballFields
-            break;
-        case 'tennis': field = tennisFields
-            break;
-        case 'basketball': field = []
-            break;
-        default: field = footballFields
-    }
+    const field = getField(params.sport)
 
     const submitHandler = () => {
 
@@ -169,6 +159,7 @@ const CreateEvent = () => {
                         fields={field}
                         value={formState.Location}
                         hasError={formErrors.locationError}
+                        labelText='Select Location'
                         onOpen={(e) => setFormErrors((state) => ({ ...state, "locationError": false }))}
                     />
                     <CountSelector
@@ -199,7 +190,7 @@ const CreateEvent = () => {
                         <FormHelperText className={classes.formHelper}>Select date and time for the event</FormHelperText>
                     </LocalizationProvider>
                     <div className={classes.createBtn}>
-                        <Button variant="contained" onClick={submitHandler} sx={{marginTop: 3}}>Submit</Button>
+                        <Button variant="contained" onClick={submitHandler} sx={{ marginTop: 3 }}>Submit</Button>
                     </div>
                 </Form>
             </Box>

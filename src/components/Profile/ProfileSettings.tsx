@@ -11,7 +11,7 @@ import useNotification from '../../hooks/notification';
 import { storage } from '../../config/firebase';
 import { ref, uploadBytes } from 'firebase/storage'
 import { styled } from '@mui/material/styles';
-import { imageTypes } from '../../util/constants';
+import { ImageTypes } from '../../util/constants';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 
 const VisuallyHiddenInput = styled('input')({
@@ -57,7 +57,7 @@ const ProfileSettings = () => {
 
             const fileExtension = files[0].name.split('.').pop();
             console.log(fileExtension)
-            if (imageTypes.some(extension => extension === fileExtension?.toLowerCase())) {
+            if (ImageTypes.some(extension => extension === fileExtension?.toLowerCase())) {
                 setImageUpload(files[0])
             }
             else {
@@ -132,7 +132,7 @@ const ProfileSettings = () => {
             </div>
             <h3>Change password</h3>
             <div className={classes.imageUploadContainer}>
-                <TextField size='small' type="text" id="password-new" ref={newPassword} placeholder='Enter your password...' />
+                <TextField size='small' type="text" id="password-new" ref={newPassword} placeholder='Enter your new password...' />
             </div>
         </div>
         <Snackbar

@@ -1,4 +1,6 @@
 import dayjs from 'dayjs';
+import { FootballFields, FootballFieldsImage, TennisFields } from './constants';
+
 
 
 export const hoursLeft = (timeLeft: Date) => {
@@ -13,26 +15,44 @@ export const hoursLeft = (timeLeft: Date) => {
     if (days > 0) {
         return {
             time: days,
-            timeLeft: `Time left: ${days} ${days > 1 ? 'days' : 'day'}`
+            timeRemaining: `Time left: > ${days} ${days > 1 ? 'days' : 'day'}`
         }
     }
 
-    if (hours > 1) {
+    if (hours > 0) {
         return {
             time: hours,
-            timeLeft: `Time left: ${hours} hours ${hours > 1 ? 'hours' : 'hour'}`
+            timeRemaining: `Time left: > ${hours} ${hours > 1 ? 'hours' : 'hour'}`
         }
     }
 
-    if (minutes > 1) {
+    if (minutes > 0) {
         return {
             time: minutes,
-            timeLeft: `Time left: ${minutes} ${minutes > 1 ? 'minutes' : 'minute'}`
+            timeRemaining: `Time left: ${minutes} ${minutes > 1 ? 'minutes' : 'minute'}`
         }
     }
 
     return {
         time: 0,
-        timeLeft: `Event started`
+        timeRemaining: `Event started`
     }
+}
+
+export const getField = (sport: string | undefined) => {
+
+    let field: string[];
+
+    switch (sport) {
+        case 'football':
+            field = FootballFields
+            break;
+        case 'tennis': field = TennisFields
+            break;
+        case 'basketball': field = []
+            break;
+        default: field = FootballFields
+    }
+
+    return field;
 }

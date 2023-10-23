@@ -11,6 +11,7 @@ import { useSubmit, useParams, useNavigate } from "react-router-dom";
 import Snackbar from '@mui/material/Snackbar';
 import { SnackbarAlert } from '../Alert/Alert';
 import AlertDialog from '../Alert/AlertDialog';
+import dayjs from 'dayjs';
 import useDialog from '../../hooks/dialog';
 import useNotification from '../../hooks/notification';
 import { hoursLeft } from '../../util/helperFunctions';
@@ -25,7 +26,7 @@ const Game: React.FC<{ data: Sport }> = (props) => {
     const { openNotification, closeNotification, actionOption } = useNotification();
     const { closeDialog, open, openDialog } = useDialog();
 
-    const { timeLeft } = hoursLeft(props.data.Time.toDate())
+    const { timeRemaining } = hoursLeft(props.data.Time.toDate())
 
 
     const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -57,7 +58,7 @@ const Game: React.FC<{ data: Sport }> = (props) => {
                     </div>
                     <div className={classes.flexItem}>
                         <AccessTimeIcon />
-                        <p>{props.data.Time.toDate().toLocaleString('it-It').replace(",", " at")}</p>
+                        <p>{dayjs(props.data.Time.toDate()).format("llll")}</p>
                     </div>
                 </div>
                 <div className={classes.mainAreas}>
@@ -72,7 +73,7 @@ const Game: React.FC<{ data: Sport }> = (props) => {
                 </div>
                 <div className={classes.gameSpots}>
                     <p>{props.data.Players.length}/{props.data.PlayersCount} spots filled</p>
-                    <p>{timeLeft}</p>
+                    <p>{timeRemaining}</p>
                 </div>
                 {props.data.Owner === user?.email ?
                     <motion.div whileHover={{ scale: 1.1 }} className={classes.detailsBtn}>
@@ -100,6 +101,7 @@ const Game: React.FC<{ data: Sport }> = (props) => {
                         >{props.data.Players.some(email => email === user?.email) ? "Leave event" :
                             props.data.PlayersCount === props.data.Players.length ? "Full" : "Join event"}</Button>
                     </motion.div>
+
                 }
             </div>
             <AlertDialog
