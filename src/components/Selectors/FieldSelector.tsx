@@ -20,7 +20,7 @@ const FieldSelector: React.FC<FieldSelectorProps> = (props) => {
 
     return (
         <div className={classes.selector}>
-            <FormControl required sx={{ m: 1, minWidth: 320 }} error={props.hasError}>
+            <FormControl required sx={{ m: 0.5, minWidth: 320 }} error={props.hasError} size='small'>
                 <InputLabel id={`${props.id}-label`}>{props.labelText}</InputLabel>
                 <Select
                     labelId={`${props.id}-label`}

@@ -1,5 +1,5 @@
 import classes from './Event.module.css'
-import { Stack, Divider, Checkbox, FormGroup, FormControlLabel } from "@mui/material";
+import { Stack, Divider, Checkbox, FormGroup, FormControlLabel, Button, Pagination } from "@mui/material";
 import { SelectChangeEvent } from '@mui/material/Select';
 import { useParams, useRouteLoaderData } from 'react-router-dom';
 import { SkillLevels } from '../../util/constants'
@@ -15,6 +15,7 @@ const Event: React.FC = () => {
     const params = useParams();
     const data = useRouteLoaderData('sport-details') as Sports
     const [filteredData, setFilteredData] = useState(data)
+    const [showFilter, setShowFilter] = useState(false)
     const [filters, setFilters] = useState({
         Location: "",
         SkillLevel: "",
@@ -36,6 +37,17 @@ const Event: React.FC = () => {
             });
         }
 
+    }
+
+    function resetFilters() {
+        setFilters({
+            ...filters,
+            Location: "",
+            SkillLevel: "",
+            Owner: "",
+            OnlyWithEmptySpots: false,
+        })
+        setFilteredData(data)
     }
 
     function filterData() {
@@ -66,51 +78,64 @@ const Event: React.FC = () => {
     return (
         <>
             <h1>There {data.length > 1 ? "are" : "is"} {data.length} upcoming {params.sport} {data.length > 1 ? "events" : "event"}</h1>
-            <div className={classes.createButton}>
-                <CreateEvent />
+            <CreateEvent />
+            <div className={classes.filterSection}>
+                <Button
+                    variant='contained'
+                    sx={{ marginBottom: '1em' }}
+                    size='small' onClick={() => setShowFilter(!showFilter)}>
+                    {showFilter ? 'Hide filters' : "Show filters"}
+                </Button>
+                {showFilter && <div className={classes.createButton}>
+                    <FieldSelector
+                        id="field"
+                        dispatch={(e) => handleFiltersChange(e)}
+                        fields={field}
+                        value={filters.Location}
+                        name='Location'
+                        labelText='Select Location'
+                    />
+                    <FieldSelector
+                        id="owner"
+                        dispatch={(e) => handleFiltersChange(e)}
+                        fields={uniqueOwners}
+                        value={filters.Owner}
+                        name='Owner'
+                        labelText='Select Owner'
+                    />
+                    <FieldSelector
+                        id="skill"
+                        dispatch={(e) => handleFiltersChange(e)}
+                        fields={SkillLevels}
+                        value={filters.SkillLevel}
+                        name='SkillLevel'
+                        labelText='Select skill'
+                    />
+                    <FormGroup className={classes.filterCheckbox}>
+                        <FormControlLabel
+                            control={<Checkbox name='OnlyWithEmptySpots' onChange={(e, checked) => handleFiltersChange(e, checked)} checked={filters.OnlyWithEmptySpots} />}
+                            label="Only groups that aren`t full yet" />
+                    </FormGroup>
+                    <div className={classes.filterBtns}>
+                        <Button size='small' variant='contained' onClick={filterData}>Apply filters</Button>
+                        <Button size='small' variant='contained' onClick={resetFilters}>Reset filters</Button>
+                    </div>
+                </div>}
             </div>
-            <h2>Find your spot</h2>
-            <FieldSelector
-                id="field"
-                dispatch={(e) => handleFiltersChange(e)}
-                fields={field}
-                value={filters.Location}
-                name='Location'
-                labelText='Select Location'
-            />
-            <FieldSelector
-                id="owner"
-                dispatch={(e) => handleFiltersChange(e)}
-                fields={uniqueOwners}
-                value={filters.Owner}
-                name='Owner'
-                labelText='Select Owner'
-            />
-            <FieldSelector
-                id="skill"
-                dispatch={(e) => handleFiltersChange(e)}
-                fields={SkillLevels}
-                value={filters.SkillLevel}
-                name='SkillLevel'
-                labelText='Select skill'
-            />
-            <FormGroup>
-                <FormControlLabel
-                    control={<Checkbox name='OnlyWithEmptySpots' onChange={(e, checked) => handleFiltersChange(e, checked)} />}
-                    label="Only groups that aren`t full yet" />
-            </FormGroup>
             <h2>Currently opened groups</h2>
-            <button onClick={filterData}>Apply filter</button>
+            {filteredData.length === 0 ? <h2>No events match your search criteria</h2> :
 
-            <Stack
-                direction={"column"}
-                divider={<Divider orientation="horizontal" sx={{ color: "black" }} flexItem />}
-                spacing={0}
-                className={classes.gamesContainer}>
-                {filteredData.map((game: Sport, index: number) => (
-                    <Game key={game.id} data={filteredData[index]} />
-                ))}
-            </Stack>
+                <Stack
+                    direction={"column"}
+                    divider={<Divider orientation="horizontal" sx={{ color: "black" }} flexItem />}
+                    spacing={0}
+                    className={classes.gamesContainer}>
+                    {filteredData.map((game: Sport, index: number) => (
+                        <Game key={game.id} data={filteredData[index]} />
+                    ))}
+                    <Pagination count={Math.ceil(filteredData.length / 10)} color="primary" />
+                </Stack>
+            }
 
         </>
     )

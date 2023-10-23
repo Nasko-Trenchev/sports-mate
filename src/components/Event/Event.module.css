@@ -8,6 +8,23 @@ h2 {
     margin: auto;
 }
 
-.createButton {
-   text-align: center;
+
+.filterSection {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.filterCheckbox {
+    display: flex;
+    padding-top: 0;
+    padding-left: 0.3em;
+    padding-right: 0.9em;
+}
+
+.filterBtns {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 1em;
 }
