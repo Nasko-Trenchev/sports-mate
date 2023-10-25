@@ -1,13 +1,15 @@
 import { createBrowserRouter } from 'react-router-dom';
 import RootLayout from '../pages/Root';
-import { loader as sportsLoader, action as sportAction } from '../pages/EventPage';
+import { loader as sportsLoader} from '../pages/EventPage';
 import { loader as profileLoader } from '../pages/ProfilePage';
 import { action as createAction } from '../pages/CreatePage';
+import { loader as gameDetailsLoader, action as gameDetailsAction } from '../pages/GameDetailsPage';
 import ErrorPage from '../pages/ErrorPage';
 import HomePage from '../components/HomePage/HomePage';
 import EventPage from '../pages/EventPage';
 import LoginPage from '../pages/LoginPage';
 import CreatePage from '../pages/CreatePage';
+import GameDetailsPage from '../pages/GameDetailsPage';
 import RegisterPage from '../pages/RegisterPage';
 import ProfileSettingsPage from '../pages/ProfileSettingsPage';
 import ProfilePage from '../pages/ProfilePage';
@@ -36,9 +38,10 @@ const router = createBrowserRouter([
                 loader: sportsLoader,
                 children: [
                     {
-                        index: true, element: <EventPage />, action: sportAction
+                        index: true, element: <EventPage />
                     },
                     { path: 'create', element: <CreatePage />, action: createAction },
+                    { path: ':gameId', id: 'game-details', element: <GameDetailsPage />, loader: gameDetailsLoader, action: gameDetailsAction },
                 ]
             }
         ]

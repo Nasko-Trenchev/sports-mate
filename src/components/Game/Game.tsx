@@ -76,7 +76,8 @@ const Game: React.FC<{ data: Sport }> = (props) => {
                     <p>{props.data.Players.length}/{props.data.PlayersCount} spots filled</p>
                     <p>{timeRemaining}</p>
                 </div>
-                {props.data.Owner === user?.email ?
+                <Button onClick={() => navigate(`/${params.sport}/${props.data.id}`)}>Show details</Button>
+                {/* {props.data.Owner === user?.email ?
                     <motion.div whileHover={{ scale: 1.1 }} className={classes.detailsBtn}>
                         <Button
                             variant='outlined'
@@ -103,7 +104,7 @@ const Game: React.FC<{ data: Sport }> = (props) => {
                             props.data.PlayersCount === props.data.Players.length ? "Full" : "Join event"}</Button>
                     </motion.div>
 
-                }
+                } */}
             </div>
             <AlertDialog
                 title='Confirm event deletion'
