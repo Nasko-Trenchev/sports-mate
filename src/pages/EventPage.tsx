@@ -48,24 +48,6 @@ export async function action({ params, request }: ActionFunctionArgs) {
         await deleteDoc(docRef);
     }
 
-
-    // let regex = new RegExp(/[0-9]{3,}/gm)
-
-    // let matches = regex.exec(jsonTime)![0]
-
-    // let time = new Timestamp(Number(matches), 0)
-
-
-    // const docRef = await addDoc(collection(db, `${params.sport}`), {
-    //     Image: data.get('Image'),
-    //     Location: data.get('Location'),
-    //     Owner: data.get('Owner'),
-    //     Players: arrayUnion(data.get('Players')),
-    //     SkillLevel: data.get('SkillLevel'),
-    //     Time: timeAsTimeStamp,
-    //     PlayersCount: Number(data.get('PlayersCount')),
-    // });
-
     return redirect('/football')
 }
 

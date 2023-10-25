@@ -7,7 +7,7 @@ import { motion } from 'framer-motion'
 import { Button } from '@mui/material';
 import { Sport } from '../../util/sportTypes';
 import { UserAuth } from '../../contexts/UserContext';
-import { useSubmit, useParams, useNavigate } from "react-router-dom";
+import { useSubmit, useParams, useNavigate, redirect } from "react-router-dom";
 import Snackbar from '@mui/material/Snackbar';
 import { SnackbarAlert } from '../Alert/Alert';
 import AlertDialog from '../Alert/AlertDialog';
@@ -29,13 +29,14 @@ const Game: React.FC<{ data: Sport }> = (props) => {
     const { timeRemaining } = hoursLeft(props.data.Time.toDate())
 
 
-    const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const handleEventClick = (e: React.MouseEvent<HTMLButtonElement>) => {
         if (!user) {
             navigate("/login")
             return;
         }
         if (e.currentTarget.textContent === "Confirm") {
             openNotification("Event cancelled successfully", 'success');
+            redirect(`${params.sport}`)
         }
         submit({
             action: `${e.currentTarget.textContent}`,
@@ -97,7 +98,7 @@ const Game: React.FC<{ data: Sport }> = (props) => {
                                 color: 'white', borderColor: 'white', '&:hover': { borderColor: 'gray' }, '&:disabled': { color: 'red', border: 'none' }
                             }}
                             disabled={props.data.PlayersCount === props.data.Players.length && !props.data.Players.some(email => email === user?.email)}
-                            onClick={(e) => handleClick(e)}
+                            onClick={(e) => handleEventClick(e)}
                         >{props.data.Players.some(email => email === user?.email) ? "Leave event" :
                             props.data.PlayersCount === props.data.Players.length ? "Full" : "Join event"}</Button>
                     </motion.div>
@@ -108,7 +109,7 @@ const Game: React.FC<{ data: Sport }> = (props) => {
                 title='Confirm event deletion'
                 confirmationText="This action can`t be reverted! You`ll need to create another event if you proceed"
                 open={open}
-                confirm={(e) => handleClick(e)}
+                confirm={(e) => handleEventClick(e)}
                 cancel={closeDialog}
             />
             <Snackbar

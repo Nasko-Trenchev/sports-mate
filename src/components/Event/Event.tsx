@@ -1,6 +1,7 @@
 import classes from './Event.module.css'
 import { Stack, Divider, Checkbox, FormGroup, FormControlLabel, Button, Pagination } from "@mui/material";
 import { SelectChangeEvent } from '@mui/material/Select';
+import EventPagination from './EventPagination';
 import { useParams, useRouteLoaderData } from 'react-router-dom';
 import { SkillLevels } from '../../util/constants'
 import { getField } from '../../util/helperFunctions';
@@ -125,16 +126,17 @@ const Event: React.FC = () => {
             <h2>Currently opened groups</h2>
             {filteredData.length === 0 ? <h2>No events match your search criteria</h2> :
 
-                <Stack
-                    direction={"column"}
-                    divider={<Divider orientation="horizontal" sx={{ color: "black" }} flexItem />}
-                    spacing={0}
-                    className={classes.gamesContainer}>
-                    {filteredData.map((game: Sport, index: number) => (
-                        <Game key={game.id} data={filteredData[index]} />
-                    ))}
-                    <Pagination count={Math.ceil(filteredData.length / 10)} color="primary" />
-                </Stack>
+                <EventPagination data={filteredData} />
+                // <Stack
+                //     direction={"column"}
+                //     divider={<Divider orientation="horizontal" sx={{ color: "black" }} flexItem />}
+                //     spacing={0}
+                //     className={classes.gamesContainer}>
+                //     {filteredData.map((game, index) => (
+                //         <Game key={game.id} data={filteredData[index]} />
+                //     ))}
+                //     <Pagination count={Math.ceil(filteredData.length / 10)} color="primary" />
+                // </Stack>
             }
 
         </>
