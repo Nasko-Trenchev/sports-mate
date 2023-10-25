@@ -10,7 +10,7 @@ import { SnackbarAlert } from '../Alert/Alert';
 import AlertDialog from '../Alert/AlertDialog';
 import useDialog from '../../hooks/dialog';
 import useNotification from '../../hooks/notification';
-
+import { FootballFieldsImage } from "../../util/constants";
 
 import Map from "../GoggleMap/GoogleMap";
 
@@ -27,6 +27,8 @@ const GameDetails: React.FC = () => {
     const { closeDialog, open, openDialog } = useDialog();
 
     const { timeRemaining } = hoursLeft(data.Time.toDate())
+
+    const mapCoordinates = FootballFieldsImage.find(field => field.location === data.Location)
 
 
     const handleEventClick = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -51,7 +53,7 @@ const GameDetails: React.FC = () => {
             <div className={classes.detailsContainer}>
                 <div className={classes.map}>
                     <p>{data.Location}</p>
-                    <Map />
+                    <Map coordinate={mapCoordinates?.coordinates!} />
                 </div>
                 <div>
                     <p>Players</p>
