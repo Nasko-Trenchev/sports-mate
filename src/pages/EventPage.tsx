@@ -17,8 +17,9 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     const currentSportRef = collection(db, `${params.sport}`);
     try {
         const data = await getDocs(currentSportRef);
-        const filteredData = data.docs.map((doc) => ({ ...doc.data(), id: doc.id })) as Sports;
-        return filteredData.sort((a, b) => Number(a.Time) - Number(b.Time));
+        const sportsData = data.docs.map((doc) => ({ ...doc.data(), id: doc.id })) as Sports;
+        ///Can be made with filter from the database
+        return sportsData.sort((a, b) => Number(a.Time) - Number(b.Time)).filter(event => event.Completed === false)
     } catch (error) {
         console.log(error)
     }

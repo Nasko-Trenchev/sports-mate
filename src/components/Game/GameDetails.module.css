@@ -12,8 +12,14 @@
     justify-content: space-around;
 }
 
-.players {
+
+.playersContainer {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+}
+
+.players {
+    display: flex;
+    flex-wrap: wrap;
 }

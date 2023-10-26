@@ -35,7 +35,12 @@ export const Register = () => {
             await createUser(formInput.email, formInput.password)
             await setDoc(doc(db, "users", `${formInput.email}`), {
                 username: formInput.username,
-                email: formInput.email
+                email: formInput.email,
+                // football: 0,
+                // footballRating: [],
+                // basketball: 0,
+                // volleyball: 0,
+                // tennis: 0
             });
 
             navigate('/');

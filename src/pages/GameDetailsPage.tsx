@@ -57,70 +57,24 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
         })
     }
 
-    // sportWithId.Players.forEach(async (element) => {
-
-    //     // const userRef = doc(db, 'users', element);
-    //     // const userData = await getDoc(userRef);
-    //     // const userObject = userData.data() as profileData
-    //     // let finalImage;
-    //     // const image = images.items.find(img => img.name === element)
-
-    //     // if (image) {
-    //     //     finalImage = await getDownloadURL(image)
-    //     // }
-    //     // else {
-    //     //     finalImage = picture
-    //     // }
-    //     // neededData.push({
-    //     //     users: userObject,
-    //     //     image: finalImage
-    //     // })
-
-    // });
-    // const usersRef = collection(db, 'users');
-    // const userData = await getDocs(usersRef);
-    // const users = userData.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
-
-    // const image = images.items.find(img => img.name === auth.currentUser?.email!)
-    // let finalImage;
-    // if (image) {
-    //     finalImage = await getDownloadURL(image)
-    // }
-    // else {
-    //     finalImage = picture
-    // }
-
-    if (neededData.length > 0) {
-        return { sportDetails: sportWithId, users: neededData };
-
-    }
-    else {
-        return { sportDetails: sportWithId, users: [] };
-    }
-
-
-
-    // const currentSportRef = collection(db, `${params.sport}`);
-    // try {
-    //     const data = await getDocs(currentSportRef);
-    //     const filteredData = data.docs.map((doc) => ({ ...doc.data(), id: doc.id })) as Sports;
-    //     return filteredData.sort((a, b) => Number(a.Time) - Number(b.Time));
-    // } catch (error) {
-    //     console.log(error)
-    // }
+    return { sportDetails: sportWithId, users: neededData };
 }
 
 export async function action({ params, request }: ActionFunctionArgs) {
 
     const data = await request.formData();
-    const sport = data.get("sport")
     const action = data.get("action")
+    const sport = data.get("sport")
     const id = data.get('id')
+    const docRef = doc(db, `${sport}`, `${id}`);
     const userEmail = data.get('user')
 
-    const docRef = doc(db, `${sport}`, `${id}`);
-
-    if (action === "Join event") {
+    if (action === "Mark as completed") {
+        await updateDoc(docRef, {
+            Completed: true
+        })
+    }
+    else if (action === "Join event") {
         await updateDoc(docRef, {
             Players: arrayUnion(userEmail)
         })

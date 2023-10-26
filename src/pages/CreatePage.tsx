@@ -23,13 +23,6 @@ export async function action({ params, request }: ActionFunctionArgs) {
 
     const timeAsTimeStamp = Timestamp.fromDate(new Date(jsonTime));
 
-    // let regex = new RegExp(/[0-9]{3,}/gm)
-
-    // let matches = regex.exec(jsonTime)![0]
-
-    // let time = new Timestamp(Number(matches), 0)
-
-
     const docRef = await addDoc(collection(db, `${params.sport}`), {
         Image: data.get('Image'),
         Location: data.get('Location'),
@@ -38,6 +31,7 @@ export async function action({ params, request }: ActionFunctionArgs) {
         SkillLevel: data.get('SkillLevel'),
         Time: timeAsTimeStamp,
         PlayersCount: Number(data.get('PlayersCount')),
+        Completed: false,
     });
 
     return redirect('/football')

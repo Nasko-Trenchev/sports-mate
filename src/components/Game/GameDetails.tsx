@@ -12,7 +12,6 @@ import { FootballFieldsImage } from "../../util/constants";
 import Map from "../GoggleMap/GoogleMap";
 import GamePlayers from "./GamePlayers";
 import { loaderReturnArgs } from "../../pages/GameDetailsPage";
-
 import classes from './GameDetails.module.css'
 
 
@@ -30,7 +29,6 @@ const GameDetails: React.FC = () => {
 
     const mapCoordinates = FootballFieldsImage.find(field => field.location === sportDetails.Location)
 
-    console.log(users)
     const handleEventClick = (e: React.MouseEvent<HTMLButtonElement>) => {
         if (!user) {
             navigate("/login")
@@ -46,20 +44,31 @@ const GameDetails: React.FC = () => {
             user: `${user?.email}`
         }, { method: 'post' })
     }
+
+    const handleCompleteClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+        submit({
+            action: `${e.currentTarget.textContent}`,
+            sport: `${sport}`,
+            id: `${sportDetails.id}`,
+            user: `${user?.email}`
+        }, { method: 'post' })
+    }
     return (
         <>
             <h1>Event by: {sportDetails.Owner}</h1>
-            <h2>Time remaining: {timeRemaining}</h2>
+            <h2>{timeRemaining}</h2>
             <div className={classes.detailsContainer}>
                 <div className={classes.map}>
                     <p>{sportDetails.Location}</p>
                     <Map coordinate={mapCoordinates?.coordinates!} />
                 </div>
-                <div className={classes.players}>
+                <div className={classes.playersContainer}>
                     <p>Players</p>
-                    {users.map((user) =>
-                        <GamePlayers key={user.users.email} image={user.image} nickname={user.users.username} />
-                    )}
+                    <div className={classes.players}>
+                        {users.map((user) =>
+                            <GamePlayers key={user.users.email} image={user.image} nickname={user.users.username} />
+                        )}
+                    </div>
                     <p>{sportDetails.PlayersCount - sportDetails.Players.length} spots remaining</p>
                     {sportDetails.Owner === user?.email ?
                         <motion.div whileHover={{ scale: 1.1 }} className={classes.detailsBtn}>
@@ -90,7 +99,7 @@ const GameDetails: React.FC = () => {
                     }
                 </div>
             </div>
-
+            {(sportDetails.Owner === user?.email && timeRemaining === "Event over") && <Button onClick={handleCompleteClick}>Mark as completed</Button>}
             <AlertDialog
                 title='Confirm event deletion'
                 confirmationText="This action can`t be reverted! You`ll need to create another event if you proceed"

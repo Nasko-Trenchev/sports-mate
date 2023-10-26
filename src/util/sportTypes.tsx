@@ -10,6 +10,7 @@ export type Sport = {
     Time: Timestamp,
     id: string,
     PlayersCount: number,
+    Completed: boolean,
 }
 
 export type Sports = {
@@ -21,6 +22,7 @@ export type Sports = {
     Time: Timestamp,
     id: string,
     PlayersCount: number,
+    Completed: boolean,
 }[]
 
 export type CreateSport = {
@@ -32,9 +34,10 @@ export type CreateSport = {
     Time: string,
     id: string,
     PlayersCount: number,
+    Completed: boolean,
 }
 
 export type combinedProfileData = {
-    profile : profileData,
+    profile: profileData,
     image: string,
 }

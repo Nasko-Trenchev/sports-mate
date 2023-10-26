@@ -8,6 +8,7 @@ import { getField } from '../../util/helperFunctions';
 import CreateEvent from '../CreateButton/CreateButton';
 import { Sports } from '../../util/sportTypes';
 import { useState } from 'react';
+import { isEventOver } from '../../util/helperFunctions';
 import FieldSelector from '../Selectors/FieldSelector';
 
 
@@ -21,14 +22,23 @@ const Event: React.FC = () => {
         SkillLevel: "",
         Owner: "",
         OnlyWithEmptySpots: false,
+        OnlyUpcomingEvents: false,
     })
 
     const handleFiltersChange = (e: SelectChangeEvent<any>, checked?: boolean) => {
         if (checked !== undefined) {
-            setFilters({
-                ...filters,
-                OnlyWithEmptySpots: checked
-            });
+            if (e.target.name === "OnlyWithEmptySpots") {
+                setFilters({
+                    ...filters,
+                    OnlyWithEmptySpots: checked
+                });
+            }
+            else {
+                setFilters({
+                    ...filters,
+                    OnlyUpcomingEvents: checked
+                });
+            }
         }
         else {
             setFilters({
@@ -61,6 +71,9 @@ const Event: React.FC = () => {
 
         if (filters.OnlyWithEmptySpots) {
             filteredData = filteredData.filter(x => x.Players.length < x.PlayersCount)
+        }
+        if (filters.OnlyUpcomingEvents) {
+            filteredData = filteredData.filter(x => isEventOver(x.Time.toDate()))
         }
         setFilteredData(filteredData)
     }
@@ -115,6 +128,11 @@ const Event: React.FC = () => {
                         <FormControlLabel
                             control={<Checkbox name='OnlyWithEmptySpots' onChange={(e, checked) => handleFiltersChange(e, checked)} checked={filters.OnlyWithEmptySpots} />}
                             label="Only groups that aren`t full yet" />
+                    </FormGroup>
+                    <FormGroup className={classes.filterCheckbox}>
+                        <FormControlLabel
+                            control={<Checkbox name='OnlyUpcomingEvents' onChange={(e, checked) => handleFiltersChange(e, checked)} checked={filters.OnlyUpcomingEvents} />}
+                            label="Only upcomming events" />
                     </FormGroup>
                     <div className={classes.filterBtns}>
                         <Button size='small' variant='contained' onClick={filterData}>Apply filters</Button>

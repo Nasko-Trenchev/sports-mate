@@ -32,11 +32,26 @@ export const hoursLeft = (timeLeft: Date) => {
             timeRemaining: `Time left: ${minutes} ${minutes > 1 ? 'minutes' : 'minute'}`
         }
     }
+    if (minutes < -1) {
+        return {
+            time: 0,
+            timeRemaining: `Event over`
+        }
+    }
 
     return {
         time: 0,
         timeRemaining: `Event started`
     }
+}
+
+export const isEventOver = (timeLeft: Date) => {
+    const startDate = dayjs();
+    const endDate = dayjs(timeLeft)
+    if (startDate < endDate) {
+        return true
+    }
+    return false
 }
 
 export const getField = (sport: string | undefined) => {

@@ -29,6 +29,7 @@ const reducerInitialValue = {
     Time: '',
     id: '',
     PlayersCount: '',
+    Completed: false,
 }
 
 interface ReducerAction {
@@ -49,8 +50,6 @@ const formReducer = (state: CreateSport, action: ReducerAction) => {
         }
         case "FIELD": {
             const image = FootballFieldsImage.find(x => x.location === payload)
-            console.log(image)
-            console.log(payload)
             return {
                 ...state,
                 Location: payload,
