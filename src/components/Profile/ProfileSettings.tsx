@@ -41,7 +41,7 @@ const ProfileSettings = () => {
             return
         }
         else {
-            const imageRef = ref(storage, `ProfileImages/${auth?.currentUser?.uid}`)
+            const imageRef = ref(storage, `ProfileImages/${auth?.currentUser?.email}`)
             setImageUpload(undefined)
             await uploadBytes(imageRef, imageUpload)
             openNotification("Profile image changed successfully", 'success');

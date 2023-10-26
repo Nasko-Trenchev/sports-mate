@@ -1,13 +1,12 @@
 import classes from './Event.module.css'
-import { Stack, Divider, Checkbox, FormGroup, FormControlLabel, Button, Pagination } from "@mui/material";
+import { Checkbox, FormGroup, FormControlLabel, Button } from "@mui/material";
 import { SelectChangeEvent } from '@mui/material/Select';
 import EventPagination from './EventPagination';
 import { useParams, useRouteLoaderData } from 'react-router-dom';
 import { SkillLevels } from '../../util/constants'
 import { getField } from '../../util/helperFunctions';
 import CreateEvent from '../CreateButton/CreateButton';
-import Game from '../Game/Game'
-import { Sport, Sports } from '../../util/sportTypes';
+import { Sports } from '../../util/sportTypes';
 import { useState } from 'react';
 import FieldSelector from '../Selectors/FieldSelector';
 
@@ -125,18 +124,7 @@ const Event: React.FC = () => {
             </div>
             <h2>Currently opened groups</h2>
             {filteredData.length === 0 ? <h2>No events match your search criteria</h2> :
-
                 <EventPagination data={filteredData} />
-                // <Stack
-                //     direction={"column"}
-                //     divider={<Divider orientation="horizontal" sx={{ color: "black" }} flexItem />}
-                //     spacing={0}
-                //     className={classes.gamesContainer}>
-                //     {filteredData.map((game, index) => (
-                //         <Game key={game.id} data={filteredData[index]} />
-                //     ))}
-                //     <Pagination count={Math.ceil(filteredData.length / 10)} color="primary" />
-                // </Stack>
             }
 
         </>

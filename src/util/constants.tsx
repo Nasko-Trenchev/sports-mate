@@ -16,7 +16,7 @@ export const FootballFieldsImage = [
     {
         location: "Sofia Sport 1",
         image: 'https://lh3.googleusercontent.com/p/AF1QipNPGTcqMIJCNltlSOFSpgfDpSTl00AArd_zHd4H=s680-w680-h510',
-        coordinates: { lat: 42.65018, lng: 23.33939 }
+        coordinates: { lat: 42.65013036910133, lng: 23.33918324785182 }
     },
     {
         location: "RD Sport",

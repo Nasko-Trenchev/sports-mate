@@ -33,7 +33,7 @@ export const Register = () => {
     const onSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
         try {
             await createUser(formInput.email, formInput.password)
-            await setDoc(doc(db, "users", `${auth?.currentUser?.uid}`), {
+            await setDoc(doc(db, "users", `${formInput.email}`), {
                 username: formInput.username,
                 email: formInput.email
             });
