@@ -20,7 +20,7 @@ const CountSelector: React.FC<CountSelectorProps> = (props) => {
 
     return (
         <>
-            <FormControl error={props.hasError} required sx={{ m: 1, minWidth: 320 }}>
+            <FormControl size='small' error={props.hasError} required sx={{ m: 0.5, minWidth: 320 }}>
                 <InputLabel id="count-label">Select players count</InputLabel>
                 <Select
                     labelId="count-label"

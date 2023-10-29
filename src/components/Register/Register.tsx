@@ -32,17 +32,11 @@ export const Register = () => {
 
     const onSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
         try {
-            await createUser(formInput.email, formInput.password)
-            await setDoc(doc(db, "users", `${formInput.email}`), {
+            await createUser(formInput.email, formInput.password, formInput.username)
+            await setDoc(doc(db, "users", `${formInput.username}`), {
                 username: formInput.username,
                 email: formInput.email,
-                // football: 0,
-                // footballRating: [],
-                // basketball: 0,
-                // volleyball: 0,
-                // tennis: 0
             });
-
             navigate('/');
         } catch (error) {
             console.log(error)
@@ -83,7 +77,7 @@ export const Register = () => {
         <StyledEngineProvider injectFirst>
             <Stack spacing={3} className={styles['login-form']}>
                 <Typography variant='h1'>Register</Typography>
-                <FormControl>
+                <FormControl size='small'>
                     <TextField
                         label='E-mail'
                         helperText="Please type in your E-mail"

@@ -1,5 +1,6 @@
 import classes from './Event.module.css'
 import { Checkbox, FormGroup, FormControlLabel, Button } from "@mui/material";
+import { StyledEngineProvider } from '@mui/material/styles';
 import { SelectChangeEvent } from '@mui/material/Select';
 import EventPagination from './EventPagination';
 import { useParams, useRouteLoaderData } from 'react-router-dom';
@@ -10,21 +11,24 @@ import { Sports } from '../../util/sportTypes';
 import { useState } from 'react';
 import { isEventOver } from '../../util/helperFunctions';
 import FieldSelector from '../Selectors/FieldSelector';
+import { auth } from '../../config/firebase';
 
+const initialState = {
+    Location: "",
+    SkillLevel: "",
+    Owner: "",
+    OnlyWithEmptySpots: false,
+    OnlyUpcomingEvents: false,
+}
 
 const Event: React.FC = () => {
     const params = useParams();
     const data = useRouteLoaderData('sport-details') as Sports
     const [filteredData, setFilteredData] = useState(data)
     const [showFilter, setShowFilter] = useState(false)
-    const [filters, setFilters] = useState({
-        Location: "",
-        SkillLevel: "",
-        Owner: "",
-        OnlyWithEmptySpots: false,
-        OnlyUpcomingEvents: false,
-    })
+    const [filters, setFilters] = useState(initialState)
 
+    console.log(auth.currentUser?.displayName)
     const handleFiltersChange = (e: SelectChangeEvent<any>, checked?: boolean) => {
         if (checked !== undefined) {
             if (e.target.name === "OnlyWithEmptySpots") {
@@ -46,17 +50,10 @@ const Event: React.FC = () => {
                 [e.target.name]: e.target.value,
             });
         }
-
     }
 
     function resetFilters() {
-        setFilters({
-            ...filters,
-            Location: "",
-            SkillLevel: "",
-            Owner: "",
-            OnlyWithEmptySpots: false,
-        })
+        setFilters(initialState)
         setFilteredData(data)
     }
 
@@ -82,14 +79,18 @@ const Event: React.FC = () => {
 
     if (data.length === 0) {
         return (
-            <h1>Currently there aren`t any events for this sport</h1>
+            <>
+                <h1>Currently there aren`t any events for this sport</h1>
+                <h2>Be the first one to create an event</h2>
+                <CreateEvent />
+            </>
         )
     }
 
     const uniqueOwners = Array.from(new Set(data.map((x) => x.Owner)))
 
     return (
-        <>
+        <StyledEngineProvider>
             <h1>There {data.length > 1 ? "are" : "is"} {data.length} upcoming {params.sport} {data.length > 1 ? "events" : "event"}</h1>
             <CreateEvent />
             <div className={classes.filterSection}>
@@ -145,7 +146,7 @@ const Event: React.FC = () => {
                 <EventPagination data={filteredData} />
             }
 
-        </>
+        </StyledEngineProvider>
     )
 }
 

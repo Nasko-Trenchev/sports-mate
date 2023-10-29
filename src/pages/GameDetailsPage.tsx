@@ -62,26 +62,34 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
 export async function action({ params, request }: ActionFunctionArgs) {
 
-    const data = await request.formData();
-    const action = data.get("action")
-    const sport = data.get("sport")
-    const id = data.get('id')
+    const data = await request.json()
+
+    const { action, sport, id, user } = data;
+
     const docRef = doc(db, `${sport}`, `${id}`);
-    const userEmail = data.get('user')
+
 
     if (action === "Mark as completed") {
-        await updateDoc(docRef, {
-            Completed: true
-        })
+        const game = JSON.parse(data.game)
+        game.sport = params.sport;
+        for (const player of game.Players) {
+            const userRef = doc(db, 'users', player);
+            await updateDoc(userRef, {
+                GamesPlayed: arrayUnion(game)
+            })
+        }
+        // await updateDoc(docRef, {
+        //     Completed: true
+        // })
     }
     else if (action === "Join event") {
         await updateDoc(docRef, {
-            Players: arrayUnion(userEmail)
+            Players: arrayUnion(user)
         })
     }
     else if (action === "Leave event") {
         await updateDoc(docRef, {
-            Players: arrayRemove(userEmail)
+            Players: arrayRemove(user)
         })
     }
     else {

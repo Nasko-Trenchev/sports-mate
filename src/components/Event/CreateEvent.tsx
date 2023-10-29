@@ -1,11 +1,12 @@
 import classes from './CreateEvent.module.css'
 import { useReducer, useState } from 'react'
-import { Select, Box, InputLabel, Button, FormControl, FormHelperText, MenuItem } from '@mui/material'
+import { Box, Button, FormHelperText } from '@mui/material'
 import { CreateSport } from '../../util/sportTypes';
-import { FootballFields, FootballFieldsImage, TennisFields } from '../../util/constants';
+import { FootballFieldsImage } from '../../util/constants';
 import { auth } from '../../config/firebase';
 import { useSubmit, useParams, Form } from "react-router-dom";
 import dayjs from 'dayjs';
+import { SkillLevels } from '../../util/constants'
 import Snackbar from '@mui/material/Snackbar';
 import { SnackbarAlert } from '../Alert/Alert';
 import useNotification from '../../hooks/notification';
@@ -45,7 +46,7 @@ const formReducer = (state: CreateSport, action: ReducerAction) => {
             return {
                 ...state,
                 SkillLevel: payload,
-                Owner: auth.currentUser?.email
+                Owner: auth.currentUser?.displayName
             }
         }
         case "FIELD": {
@@ -57,7 +58,7 @@ const formReducer = (state: CreateSport, action: ReducerAction) => {
             }
         }
         case "COUNT": {
-            const initialPlayers = [auth.currentUser?.email as string]
+            const initialPlayers = [auth.currentUser?.displayName as string]
             return {
                 ...state,
                 PlayersCount: payload,
@@ -125,7 +126,6 @@ const CreateEvent = () => {
             }, { method: 'post' })
 
         }
-
     }
 
     return (
@@ -133,25 +133,14 @@ const CreateEvent = () => {
             <Box className={classes.createContainer}>
                 <h1>Create {`${params.sport}`} event</h1>
                 <Form className={classes.formContainer}>
-                    <FormControl error={formErrors.skillError} required sx={{ m: 1, minWidth: 320 }}>
-                        <InputLabel id="skill-label">Select skill level</InputLabel>
-                        <Select
-                            labelId="skill-label"
-                            id="skill"
-                            value={formState.SkillLevel}
-                            label="Select skill level"
-                            name='skill'
-                            onOpen={(e) => setFormErrors((state) => ({ ...state, "skillError": false }))}
-                            onChange={(e) => dispatchFormState({ type: "SKILL", payload: e.target.value })}
-                        >
-                            <MenuItem value={"Beginner"}>Beginner</MenuItem>
-                            <MenuItem value={"Advanced"}>Advanced</MenuItem>
-                            <MenuItem value={"Expert"}>Expert</MenuItem>
-                            <MenuItem value={"Professional"}>Professional</MenuItem>
-                        </Select>
-                        <FormHelperText>Select a skill level from the list</FormHelperText>
-                    </FormControl>
-
+                    <FieldSelector
+                        id="skill"
+                        dispatch={(e) => dispatchFormState({ type: "SKILL", payload: e.target.value })}
+                        fields={SkillLevels}
+                        value={formState.SkillLevel}
+                        name='SkillLevel'
+                        labelText='Select skill'
+                    />
                     <FieldSelector
                         id="field"
                         dispatch={(e) => dispatchFormState({ type: "FIELD", payload: e.target.value })}
@@ -195,13 +184,12 @@ const CreateEvent = () => {
             </Box>
             <Snackbar
                 open={actionOption.open}
-                autoHideDuration={2000}
+                autoHideDuration={3000}
                 onClose={closeNotification.bind(actionOption.color)}
                 anchorOrigin={{
                     vertical: 'bottom',
                     horizontal: 'center'
                 }}
-
             >
                 <SnackbarAlert onClose={closeNotification.bind(actionOption.color)} severity={actionOption.color}>
                     {actionOption.message}

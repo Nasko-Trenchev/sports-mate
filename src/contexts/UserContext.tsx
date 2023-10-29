@@ -1,12 +1,12 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from "react";
-import { createUserWithEmailAndPassword, UserCredential, signInWithEmailAndPassword, signOut, signInWithPopup, onAuthStateChanged, Auth, User } from 'firebase/auth';
+import { createUserWithEmailAndPassword, UserCredential, signInWithEmailAndPassword, updateProfile, signOut, signInWithPopup, onAuthStateChanged, Auth, User } from 'firebase/auth';
 import { auth, googleProvider } from '../config/firebase';
 
 
 export interface AuthContextModel {
     user: User | null
     loginUser: (email: string, password: string) => Promise<UserCredential>
-    createUser: (email: string, password: string) => Promise<UserCredential>
+    createUser: (email: string, password: string, displayName: string) => Promise<void>
     signOutUser: () => Promise<void>
     singUpWithGoogle: () => Promise<UserCredential>
     isAuthenticated: boolean
@@ -22,8 +22,13 @@ export const AuthContextProvider = ({ children }: UserContextProviderProps): JSX
 
     const [user, setUser] = useState<User | null>(null);
 
-    const createUser = (email: string, password: string) => {
-        return createUserWithEmailAndPassword(auth, email, password);
+    const createUser = async (email: string, password: string, displayName: string) => {
+
+        await createUserWithEmailAndPassword(auth, email, password);
+
+        return updateProfile(auth.currentUser!, {
+            displayName: displayName
+        })
     }
 
     const loginUser = (email: string, password: string) => {

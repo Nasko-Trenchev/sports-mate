@@ -1,9 +1,11 @@
 import { createBrowserRouter } from 'react-router-dom';
 import RootLayout from '../pages/Root';
-import { loader as sportsLoader} from '../pages/EventPage';
+import { loader as sportsLoader } from '../pages/EventPage';
 import { loader as profileLoader } from '../pages/ProfilePage';
 import { action as createAction } from '../pages/CreatePage';
 import { loader as gameDetailsLoader, action as gameDetailsAction } from '../pages/GameDetailsPage';
+import PublicProfilePage from '../pages/PublicProfilePage';
+import { loader as publicProfileLoader } from '../pages/PublicProfilePage';
 import ErrorPage from '../pages/ErrorPage';
 import HomePage from '../components/HomePage/HomePage';
 import EventPage from '../pages/EventPage';
@@ -42,6 +44,15 @@ const router = createBrowserRouter([
                     },
                     { path: 'create', element: <CreatePage />, action: createAction },
                     { path: ':gameId', id: 'game-details', element: <GameDetailsPage />, loader: gameDetailsLoader, action: gameDetailsAction },
+                ]
+            },
+            {
+                path: 'publicProfile',
+                children: [
+                    {
+                        index: true
+                    },
+                    { path: ':profileId', id: 'public-profile', element: <PublicProfilePage />, loader: publicProfileLoader }
                 ]
             }
         ]

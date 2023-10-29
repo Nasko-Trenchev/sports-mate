@@ -27,6 +27,7 @@ const GameDetails: React.FC = () => {
 
     const { timeRemaining } = hoursLeft(sportDetails.Time.toDate())
 
+    console.log(user?.displayName)
     const mapCoordinates = FootballFieldsImage.find(field => field.location === sportDetails.Location)
 
     const handleEventClick = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -41,8 +42,9 @@ const GameDetails: React.FC = () => {
             action: `${e.currentTarget.textContent}`,
             sport: `${sport}`,
             id: `${sportDetails.id}`,
-            user: `${user?.email}`
-        }, { method: 'post' })
+            user: `${user?.displayName}`,
+        },
+            { method: "post", encType: "application/json" })
     }
 
     const handleCompleteClick = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -50,8 +52,17 @@ const GameDetails: React.FC = () => {
             action: `${e.currentTarget.textContent}`,
             sport: `${sport}`,
             id: `${sportDetails.id}`,
-            user: `${user?.email}`
-        }, { method: 'post' })
+            user: `${user?.displayName}`,
+            game: `${JSON.stringify(sportDetails)}`
+        },
+            { method: "post", encType: "application/json" })
+        // {
+        //     action: `${ e.currentTarget.textContent }`,
+        //     sport: `${ sport }`,
+        //     id: `${ sportDetails.id }`,
+        //     user: `${ user?.email }`,
+        //     game: `${{ ...sportDetails }}`
+        // }, { method: 'post' })
     }
     return (
         <>
@@ -66,11 +77,11 @@ const GameDetails: React.FC = () => {
                     <p>Players</p>
                     <div className={classes.players}>
                         {users.map((user) =>
-                            <GamePlayers key={user.users.email} image={user.image} nickname={user.users.username} />
+                            <GamePlayers key={user.users.email} image={user.image} nickname={user.users.username} email={user.users.email} />
                         )}
                     </div>
                     <p>{sportDetails.PlayersCount - sportDetails.Players.length} spots remaining</p>
-                    {sportDetails.Owner === user?.email ?
+                    {sportDetails.Owner === user?.displayName ?
                         <motion.div whileHover={{ scale: 1.1 }} className={classes.detailsBtn}>
                             <Button
                                 variant='outlined'
@@ -93,7 +104,7 @@ const GameDetails: React.FC = () => {
                                 }}
                                 disabled={sportDetails.PlayersCount === sportDetails.Players.length && !sportDetails.Players.some(email => email === user?.email)}
                                 onClick={(e) => handleEventClick(e)}
-                            >{sportDetails.Players.some(email => email === user?.email) ? "Leave event" :
+                            >{sportDetails.Players.some(email => email === user?.displayName) ? "Leave event" :
                                 sportDetails.PlayersCount === sportDetails.Players.length ? "Full" : "Join event"}</Button>
                         </motion.div>
                     }

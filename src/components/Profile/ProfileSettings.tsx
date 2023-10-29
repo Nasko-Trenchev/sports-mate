@@ -41,7 +41,7 @@ const ProfileSettings = () => {
             return
         }
         else {
-            const imageRef = ref(storage, `ProfileImages/${auth?.currentUser?.email}`)
+            const imageRef = ref(storage, `ProfileImages/${auth?.currentUser?.displayName}`)
             setImageUpload(undefined)
             await uploadBytes(imageRef, imageUpload)
             openNotification("Profile image changed successfully", 'success');
@@ -56,7 +56,6 @@ const ProfileSettings = () => {
         if (files && files.length > 0) {
 
             const fileExtension = files[0].name.split('.').pop();
-            console.log(fileExtension)
             if (ImageTypes.some(extension => extension === fileExtension?.toLowerCase())) {
                 setImageUpload(files[0])
             }
