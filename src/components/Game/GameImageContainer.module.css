@@ -1,0 +1,50 @@
+.sliderStyles {
+    height: 100%;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.coverImageContainer {
+    width: 30vw;
+    height: 40vh;
+    border-radius: 1em;
+}
+
+.coverImageContainer img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 1em;
+
+}
+
+.leftArrow {
+    position: absolute;
+    top: 50%;
+    transform: translate(0, -50%);
+    left: 5%;
+    color: rgb(247, 244, 238);
+    cursor: pointer;
+}
+
+.rightArrow {
+    position: absolute;
+    top: 50%;
+    transform: translate(0, -50%);
+    right: 5%;
+    color: rgb(247, 244, 238);
+    cursor: pointer;
+}
+
+.slideDots {
+    display: flex;
+    position: absolute;
+    top: 90%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 12px;
+    color: white;
+    cursor: pointer;
+}

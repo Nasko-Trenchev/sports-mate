@@ -15,16 +15,24 @@ export const TennisFields = [
 export const FootballFieldsImage = [
     {
         location: "Sofia Sport 1",
+        street: 'Sofia, bul Maria Luiza',
         image: 'https://lh3.googleusercontent.com/p/AF1QipNPGTcqMIJCNltlSOFSpgfDpSTl00AArd_zHd4H=s680-w680-h510',
+        additionalImages: [
+            "https://lh3.googleusercontent.com/p/AF1QipNPGTcqMIJCNltlSOFSpgfDpSTl00AArd_zHd4H=s680-w680-h510",
+            "https://lh5.googleusercontent.com/p/AF1QipNACwE_np5zlSZ_4P2Jf364eNRQj9kywAfkGRHk=w260-h175-n-k-no",
+            "https://lh5.googleusercontent.com/p/AF1QipNACwE_np5zlSZ_4P2Jf364eNRQj9kywAfkGRHk=w260-h175-n-k-no",
+        ],
         coordinates: { lat: 42.65013036910133, lng: 23.33918324785182 }
     },
     {
         location: "RD Sport",
+        street: 'Sofia, bul Maria Luiza',
         image: 'https://lh5.googleusercontent.com/p/AF1QipNACwE_np5zlSZ_4P2Jf364eNRQj9kywAfkGRHk=w260-h175-n-k-no',
         coordinates: { lat: 42.65973821996859, lng: 23.354233246583714 }
     },
     {
         location: "Sport complex OMV",
+        street: 'Sofia, bul Maria Luiza',
         image: 'http://www.kidssports.bg/prettyPhoto/default/sprite_y.png',
         coordinates: { lat: 42.661887368545905, lng: 23.392248001624957 }
     }

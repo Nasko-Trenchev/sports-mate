@@ -1,6 +1,6 @@
 import GameDetails from "../components/Game/GameDetails";
 import { LoaderFunctionArgs, ActionFunctionArgs, redirect, defer } from "react-router-dom";
-import { getDoc, doc, updateDoc, arrayUnion, arrayRemove, deleteDoc, collection, getDocs } from "firebase/firestore";
+import { getDoc, doc, updateDoc, arrayUnion, arrayRemove, deleteDoc, collection, getDocs, Timestamp } from "firebase/firestore";
 import { db } from "../config/firebase";
 import { Sport } from "../util/sportTypes";
 import { ref, getDownloadURL, listAll } from 'firebase/storage'
@@ -72,15 +72,17 @@ export async function action({ params, request }: ActionFunctionArgs) {
     if (action === "Mark as completed") {
         const game = JSON.parse(data.game)
         game.sport = params.sport;
+        game.Time = new Timestamp(game.Time.seconds, game.Time.nanoseconds)
+        console.log(game.Time)
         for (const player of game.Players) {
             const userRef = doc(db, 'users', player);
             await updateDoc(userRef, {
                 GamesPlayed: arrayUnion(game)
             })
         }
-        // await updateDoc(docRef, {
-        //     Completed: true
-        // })
+        await updateDoc(docRef, {
+            Completed: true
+        })
     }
     else if (action === "Join event") {
         await updateDoc(docRef, {

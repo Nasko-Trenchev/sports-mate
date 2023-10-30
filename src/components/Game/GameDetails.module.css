@@ -7,19 +7,66 @@
     justify-content: space-between;
 }
 
-.detailsContainer {
-    display: flex;
-    justify-content: space-around;
+.registrationStatus {
+    text-align: center;
 }
 
-
-.playersContainer {
+.description {
+    flex-basis: 25%;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    align-items: center;
+    justify-content: center;
+}
+
+.images {
+    flex-basis: 30%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.detailsContainer {
+    margin: auto;
+    margin-top: 5em;
+    width: 90%;
+    height: 40vh;
+    display: flex;
+    justify-content: space-around;
+    gap: 3em;
+    padding: 1em;
+    border-radius: 2em;
 }
 
 .players {
     display: flex;
-    flex-wrap: wrap;
+    flex-basis: 20%;
+    justify-content: center;
+    align-items: flex-start;
+    flex-direction: column;
+}
+
+.modalStyles {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    min-width: 25vw;
+    max-width: 30vw;
+    max-height: 55vh;
+    background-color: 'background.paper';
+    border: '2px solid #000';
+    box-shadow: 24;
+    overflow-y: scroll;
+}
+
+.additionalHeader {
+    margin-top: 3em;
+}
+
+.additionalSection {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 90%;
 }

@@ -15,6 +15,8 @@ const Game: React.FC<{ data: Sport }> = (props) => {
     const params = useParams();
     const navigate = useNavigate()
 
+    console.log(props.data.Time)
+
     const { timeRemaining } = hoursLeft(props.data.Time.toDate())
 
     return (

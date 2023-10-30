@@ -29,7 +29,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     const images = await listAll(listRef);
 
     let finalImage;
-    const image = images.items.find(img => img.name === userObject.email)
+    const image = images.items.find(img => img.name === userObject.username)
 
     if (image) {
         finalImage = await getDownloadURL(image)

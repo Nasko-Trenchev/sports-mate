@@ -11,7 +11,7 @@ import { Sports } from "../util/sportTypes";
 export type profileData = {
     username: string,
     email: string,
-    game: Sports
+    GamesPlayed: Sports
 }
 
 const ProfilePage = () => {

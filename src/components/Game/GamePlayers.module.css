@@ -1,0 +1,8 @@
+.playerProfileContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-basis: 10%;
+    color: black;
+
+}

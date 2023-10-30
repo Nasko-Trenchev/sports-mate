@@ -15,6 +15,7 @@ export const Register = () => {
         password: '',
         rePassword: '',
         username: ''
+        //Username can`t be more than 15 characters
     });
 
     const { user } = UserAuth();

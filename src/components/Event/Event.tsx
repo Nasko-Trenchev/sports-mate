@@ -11,7 +11,6 @@ import { Sports } from '../../util/sportTypes';
 import { useState } from 'react';
 import { isEventOver } from '../../util/helperFunctions';
 import FieldSelector from '../Selectors/FieldSelector';
-import { auth } from '../../config/firebase';
 
 const initialState = {
     Location: "",
@@ -28,7 +27,6 @@ const Event: React.FC = () => {
     const [showFilter, setShowFilter] = useState(false)
     const [filters, setFilters] = useState(initialState)
 
-    console.log(auth.currentUser?.displayName)
     const handleFiltersChange = (e: SelectChangeEvent<any>, checked?: boolean) => {
         if (checked !== undefined) {
             if (e.target.name === "OnlyWithEmptySpots") {

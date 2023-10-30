@@ -2,22 +2,25 @@ import * as React from 'react';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
+import Divider from '@mui/material/Divider';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Avatar from '@mui/material/Avatar';
+import { Rating } from '@mui/lab';
 import Typography from '@mui/material/Typography';
 import { useNavigate } from 'react-router-dom';
+import classes from './GamePlayers.module.css'
 
-const GamePlayers: React.FC<{ image: string, nickname: string, email: string }> = (props) => {
+const GamePlayers: React.FC<{ image: string, displayName: string, email: string }> = (props) => {
 
     const navigate = useNavigate();
     return (
-        <List sx={{ width: '30%', maxWidth: 360, bgcolor: 'background.paper' }}>
+        <List sx={{ width: '100%', bgcolor: 'background.paper' }} className={classes.playerProfileContainer}>
             <ListItem alignItems="center">
-                <ListItemAvatar >
-                    <Avatar onClick={() => navigate(`/publicProfile/${props.email}`)} alt={props.nickname} src={props.image} />
+                <ListItemAvatar sx={{ flex: '30%', display: 'flex', justifyContent: 'center' }}>
+                    <Avatar onClick={() => navigate(`/publicProfile/${props.displayName}`)} alt={props.displayName} src={props.image} />
                 </ListItemAvatar>
-                <ListItemText
-                    primary={props.nickname}
+                <ListItemText sx={{flex: '70%' }}
+                    primary={props.displayName}
                     secondary={
                         <React.Fragment>
                             <Typography
@@ -26,15 +29,12 @@ const GamePlayers: React.FC<{ image: string, nickname: string, email: string }> 
                                 variant="body2"
                                 color="text.primary"
                             >
-                                Games played:
-                            </Typography>
-                            <Typography
-                                sx={{ display: 'block' }}
-                                component="span"
-                                variant="body2"
-                                color="text.primary"
-                            >
-                                Mates rating:
+                                <Rating
+                                    size='small'
+                                    readOnly
+                                    precision={0.5}
+                                    value={5}
+                                />
                             </Typography>
                         </React.Fragment>
                     }
