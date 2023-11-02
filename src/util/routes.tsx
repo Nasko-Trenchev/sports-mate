@@ -5,6 +5,7 @@ import { loader as profileLoader } from '../pages/ProfilePage';
 import { action as createAction } from '../pages/CreatePage';
 import { loader as gameDetailsLoader, action as gameDetailsAction } from '../pages/GameDetailsPage';
 import CompleteEventPage from '../pages/CompleteEventPage';
+import { action as completeAction } from '../pages/CompleteEventPage';
 import PublicProfilePage from '../pages/PublicProfilePage';
 import { loader as publicProfileLoader } from '../pages/PublicProfilePage';
 import ErrorPage from '../pages/ErrorPage';
@@ -51,7 +52,7 @@ const router = createBrowserRouter([
                             {
                                 index: true, element: <GameDetailsPage />, action: gameDetailsAction
                             },
-                            { path: 'completion', element: <CompleteEventPage /> }
+                            { path: 'completion', element: <CompleteEventPage />, action: completeAction }
                         ]
                     },
                 ]

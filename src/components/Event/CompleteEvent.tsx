@@ -1,4 +1,3 @@
-import * as React from 'react';
 import Box from '@mui/material/Box';
 import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
@@ -6,15 +5,88 @@ import StepLabel from '@mui/material/StepLabel';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import CompleteEventSteps from './CompleteEventSteps';
+import { SelectChangeEvent } from '@mui/material/Select';
+import { useReducer, useState } from 'react'
+import { useSubmit, useParams } from 'react-router-dom';
+import classes from './CompleteEvent.module.css'
 
+
+type reducerStateType = {
+    Rating: {
+        username: string,
+        rating: number
+    }[],
+    Presence: string[],
+    Comment: string
+}
+const reducerInitialValue = {
+    Rating: [],
+    Presence: [],
+    Comment: '',
+}
+
+interface ReducerAction {
+    type: string;
+    payload: any;
+}
+
+const formReducer = (state: reducerStateType, action: ReducerAction) => {
+
+    const { type, payload } = action;
+
+    switch (type) {
+        case "PRESENCE": {
+            const currentUser = payload;
+            let prevState = [...state.Presence]
+            if (prevState.some((username) => username === currentUser)) {
+                prevState = prevState.filter(username => username !== currentUser)
+            }
+            else {
+                prevState.push(currentUser)
+            }
+            return {
+                ...state,
+                Presence: prevState
+            }
+        }
+        case "RATING": {
+            let prevState = [...state.Rating]
+            const username = payload.user as string;
+            const rating = payload.rating as number || 0;
+            if (prevState.some((user) => user.username === username)) {
+                const userIndex = prevState.findIndex((user) => user.username === username)
+                prevState[userIndex].rating = rating;
+            }
+            else {
+                prevState.push({ username, rating })
+            }
+            return {
+                ...state,
+                Rating: prevState
+            }
+        }
+        case "COMMENT": {
+            return {
+                ...state,
+                Comment: payload
+            }
+        }
+    }
+    return state;
+}
 const steps = ['Mark players presence', 'Rate players', 'Add additional information'];
 
 export default function HorizontalLinearStepper() {
-    const [activeStep, setActiveStep] = React.useState(0);
-    const [skipped, setSkipped] = React.useState(new Set<number>());
+    const [activeStep, setActiveStep] = useState(0);
+    const [skipped, setSkipped] = useState(new Set<number>());
+    const [formState, dispatchFormState] = useReducer(formReducer, reducerInitialValue);
+
+    console.log(formState.Rating)
+    const submit = useSubmit();
+    const { sport, gameId } = useParams();
 
     const isStepOptional = (step: number) => {
-        return step === 2 || step === 1;
+        return step === 1 || step === 2;
     };
 
     const isStepSkipped = (step: number) => {
@@ -22,6 +94,19 @@ export default function HorizontalLinearStepper() {
     };
 
     const handleNext = () => {
+
+        if (activeStep === steps.length - 1) {
+
+            submit({
+                sport: `${sport}`,
+                id: `${gameId}`,
+                rating: JSON.stringify(formState.Rating),
+                presence: `${formState.Presence}`,
+                comment: `${formState.Comment}`
+            },
+                { method: "post", encType: "application/json" })
+        }
+
         let newSkipped = skipped;
         if (isStepSkipped(activeStep)) {
             newSkipped = new Set(newSkipped.values());
@@ -37,6 +122,7 @@ export default function HorizontalLinearStepper() {
     };
 
     const handleSkip = () => {
+
         if (!isStepOptional(activeStep)) {
             // You probably want to guard against something like this,
             // it should never occur unless someone's actively trying to break something.
@@ -55,8 +141,19 @@ export default function HorizontalLinearStepper() {
         setActiveStep(0);
     };
 
+    const handlePresenceChange = (e: SelectChangeEvent<any>) => {
+        dispatchFormState({ type: "PRESENCE", payload: e.target.name as string })
+    }
+
+    const handleRatingChange = (event: React.SyntheticEvent<Element, Event>, value: number | null, user: string) => {
+        dispatchFormState({ type: "RATING", payload: { user: user, rating: value } })
+    }
+    const handleCommentChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        dispatchFormState({ type: "COMMENT", payload: e.target.value })
+    }
+
     return (
-        <Box sx={{ width: '100%' }}>
+        <div className={classes.completeEventContainer}>
             <Stepper activeStep={activeStep}>
                 {steps.map((label, index) => {
                     const stepProps: { completed?: boolean } = {};
@@ -79,18 +176,23 @@ export default function HorizontalLinearStepper() {
                 })}
             </Stepper>
             {activeStep === steps.length ? (
-                <React.Fragment>
+                <>
                     <Typography sx={{ mt: 2, mb: 1 }}>
-                        All steps completed - you&apos;re finished
+                        All steps completed - you&apos;re finished!
                     </Typography>
                     <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
                         <Box sx={{ flex: '1 1 auto' }} />
                         <Button onClick={handleReset}>Reset</Button>
                     </Box>
-                </React.Fragment>
+                </>
             ) : (
-                <React.Fragment>
-                    <CompleteEventSteps step={activeStep} />
+                <>
+                    <CompleteEventSteps
+                        step={activeStep}
+                        handlePresenceChange={handlePresenceChange}
+                        handleRatingChange={handleRatingChange}
+                        handleCommentChange={handleCommentChange}
+                    />
                     {/* <Typography sx={{ mt: 2, mb: 1 }}>Step {activeStep + 1}</Typography> */}
                     <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
                         <Button
@@ -111,8 +213,8 @@ export default function HorizontalLinearStepper() {
                             {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
                         </Button>
                     </Box>
-                </React.Fragment>
+                </>
             )}
-        </Box>
+        </div>
     );
 }

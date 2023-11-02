@@ -20,10 +20,8 @@ export async function action({ params, request }: ActionFunctionArgs) {
     const data = await request.formData();
 
     const jsonTime = data.get('Time') as string;
-    console.log(jsonTime)
 
     const timeAsTimeStamp = Timestamp.fromDate(new Date(jsonTime));
-    console.log(timeAsTimeStamp.toDate())
 
     const docRef = await addDoc(collection(db, `${params.sport}`), {
         Image: data.get('Image'),

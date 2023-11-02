@@ -71,10 +71,7 @@ export async function action({ params, request }: ActionFunctionArgs) {
 
     const docRef = doc(db, `${sport}`, `${id}`);
 
-    console.log(action)
-    console.log(sport)
-    console.log(id)
-    console.log(user)
+
     if (action === "Mark as completed") {
         const game = JSON.parse(data.game)
         game.sport = params.sport;

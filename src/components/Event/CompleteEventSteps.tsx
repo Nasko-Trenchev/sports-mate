@@ -4,14 +4,24 @@ import { ListItemSecondaryAction } from '@mui/material';
 import { loaderReturnArgs } from "../../pages/GameDetailsPage";
 import Checkbox from '@mui/material/Checkbox';
 import List from '@mui/material/List';
+import TextField from '@mui/material/TextField/TextField';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
-import { Rating } from '@mui/lab';
+import { Rating } from '@mui/material';
+import { SelectChangeEvent } from '@mui/material/Select';
 import Avatar from '@mui/material/Avatar';
 import { StyledEngineProvider } from '@mui/material/styles';
 
-const CompleteEventSteps: React.FC<{ step: number }> = (props) => {
+type StepsProps = {
+    step: number,
+    handlePresenceChange: (e: SelectChangeEvent<any>) => void
+    handleRatingChange: (e: React.SyntheticEvent<Element, Event>, value: number | null, user: string) => void
+    handleCommentChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void
+}
+
+const CompleteEventSteps: React.FC<StepsProps> = (props) => {
+
 
     const { sportDetails, users } = useRouteLoaderData('game-details') as loaderReturnArgs;
 
@@ -23,19 +33,21 @@ const CompleteEventSteps: React.FC<{ step: number }> = (props) => {
                 <h3>Please mark the attendance of the players</h3>
                 <div className={classes.players}>
                     {users.map((user) =>
-                        <List className={classes.playerProfileContainer}>
+                        <List className={classes.playerProfileContainer} key={user.users.email}>
                             <ListItem >
                                 <ListItemAvatar>
                                     <div >
                                         <Avatar alt={user.users.username} src={user.image} />
                                     </div>
-
                                 </ListItemAvatar>
                                 <ListItemText sx={{ flex: '70%' }}
                                     primary={user.users.username}
                                 />
                                 <ListItemSecondaryAction >
-                                    <Checkbox {...label} defaultChecked />
+                                    <Checkbox {...label}
+                                        name={user.users.username}
+                                        defaultChecked
+                                        onChange={(e) => props.handlePresenceChange(e)} />
                                 </ListItemSecondaryAction>
                             </ListItem>
                         </List>
@@ -64,9 +76,9 @@ const CompleteEventSteps: React.FC<{ step: number }> = (props) => {
                                 <ListItemSecondaryAction className={classes.rating} >
                                     <Rating
                                         size='small'
-                                        readOnly
-                                        precision={0.5}
-                                        value={5}
+                                        name={user.users.username}
+                                        precision={1}
+                                        onChange={(event, value) => props.handleRatingChange(event, value, user.users.username)}
                                     />
                                 </ListItemSecondaryAction>
                             </ListItem>
@@ -78,7 +90,18 @@ const CompleteEventSteps: React.FC<{ step: number }> = (props) => {
     }
     else {
         return (
-            <div></div>
+            <StyledEngineProvider>
+                <div className={classes.commentSection}>
+                    <TextField sx={{ width: "60%" }}
+                        id="standard-multiline-static"
+                        label="Write your comment"
+                        multiline
+                        rows={5}
+                        variant="standard"
+                        onBlur={(e) => props.handleCommentChange(e)}
+                    />
+                </div>
+            </StyledEngineProvider>
         )
     }
 }

@@ -10,3 +10,9 @@
     justify-content: space-around;
 
 }
+
+.completeEventContainer {
+    width: 80%;
+    margin: auto;
+    margin-top: 2em;
+}
