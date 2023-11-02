@@ -89,8 +89,10 @@ const Event: React.FC = () => {
 
     return (
         <StyledEngineProvider>
-            <h1>There {data.length > 1 ? "are" : "is"} {data.length} upcoming {params.sport} {data.length > 1 ? "events" : "event"}</h1>
-            <CreateEvent />
+            <div className={classes.eventHeader}>
+                <h1>There {data.length > 1 ? "are" : "is"} {data.length} upcoming {params.sport} {data.length > 1 ? "events" : "event"}</h1>
+                <CreateEvent />
+            </div>
             <div className={classes.filterSection}>
                 <Button
                     variant='contained'

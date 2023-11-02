@@ -12,8 +12,12 @@ const CreateButton = () => {
                 isPending ? `${classes.pending}` : isActive ? `${classes.active}` : ""
             }>
                 <motion.div
+
                     whileHover={{ scale: 1.1 }}>
-                    <Button>Create event</Button>
+                    <Button
+                        variant='contained'
+                        size='small'
+                    >Create event</Button>
                 </motion.div>
             </NavLink>
         </div>

@@ -18,22 +18,9 @@ import classes from './GameDetails.module.css'
 import { useState } from "react";
 import Box from "@mui/material/Box";
 
-
-// const style = {
-//     position: 'absolute' as 'absolute',
-//     top: '50%',
-//     left: '50%',
-//     transform: 'translate(-50%, -50%)',
-//     width: 500,
-//     height: 80vh;
-//     bgcolor: 'background.paper',
-//     border: '2px solid #000',
-//     boxShadow: 24,
-//     p: 4,
-// };
 const GameDetails: React.FC = () => {
 
-    const { sport } = useParams();
+    const { sport, gameId } = useParams();
     const { user } = UserAuth();
     const navigate = useNavigate()
     const submit = useSubmit();
@@ -46,9 +33,8 @@ const GameDetails: React.FC = () => {
 
     const fieldDetails = FootballFieldsImage.find(field => field.location === sportDetails.Location)
 
-    const mapCoordinates = FootballFieldsImage.find(field => field.location === sportDetails.Location)
-
     const handleEventClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+
         if (!user) {
             navigate("/login")
             return;
@@ -66,58 +52,74 @@ const GameDetails: React.FC = () => {
     }
 
     const handleCompleteClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-        submit({
-            action: `${e.currentTarget.textContent}`,
-            sport: `${sport}`,
-            id: `${sportDetails.id}`,
-            user: `${user?.displayName}`,
-            game: `${JSON.stringify(sportDetails)}`
-        },
-            { method: "post", encType: "application/json" })
+
+        // submit({
+        //     action: `${e.currentTarget.textContent}`,
+        //     sport: `${sport}`,
+        //     id: `${sportDetails.id}`,
+        //     user: `${user?.displayName}`,
+        //     game: `${JSON.stringify(sportDetails)}`
+        // },
+        //     { method: "post", encType: "application/json" })
     }
     return (
         <>
+            {(sportDetails.Owner === user?.displayName && timeRemaining === "Event over") &&
+                <motion.div style={{ textAlign: 'center', marginTop: '2em' }} whileHover={{ scale: 1.1 }}>
+                    <Button
+                        variant='contained'
+                        size='small'
+                        sx={{
+                            color: 'white', borderColor: 'blue', '&:hover': { borderColor: 'gray' }
+                        }} onClick={() => navigate(`/${sport}/${gameId}/completion`)}>Mark as completed</Button>
+                </motion.div>
+
+            }
             <div className={classes.detailsContainer}>
                 <div className={classes.description}>
                     <h1>{sportDetails.Location}</h1>
                     <p>{fieldDetails?.street}</p>
-                    <p>{timeRemaining}</p>
+                    {timeRemaining !== "Event over" && <p>{timeRemaining}</p>}
                     <div className={classes.registrationStatus}>
                         {time > 0 && sportDetails.PlayersCount > sportDetails.Players.length ?
                             <h3 style={{ color: 'green' }}>Registration open</h3> :
-                            <h3 style={{ color: 'red' }}>Registration closed</h3>}
+                            timeRemaining === "Event over" ?
+                                <h3 style={{ color: 'red' }}>Event over</h3>
+                                :
+                                <h3 style={{ color: 'red' }}>Registration closed</h3>}
+                        {timeRemaining !== "Event over" && <>
+                            <p>{sportDetails.PlayersCount - sportDetails.Players.length} spots remaining</p>
+                            {sportDetails.Owner === user?.displayName ?
+                                <motion.div whileHover={{ scale: 1.1 }} className={classes.detailsBtn}>
+                                    <Button
+                                        variant='contained'
+                                        size='small'
+                                        sx={{
+                                            color: 'white', borderColor: 'blue', '&:hover': { borderColor: 'gray' }
+                                        }}
+                                        onClick={openDialog}
+                                    >Cancel event</Button>
+                                </motion.div>
 
-                        <p>{sportDetails.PlayersCount - sportDetails.Players.length} spots remaining</p>
-                        {sportDetails.Owner === user?.displayName ?
-                            <motion.div whileHover={{ scale: 1.1 }} className={classes.detailsBtn}>
-                                <Button
-                                    variant='outlined'
-                                    size='small'
-                                    sx={{
-                                        color: 'blue', borderColor: 'blue', '&:hover': { borderColor: 'gray' }
-                                    }}
-                                    onClick={openDialog}
-                                >Cancel event</Button>
-                            </motion.div>
+                                :
 
-                            :
-
-                            <motion.div whileHover={{ scale: 1.1 }} className={classes.detailsBtn}>
-                                <Button
-                                    variant='outlined'
-                                    size='small'
-                                    sx={{
-                                        color: 'blue', borderColor: 'blue', '&:hover': { borderColor: 'gray' },
-                                        '&:disabled': { color: 'red', border: 'none' }
-                                    }}
-                                    disabled={sportDetails.PlayersCount === sportDetails.Players.length &&
-                                        !sportDetails.Players.some(email => email === user?.email)}
-                                    onClick={(e) => handleEventClick(e)}
-                                >{sportDetails.Players.some(email => email === user?.displayName) ? "Leave event" :
-                                    sportDetails.PlayersCount === sportDetails.Players.length ? "Full" : "Join event"}
-                                </Button>
-                            </motion.div>
-                        }
+                                <motion.div whileHover={{ scale: 1.1 }} className={classes.detailsBtn}>
+                                    <Button
+                                        variant='contained'
+                                        size='small'
+                                        sx={{
+                                            color: 'white', borderColor: 'blue', '&:hover': { borderColor: 'gray' },
+                                            '&:disabled': { color: 'red', border: 'none' }
+                                        }}
+                                        disabled={sportDetails.PlayersCount === sportDetails.Players.length &&
+                                            !sportDetails.Players.some(email => email === user?.displayName)}
+                                        onClick={(e) => handleEventClick(e)}
+                                    >{sportDetails.Players.some(email => email === user?.displayName) ? "Leave event" :
+                                        sportDetails.PlayersCount === sportDetails.Players.length ? "Full" : "Join event"}
+                                    </Button>
+                                </motion.div>
+                            }
+                        </>}
                     </div >
                 </div>
                 <div className={classes.images}>
@@ -131,8 +133,18 @@ const GameDetails: React.FC = () => {
                             displayName={user.users.username}
                             email={user.users.email} />
                     )}
-                    {users.length > 3 && <Button onClick={() => setShowPlayers(true)} sx={{ alignSelf: 'center' }}>
-                        Show all Players</Button>
+                    {users.length > 3 &&
+                        <motion.div whileHover={{ scale: 1.1 }} style={{ alignSelf: 'center' }}>
+                            <Button
+                                variant='contained'
+                                size='small'
+                                sx={{
+                                    color: 'white', borderColor: 'blue', '&:hover': { borderColor: 'gray' }
+                                }}
+                                onClick={() => setShowPlayers(true)}>
+                                Show all Players
+                            </Button>
+                        </motion.div>
                     }
                     <Modal
                         open={showPlayers}
@@ -156,16 +168,12 @@ const GameDetails: React.FC = () => {
             <div className={classes.additionalSection}>
                 <div className={classes.map}>
                     <p>Event location</p>
-                    <Map coordinate={mapCoordinates?.coordinates!} />
+                    <Map coordinate={fieldDetails?.coordinates!} />
                 </div>
                 <div>
                     <h3>Comments</h3>
                 </div>
             </div>
-
-            {(sportDetails.Owner === user?.displayName && timeRemaining === "Event over") &&
-                <Button onClick={handleCompleteClick}>Mark as completed</Button>
-            }
             <AlertDialog
                 title='Confirm event deletion'
                 confirmationText="This action can`t be reverted! You`ll need to create another event if you proceed"

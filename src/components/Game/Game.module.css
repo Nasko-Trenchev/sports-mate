@@ -1,12 +1,4 @@
 .game {
-    /* display: flex;
-    flex-direction: row;
-    justify-content: space-evenly;
-    align-items: center;
-    height: 10vh;
-    padding: 1em;
-    background-image: linear-gradient(to right, #0f0c29, #302b63, #24243e);
-    color: rgb(255, 255, 255); */
     display: grid;
     grid-template-columns: 1.2fr 1.1fr 1.1fr 0.7fr 1fr;
     grid-template-rows: 100px;
@@ -59,4 +51,5 @@
 
 .detailsBtn button {
     min-width: 135px;
+    font-size: 0.8em;
 }

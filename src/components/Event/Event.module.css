@@ -3,6 +3,16 @@ h2 {
     text-align: center;
 }
 
+.eventHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.eventHeader h1 {
+    flex-basis: 80%
+}
+
 .gamesContainer {
     width: 80vw;
     margin: auto;
@@ -14,6 +24,10 @@ h2 {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+}
+
+.filterSection button {
+    margin: 0
 }
 
 .filterCheckbox {
@@ -34,5 +48,5 @@ h2 {
     display: flex;
     justify-content: space-around;
     margin-top: 1em;
-    
+
 }

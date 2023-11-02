@@ -7,6 +7,7 @@ import { ref, getDownloadURL, listAll } from 'firebase/storage'
 import { storage } from "../config/firebase";
 import picture from '../assets/noProfile.webp'
 import { profileData } from "./ProfilePage";
+import { act } from "react-dom/test-utils";
 
 
 export type constructedObject = {
@@ -64,16 +65,21 @@ export async function action({ params, request }: ActionFunctionArgs) {
 
     const data = await request.json()
 
+    console.log(data)
+
     const { action, sport, id, user } = data;
 
     const docRef = doc(db, `${sport}`, `${id}`);
 
-
+    console.log(action)
+    console.log(sport)
+    console.log(id)
+    console.log(user)
     if (action === "Mark as completed") {
         const game = JSON.parse(data.game)
         game.sport = params.sport;
         game.Time = new Timestamp(game.Time.seconds, game.Time.nanoseconds)
-        console.log(game.Time)
+
         for (const player of game.Players) {
             const userRef = doc(db, 'users', player);
             await updateDoc(userRef, {

@@ -4,6 +4,7 @@ import { loader as sportsLoader } from '../pages/EventPage';
 import { loader as profileLoader } from '../pages/ProfilePage';
 import { action as createAction } from '../pages/CreatePage';
 import { loader as gameDetailsLoader, action as gameDetailsAction } from '../pages/GameDetailsPage';
+import CompleteEventPage from '../pages/CompleteEventPage';
 import PublicProfilePage from '../pages/PublicProfilePage';
 import { loader as publicProfileLoader } from '../pages/PublicProfilePage';
 import ErrorPage from '../pages/ErrorPage';
@@ -16,6 +17,7 @@ import RegisterPage from '../pages/RegisterPage';
 import ProfileSettingsPage from '../pages/ProfileSettingsPage';
 import ProfilePage from '../pages/ProfilePage';
 import Logout from '../pages/LogoutPage';
+import path from 'path';
 
 const router = createBrowserRouter([
     {
@@ -43,7 +45,15 @@ const router = createBrowserRouter([
                         index: true, element: <EventPage />
                     },
                     { path: 'create', element: <CreatePage />, action: createAction },
-                    { path: ':gameId', id: 'game-details', element: <GameDetailsPage />, loader: gameDetailsLoader, action: gameDetailsAction },
+                    {
+                        path: ':gameId', id: 'game-details', loader: gameDetailsLoader,
+                        children: [
+                            {
+                                index: true, element: <GameDetailsPage />, action: gameDetailsAction
+                            },
+                            { path: 'completion', element: <CompleteEventPage /> }
+                        ]
+                    },
                 ]
             },
             {

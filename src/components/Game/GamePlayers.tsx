@@ -2,9 +2,9 @@ import * as React from 'react';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
-import Divider from '@mui/material/Divider';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Avatar from '@mui/material/Avatar';
+import { motion } from 'framer-motion';
 import { Rating } from '@mui/lab';
 import Typography from '@mui/material/Typography';
 import { useNavigate } from 'react-router-dom';
@@ -17,9 +17,12 @@ const GamePlayers: React.FC<{ image: string, displayName: string, email: string 
         <List sx={{ width: '100%', bgcolor: 'background.paper' }} className={classes.playerProfileContainer}>
             <ListItem alignItems="center">
                 <ListItemAvatar sx={{ flex: '30%', display: 'flex', justifyContent: 'center' }}>
-                    <Avatar onClick={() => navigate(`/publicProfile/${props.displayName}`)} alt={props.displayName} src={props.image} />
+                    <motion.div whileHover={{ scale: 1.2 }}>
+                        <Avatar onClick={() => navigate(`/publicProfile/${props.displayName}`)} alt={props.displayName} src={props.image} />
+                    </motion.div>
+
                 </ListItemAvatar>
-                <ListItemText sx={{flex: '70%' }}
+                <ListItemText sx={{ flex: '70%' }}
                     primary={props.displayName}
                     secondary={
                         <React.Fragment>

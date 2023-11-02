@@ -1,0 +1,12 @@
+.StepsContaier {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+}
+
+.Stepper {
+    width: 80%;
+    display: flex;
+    justify-content: space-around;
+
+}

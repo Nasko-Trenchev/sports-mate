@@ -3,6 +3,7 @@ import LocationOnIcon from '@mui/icons-material/LocationOn';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import StarsIcon from '@mui/icons-material/Stars';
 import ThreePIcon from '@mui/icons-material/ThreeP';
+import { motion } from 'framer-motion';
 import { Button } from '@mui/material';
 import { Sport } from '../../util/sportTypes';
 import { useParams, useNavigate } from "react-router-dom";
@@ -49,7 +50,9 @@ const Game: React.FC<{ data: Sport }> = (props) => {
                     <p>{props.data.Players.length}/{props.data.PlayersCount} spots filled</p>
                     <p>{timeRemaining}</p>
                 </div>
-                <Button onClick={() => navigate(`/${params.sport}/${props.data.id}`)}>Show details</Button>
+                <motion.div whileHover={{ scale: 1.1 }} className={classes.detailsBtn}>
+                    <Button variant='contained' size='small' onClick={() => navigate(`/${params.sport}/${props.data.id}`)}>Show details</Button>
+                </motion.div>
             </div>
         </>
     )
