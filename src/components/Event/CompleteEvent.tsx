@@ -81,7 +81,6 @@ export default function HorizontalLinearStepper() {
     const [skipped, setSkipped] = useState(new Set<number>());
     const [formState, dispatchFormState] = useReducer(formReducer, reducerInitialValue);
 
-    console.log(formState.Rating)
     const submit = useSubmit();
     const { sport, gameId } = useParams();
 
@@ -101,7 +100,7 @@ export default function HorizontalLinearStepper() {
                 sport: `${sport}`,
                 id: `${gameId}`,
                 rating: JSON.stringify(formState.Rating),
-                presence: `${formState.Presence}`,
+                presence: JSON.stringify(formState.Presence),
                 comment: `${formState.Comment}`
             },
                 { method: "post", encType: "application/json" })
