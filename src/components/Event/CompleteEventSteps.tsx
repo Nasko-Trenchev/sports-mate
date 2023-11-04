@@ -94,7 +94,7 @@ const CompleteEventSteps: React.FC<StepsProps> = (props) => {
                 <div className={classes.commentSection}>
                     <TextField sx={{ width: "60%" }}
                         id="standard-multiline-static"
-                        label="Write your comment"
+                        label="Write your comment about the game"
                         multiline
                         rows={5}
                         variant="standard"

@@ -7,7 +7,7 @@ const CreateButton = () => {
 
     const param = useParams();
     return (
-        <div>
+        <div className={classes.createBtnContainer}>
             <NavLink to={`create`} className={({ isActive, isPending }) =>
                 isPending ? `${classes.pending}` : isActive ? `${classes.active}` : ""
             }>

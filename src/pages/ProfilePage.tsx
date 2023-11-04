@@ -12,6 +12,9 @@ export type profileData = {
     username: string,
     email: string,
     GamesPlayed: Sports
+    absent: string[],
+    rating: number,
+    votes: number,
 }
 
 const ProfilePage = () => {
@@ -39,10 +42,5 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     const finalData = userData.data() as profileData;
 
     return { image: finalImage, profile: finalData };
-    // try {
-    //     const userData = await getDoc(doc(db, `users`, `${auth.currentUser?.uid!}`));
-    //     return userData.data() as profileData;
-    // } catch (error) {
-    //     console.log(error)
-    // }
+
 }

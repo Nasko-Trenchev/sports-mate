@@ -1,11 +1,9 @@
 import classes from './Profile.module.css';
-import Snackbar from '@mui/material/Snackbar';
-import { SnackbarAlert } from '../Alert/Alert';
 import { updatePassword, reauthenticateWithCredential, EmailAuthProvider } from "firebase/auth";
 import { StyledEngineProvider } from '@mui/material/styles';
 import { auth } from '../../config/firebase';
 import { useRef, useState } from 'react';
-import { Button } from '@mui/material';
+import { Button, Rating, Box } from '@mui/material';
 import { useRouteLoaderData, NavLink } from 'react-router-dom';
 import useNotification from '../../hooks/notification';
 import { storage } from '../../config/firebase';
@@ -22,6 +20,7 @@ const Profile = () => {
     const { image, profile } = useRouteLoaderData('profile-data') as combinedProfileData
 
     const fileInput = useRef<HTMLInputElement | null>(null);
+    const ratingValue = Math.round(profile.rating / profile.votes)
 
     const handleImageInputChange = (event: React.FormEvent) => {
         const files = (event.target as HTMLInputElement).files
@@ -77,7 +76,20 @@ const Profile = () => {
             </div>
             <div className={classes.profileContainer}>
                 <div>
-                    <p>Games played 3</p>
+                    <p>Total events attended: {profile.GamesPlayed.length}</p>
+                    <div className={classes.ratingSection}>
+                        <h2>Your rating:</h2>
+                        <div className={classes.ratingFlexContainer}>
+                            <Rating
+                                size='small'
+                                sx={{ alignItems: 'center' }}
+                                precision={1}
+                                readOnly
+                                value={ratingValue}
+                            />
+                            <p>{profile.votes} votes</p>
+                        </div>
+                    </div>
                 </div>
                 <Button variant='contained'><NavLink to={'settings'} className={classes['links']}>Settings</NavLink></Button>
 

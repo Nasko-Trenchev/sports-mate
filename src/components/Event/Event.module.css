@@ -3,14 +3,19 @@ h2 {
     text-align: center;
 }
 
-.eventHeader {
+.createContainer {
     display: flex;
-    align-items: center;
-    justify-content: space-around;
+    justify-content: center;
+    margin: auto;
+    width: 80vw;
 }
 
-.eventHeader h1 {
-    flex-basis: 80%
+.createContainerTitle {
+    flex-basis: 80%;
+}
+
+.createContainerTitle h2 {
+    margin-left: 5em;
 }
 
 .gamesContainer {

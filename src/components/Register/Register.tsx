@@ -4,7 +4,7 @@ import { useNavigate, NavLink } from 'react-router-dom';
 import { StyledEngineProvider } from '@mui/material/styles';
 import { UserAuth } from '../../contexts/UserContext';
 import { setDoc, doc } from 'firebase/firestore';
-import { db, auth } from '../../config/firebase';
+import { db } from '../../config/firebase';
 import { User, getAuth, sendEmailVerification, sendPasswordResetEmail } from "firebase/auth";
 
 import styles from './Register.module.css';
@@ -36,7 +36,10 @@ export const Register = () => {
             await createUser(formInput.email, formInput.password, formInput.username)
             await setDoc(doc(db, "users", `${formInput.username}`), {
                 username: formInput.username,
-                email: formInput.email,                
+                email: formInput.email,
+                GamesPlayed: [],
+                votes: 0,
+                rating: 0,
             });
             navigate('/');
         } catch (error) {

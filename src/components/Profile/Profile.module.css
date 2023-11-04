@@ -30,3 +30,25 @@
     text-decoration: none;
     color: white;
 }
+
+.ratingSection {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+}
+
+.ratingSection h2 {
+    margin-right: 0.5em;
+}
+
+.ratingSection p {
+    margin: 0;
+    font-size: 0.9em;
+}
+.ratingFlexContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    justify-items: flex-end;
+}

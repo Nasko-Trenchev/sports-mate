@@ -24,7 +24,7 @@ const EventPagination: React.FC<{ data: Sports }> = (props) => {
             {displayedItems.map((game, index) => (
                 <Game key={game.id} data={displayedItems[index]} />
             ))}
-            <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+            <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: '1em' }}>
                 <Pagination
                     count={Math.ceil(props.data.length / itemsPerPage)}
                     page={page}

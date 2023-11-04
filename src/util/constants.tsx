@@ -37,3 +37,11 @@ export const FootballFieldsImage = [
         coordinates: { lat: 42.661887368545905, lng: 23.392248001624957 }
     }
 ]
+
+export const ratingLabels: { [index: string]: string } = {
+    1: 'Useless',
+    2: 'Poor',
+    3: 'Ok',
+    4: 'Good',
+    5: 'Excellent',
+};

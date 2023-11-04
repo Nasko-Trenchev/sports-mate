@@ -29,7 +29,6 @@ const AlertDialog: React.FC<alertActions> = (props) => {
             aria-describedby="alert-dialog-description"
         >
             <DialogTitle id="alert-dialog-title">
-                {/* {"Use Google's location service?"} */}
                 {props.title}
             </DialogTitle>
             <DialogContent>

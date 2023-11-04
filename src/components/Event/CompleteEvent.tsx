@@ -7,7 +7,8 @@ import Typography from '@mui/material/Typography';
 import CompleteEventSteps from './CompleteEventSteps';
 import { SelectChangeEvent } from '@mui/material/Select';
 import { useReducer, useState } from 'react'
-import { useSubmit, useParams } from 'react-router-dom';
+import { useSubmit, useParams, useNavigate, useRouteLoaderData } from 'react-router-dom';
+import { loaderReturnArgs } from "../../pages/GameDetailsPage";
 import classes from './CompleteEvent.module.css'
 
 
@@ -78,19 +79,22 @@ const steps = ['Mark players presence', 'Rate players', 'Add additional informat
 
 export default function HorizontalLinearStepper() {
     const [activeStep, setActiveStep] = useState(0);
-    const [skipped, setSkipped] = useState(new Set<number>());
+    // const [skipped, setSkipped] = useState(new Set<number>());
     const [formState, dispatchFormState] = useReducer(formReducer, reducerInitialValue);
 
     const submit = useSubmit();
+    const navigate = useNavigate();
     const { sport, gameId } = useParams();
+    const { sportDetails } = useRouteLoaderData('game-details') as loaderReturnArgs;
+
 
     const isStepOptional = (step: number) => {
         return step === 1 || step === 2;
     };
 
-    const isStepSkipped = (step: number) => {
-        return skipped.has(step);
-    };
+    // const isStepSkipped = (step: number) => {
+    //     return skipped.has(step);
+    // };
 
     const handleNext = () => {
 
@@ -101,44 +105,41 @@ export default function HorizontalLinearStepper() {
                 id: `${gameId}`,
                 rating: JSON.stringify(formState.Rating),
                 presence: JSON.stringify(formState.Presence),
-                comment: `${formState.Comment}`
+                comment: `${formState.Comment}`,
+                event: JSON.stringify(sportDetails)
             },
                 { method: "post", encType: "application/json" })
         }
 
-        let newSkipped = skipped;
-        if (isStepSkipped(activeStep)) {
-            newSkipped = new Set(newSkipped.values());
-            newSkipped.delete(activeStep);
-        }
+        // let newSkipped = skipped;
+        // if (isStepSkipped(activeStep)) {
+        //     newSkipped = new Set(newSkipped.values());
+        //     newSkipped.delete(activeStep);
+        // }
 
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
-        setSkipped(newSkipped);
+        // setSkipped(newSkipped);
     };
 
     const handleBack = () => {
         setActiveStep((prevActiveStep) => prevActiveStep - 1);
     };
 
-    const handleSkip = () => {
+    // const handleSkip = () => {
 
-        if (!isStepOptional(activeStep)) {
-            // You probably want to guard against something like this,
-            // it should never occur unless someone's actively trying to break something.
-            throw new Error("You can't skip a step that isn't optional.");
-        }
+    //     if (!isStepOptional(activeStep)) {
+    //         // You probably want to guard against something like this,
+    //         // it should never occur unless someone's actively trying to break something.
+    //         throw new Error("You can't skip a step that isn't optional.");
+    //     }
 
-        setActiveStep((prevActiveStep) => prevActiveStep + 1);
-        setSkipped((prevSkipped) => {
-            const newSkipped = new Set(prevSkipped.values());
-            newSkipped.add(activeStep);
-            return newSkipped;
-        });
-    };
-
-    const handleReset = () => {
-        setActiveStep(0);
-    };
+    //     setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    //     setSkipped((prevSkipped) => {
+    //         const newSkipped = new Set(prevSkipped.values());
+    //         newSkipped.add(activeStep);
+    //         return newSkipped;
+    //     });
+    // };
 
     const handlePresenceChange = (e: SelectChangeEvent<any>) => {
         dispatchFormState({ type: "PRESENCE", payload: e.target.name as string })
@@ -155,7 +156,7 @@ export default function HorizontalLinearStepper() {
         <div className={classes.completeEventContainer}>
             <Stepper activeStep={activeStep}>
                 {steps.map((label, index) => {
-                    const stepProps: { completed?: boolean } = {};
+                    // const stepProps: { completed?: boolean } = {};
                     const labelProps: {
                         optional?: React.ReactNode;
                     } = {};
@@ -164,11 +165,11 @@ export default function HorizontalLinearStepper() {
                             <Typography variant="caption">Optional</Typography>
                         );
                     }
-                    if (isStepSkipped(index)) {
-                        stepProps.completed = false;
-                    }
+                    // if (isStepSkipped(index)) {
+                    //     stepProps.completed = false;
+                    // }
                     return (
-                        <Step key={label} {...stepProps}>
+                        <Step key={label} >
                             <StepLabel {...labelProps}>{label}</StepLabel>
                         </Step>
                     );
@@ -176,12 +177,13 @@ export default function HorizontalLinearStepper() {
             </Stepper>
             {activeStep === steps.length ? (
                 <>
-                    <Typography sx={{ mt: 2, mb: 1 }}>
+                    <Typography sx={{ mt: 2, mb: 1, textAlign: 'center', marginTop: '5em' }}>
                         All steps completed - you&apos;re finished!
+                        <p>Thank you!</p>
                     </Typography>
-                    <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
-                        <Box sx={{ flex: '1 1 auto' }} />
-                        <Button onClick={handleReset}>Reset</Button>
+                    <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', pt: 2 }}>
+                        {/* <Box sx={{ flex: '1 1 auto'}} /> */}
+                        <Button variant='contained' sx={{ justifySelf: 'center' }} onClick={() => navigate('/')}>Back to homepage</Button>
                     </Box>
                 </>
             ) : (
@@ -203,11 +205,11 @@ export default function HorizontalLinearStepper() {
                             Back
                         </Button>
                         <Box sx={{ flex: '1 1 auto' }} />
-                        {isStepOptional(activeStep) && (
+                        {/* {isStepOptional(activeStep) && (
                             <Button color="inherit" onClick={handleSkip} sx={{ mr: 1 }}>
                                 Skip
                             </Button>
-                        )}
+                        )} */}
                         <Button onClick={handleNext}>
                             {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
                         </Button>

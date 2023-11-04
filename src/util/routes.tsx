@@ -18,7 +18,6 @@ import RegisterPage from '../pages/RegisterPage';
 import ProfileSettingsPage from '../pages/ProfileSettingsPage';
 import ProfilePage from '../pages/ProfilePage';
 import Logout from '../pages/LogoutPage';
-import path from 'path';
 
 const router = createBrowserRouter([
     {

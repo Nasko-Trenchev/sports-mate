@@ -1,7 +1,7 @@
 import CompleteEvent from "../components/Event/CompleteEvent"
 import { db } from "../config/firebase";
-import { arrayUnion, doc, increment, setDoc } from "firebase/firestore";
-import { ActionFunctionArgs, redirect } from "react-router-dom";
+import { arrayUnion, doc, increment, setDoc, Timestamp, updateDoc } from "firebase/firestore";
+import { ActionFunctionArgs } from "react-router-dom";
 
 const CompleteEventPage = () => {
 
@@ -16,8 +16,9 @@ export async function action({ params, request }: ActionFunctionArgs) {
 
     const data = await request.json()
 
-    const { rating, sport, id, presence, comment } = data;
+    const { rating, sport, id, presence, comment, event } = data;
 
+    const gameDocRef = doc(db, `${sport}`, `${id}`);
     const eventCommentsRef = doc(db, `${sport}`, `${id}`, "Comments", `${id}`);
 
     const ratingArray = JSON.parse(rating);
@@ -49,6 +50,22 @@ export async function action({ params, request }: ActionFunctionArgs) {
             }, { merge: true })
         }
     }
+
+    const game = JSON.parse(event)
+    game.sport = params.sport;
+    game.Time = new Timestamp(game.Time.seconds, game.Time.nanoseconds)
+    game.Completed = true;
+
+    for (const player of game.Players) {
+        const userRef = doc(db, 'users', player);
+        await updateDoc(userRef, {
+            GamesPlayed: arrayUnion(game)
+        })
+    }
+    await updateDoc(gameDocRef, {
+        Completed: true
+    })
+
 
     return null;
 }

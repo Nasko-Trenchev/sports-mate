@@ -89,10 +89,7 @@ const Event: React.FC = () => {
 
     return (
         <StyledEngineProvider>
-            <div className={classes.eventHeader}>
-                <h1>There {data.length > 1 ? "are" : "is"} {data.length} upcoming {params.sport} {data.length > 1 ? "events" : "event"}</h1>
-                <CreateEvent />
-            </div>
+            <h1>There {data.length > 1 ? "are" : "is"} {data.length} upcoming {params.sport} {data.length > 1 ? "events" : "event"}</h1>
             <div className={classes.filterSection}>
                 <Button
                     variant='contained'
@@ -141,7 +138,12 @@ const Event: React.FC = () => {
                     </div>
                 </div>}
             </div>
-            <h2>Currently opened groups</h2>
+            <div className={classes.createContainer}>
+                <div className={classes.createContainerTitle}>
+                    <h2>Find your spot</h2>
+                </div>
+                <CreateEvent />
+            </div>
             {filteredData.length === 0 ? <h2>No events match your search criteria</h2> :
                 <EventPagination data={filteredData} />
             }

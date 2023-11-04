@@ -1,3 +1,13 @@
+.createBtnContainer {
+    display: flex;
+    align-items: center;
+}
+
+.createBtnContainer button {
+    min-width: 125px;
+}
+
+
 .active {
     color: black;
     text-decoration: none;
