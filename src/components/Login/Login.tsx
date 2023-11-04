@@ -1,6 +1,6 @@
 import { Stack, TextField, Typography, Button, FormControl } from '@mui/material';
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { StyledEngineProvider } from '@mui/material/styles';
 import { UserAuth } from '../../contexts/UserContext';
 
@@ -12,6 +12,10 @@ export default function Login() {
         email: '',
         password: '',
     });
+
+    let location = useLocation();
+    let params = new URLSearchParams(location.search);
+    let from = params.get("from") || "/";
 
     const { loginUser } = UserAuth();
     const navigate = useNavigate();
@@ -26,7 +30,7 @@ export default function Login() {
     const onSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
         try {
             await loginUser(formInput.email, formInput.password);
-            navigate('/');
+            navigate(`${from}`);
         } catch (error) {
             setformInput({
                 email: '',

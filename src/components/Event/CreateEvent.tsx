@@ -85,8 +85,9 @@ const CreateEvent = () => {
         'dateError': false
     })
 
-    const submit = useSubmit()
+    const submit = useSubmit();
     const params = useParams();
+
     const { openNotification, closeNotification, actionOption } = useNotification();
 
     const field = getField(params.sport)

@@ -13,6 +13,7 @@ const EventPage = () => {
 }
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
+    
 
     const currentSportRef = collection(db, `${params.sport}`);
     try {

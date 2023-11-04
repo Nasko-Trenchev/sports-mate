@@ -7,7 +7,7 @@ import { ref, getDownloadURL, listAll } from 'firebase/storage'
 import { storage } from "../config/firebase";
 import picture from '../assets/noProfile.webp'
 import { profileData } from "./ProfilePage";
-import { act } from "react-dom/test-utils";
+import checkAuthentication from "../util/routeGuard";
 
 
 export type constructedObject = {
@@ -29,6 +29,13 @@ const GameDetailsPage = () => {
 }
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
+
+
+    const redirecUnAuthenticatedtUser = checkAuthentication(request);
+
+    if (redirecUnAuthenticatedtUser) {
+        return redirecUnAuthenticatedtUser
+    }
 
     const gameDocRef = doc(db, `${params.sport}`, `${params.gameId}`)
     const gameDocSnap = await getDoc(gameDocRef)

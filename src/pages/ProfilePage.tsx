@@ -6,6 +6,7 @@ import { ref, getDownloadURL, listAll } from 'firebase/storage'
 import { storage } from "../config/firebase";
 import picture from '../assets/noProfile.webp'
 import { Sports } from "../util/sportTypes";
+import checkAuthentication from "../util/routeGuard";
 
 
 export type profileData = {
@@ -26,6 +27,12 @@ const ProfilePage = () => {
 export default ProfilePage;
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
+
+    const redirecUnAuthenticatedtUser = checkAuthentication(request);
+
+    if (redirecUnAuthenticatedtUser) {
+        return redirecUnAuthenticatedtUser
+    }
 
     const listRef = ref(storage, `ProfileImages/`)
     const images = await listAll(listRef);
