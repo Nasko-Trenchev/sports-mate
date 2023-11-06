@@ -15,8 +15,14 @@ export const Register = () => {
         password: '',
         rePassword: '',
         username: ''
-        //Username can`t be more than 15 characters
     });
+
+    const [formError, setFormError] = useState({
+        email: false,
+        username: false,
+        password: false,
+        rePassword: false
+    })
 
     const { user } = UserAuth();
 
@@ -31,7 +37,48 @@ export const Register = () => {
         }))
     }
 
+    const onInputFocus = (e: React.FocusEvent<HTMLInputElement>) => {
+        setFormError(oldData => ({
+            ...oldData,
+            [e.target.name]: false
+        }))
+    }
+
     const onSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
+
+        const validEmail = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g.test(formInput.email);
+        const validUsername = formInput.username.length >= 3 && formInput.username.length < 15;
+        const validPassword = formInput.password.length > 6
+        const passwordMatch = formInput.password === formInput.rePassword;
+        if (!validEmail || !validUsername || !validPassword || !passwordMatch) {
+            if (!validEmail) {
+                setFormError((prev) => ({
+                    ...prev,
+                    email: true
+                }))
+            }
+            if (!validUsername) {
+                setFormError((prev) => ({
+                    ...prev,
+                    username: true
+                }))
+            }
+            if (!validPassword) {
+                setFormError((prev) => ({
+                    ...prev,
+                    password: true
+                }))
+            }
+            if (!passwordMatch) {
+                setFormError((prev) => ({
+                    ...prev,
+                    rePassword: true
+                }))
+            }
+            return;
+        }
+
+
         try {
             await createUser(formInput.email, formInput.password, formInput.username)
             await setDoc(doc(db, "users", `${formInput.username}`), {
@@ -81,42 +128,50 @@ export const Register = () => {
         <StyledEngineProvider injectFirst>
             <Stack spacing={3} className={styles['login-form']}>
                 <Typography variant='h1'>Register</Typography>
-                <FormControl size='small'>
+                <FormControl size='small' sx={{ gap: '0.7em' }}>
                     <TextField
                         label='E-mail'
-                        helperText="Please type in your E-mail"
+                        error={formError.email}
+                        helperText={formError.email ? "Email should have format like example@gmail.com" : "Please type in your E-mail"}
                         name='email'
                         variant='outlined'
                         size='small'
                         required value={null}
                         onChange={onUserInput}
+                        onFocus={onInputFocus}
                     />
                     <TextField
                         label='Username'
-                        helperText="Please type in your username"
+                        error={formError.username}
+                        helperText={formError.username ? "Username should be at least 3 characters long" : "Please type in your username"}
                         name='username'
                         variant='outlined'
                         size='small'
                         required value={null}
                         onChange={onUserInput}
+                        onFocus={onInputFocus}
                     />
                     <TextField
                         label='Password'
-                        helperText="Do not share this with anyone"
+                        error={formError.password}
+                        helperText={formError.password ? "Password should be at least 6 characters long" : "Do not share this with anyone"}
                         name='password'
                         type='password'
                         size='small'
                         required value={null}
                         onChange={onUserInput}
+                        onFocus={onInputFocus}
                     />
                     <TextField
                         label='Repeat Password'
-                        helperText="Please type your password again"
+                        error={formError.rePassword}
+                        helperText={formError.rePassword ? "Passwords missmatch" : "Please type your password again"}
                         name='rePassword'
                         type='password'
                         size='small'
                         required value={null}
                         onChange={onUserInput}
+                        onFocus={onInputFocus}
                     />
                     <Button variant='contained' size='medium' onClick={onSubmit}>Register</Button>
                     {/* <Button variant='contained' size='medium' onClick={onEmailVerification}>Verify</Button> */}

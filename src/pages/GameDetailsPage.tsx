@@ -1,5 +1,5 @@
 import GameDetails from "../components/Game/GameDetails";
-import { LoaderFunctionArgs, ActionFunctionArgs, redirect, defer } from "react-router-dom";
+import { LoaderFunctionArgs, ActionFunctionArgs, redirect, json } from "react-router-dom";
 import { getDoc, doc, updateDoc, arrayUnion, arrayRemove, deleteDoc, collection, getDocs, Timestamp } from "firebase/firestore";
 import { db } from "../config/firebase";
 import { Sport } from "../util/sportTypes";
@@ -30,85 +30,100 @@ const GameDetailsPage = () => {
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
 
-
     const redirecUnAuthenticatedtUser = checkAuthentication(request);
 
     if (redirecUnAuthenticatedtUser) {
         return redirecUnAuthenticatedtUser
     }
 
-    const gameDocRef = doc(db, `${params.sport}`, `${params.gameId}`)
-    const gameDocSnap = await getDoc(gameDocRef)
-    const sportWithId = ({ ...gameDocSnap.data(), id: gameDocSnap.id }) as Sport;
+    try {
+        const gameDocRef = doc(db, `${params.sport}`, `${params.gameId}`)
+        const gameDocSnap = await getDoc(gameDocRef)
+        const sportWithId = ({ ...gameDocSnap.data(), id: gameDocSnap.id }) as Sport;
 
-    const listRef = ref(storage, `ProfileImages/`)
-    const images = await listAll(listRef);
+        const listRef = ref(storage, `ProfileImages/`)
+        const images = await listAll(listRef);
 
-    let neededData = [] as constructedObject;
+        let neededData = [] as constructedObject;
 
-    for (const player of sportWithId.Players) {
-        const userRef = doc(db, 'users', player);
-        const userData = await getDoc(userRef);
-        const userObject = userData.data() as profileData
-        let finalImage;
-        const image = images.items.find(img => img.name === player)
+        for (const player of sportWithId.Players) {
+            const userRef = doc(db, 'users', player);
+            const userData = await getDoc(userRef);
+            const userObject = userData.data() as profileData
+            let finalImage;
+            const image = images.items.find(img => img.name === player)
 
-        if (image) {
-            finalImage = await getDownloadURL(image)
+            if (image) {
+                finalImage = await getDownloadURL(image)
+            }
+            else {
+                finalImage = picture
+            }
+            neededData.push({
+                users: userObject,
+                image: finalImage
+            })
         }
-        else {
-            finalImage = picture
+
+        return { sportDetails: sportWithId, users: neededData };
+    } catch (error) {
+        if (error instanceof Error) {
+            throw json(
+                {
+                    name: "Something went wrong",
+                    message: "Refresh the page and try again later"
+                },
+                { status: 401 }
+            );
         }
-        neededData.push({
-            users: userObject,
-            image: finalImage
-        })
     }
 
-    return { sportDetails: sportWithId, users: neededData };
 }
 
 export async function action({ params, request }: ActionFunctionArgs) {
 
-    const data = await request.json()
+    try {
+        const data = await request.json()
 
-    console.log(data)
+        const { action, sport, id, user } = data;
 
-    const { action, sport, id, user } = data;
+        const docRef = doc(db, `${sport}`, `${id}`);
 
-    const docRef = doc(db, `${sport}`, `${id}`);
-
-
-    if (action === "Mark as completed") {
-        const game = JSON.parse(data.game)
-        game.sport = params.sport;
-        game.Time = new Timestamp(game.Time.seconds, game.Time.nanoseconds)
-
-        for (const player of game.Players) {
-            const userRef = doc(db, 'users', player);
-            await updateDoc(userRef, {
-                GamesPlayed: arrayUnion(game)
+        if (action === "Join event") {
+            await updateDoc(docRef, {
+                Players: arrayUnion(user)
             })
         }
-        await updateDoc(docRef, {
-            Completed: true
-        })
-    }
-    else if (action === "Join event") {
-        await updateDoc(docRef, {
-            Players: arrayUnion(user)
-        })
-    }
-    else if (action === "Leave event") {
-        await updateDoc(docRef, {
-            Players: arrayRemove(user)
-        })
-    }
-    else {
-        await deleteDoc(docRef);
-        return redirect(`/${sport}`)
-    }
+        else if (action === "Leave event") {
+            await updateDoc(docRef, {
+                Players: arrayRemove(user)
+            })
+        }
+        else {
+            await deleteDoc(docRef);
+            return redirect(`/${sport}`)
+        }
 
-    return redirect(`/${sport}/${id}`)
+        return redirect(`/${sport}/${id}`)
+    } catch (error) {
+        if (error instanceof Error) {
+            throw json(
+                {
+                    name: "Something went wrong",
+                    message: "Refresh the page and try again later"
+                },
+                { status: 401 }
+            );
+        }
+        else {
+            throw json(
+                {
+                    message: "test",
+                    name: "test"
+                },
+                { status: 401 }
+            );
+        }
+    }
 }
 export default GameDetailsPage;

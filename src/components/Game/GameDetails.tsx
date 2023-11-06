@@ -29,16 +29,13 @@ const GameDetails: React.FC = () => {
     const { closeDialog, open, openDialog } = useDialog();
     const [showPlayers, setShowPlayers] = useState(false)
 
+
     const { timeRemaining, time } = hoursLeft(sportDetails.Time.toDate())
 
     const fieldDetails = FootballFieldsImage.find(field => field.location === sportDetails.Location)
 
     const handleEventClick = (e: React.MouseEvent<HTMLButtonElement>) => {
 
-        if (!user) {
-            navigate("/login")
-            return;
-        }
         if (e.currentTarget.textContent === "Confirm") {
             openNotification("Event cancelled successfully", 'success');
         }
@@ -51,17 +48,6 @@ const GameDetails: React.FC = () => {
             { method: "post", encType: "application/json" })
     }
 
-    const handleCompleteClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-
-        // submit({
-        //     action: `${e.currentTarget.textContent}`,
-        //     sport: `${sport}`,
-        //     id: `${sportDetails.id}`,
-        //     user: `${user?.displayName}`,
-        //     game: `${JSON.stringify(sportDetails)}`
-        // },
-        //     { method: "post", encType: "application/json" })
-    }
     return (
         <>
             {(sportDetails.Owner === user?.displayName && timeRemaining === "Event over") &&
@@ -73,7 +59,6 @@ const GameDetails: React.FC = () => {
                             color: 'white', borderColor: 'blue', '&:hover': { borderColor: 'gray' }
                         }} onClick={() => navigate(`/${sport}/${gameId}/completion`)}>Mark as completed</Button>
                 </motion.div>
-
             }
             <div className={classes.detailsContainer}>
                 <div className={classes.description}>
@@ -83,11 +68,12 @@ const GameDetails: React.FC = () => {
                     <div className={classes.registrationStatus}>
                         {time > 0 && sportDetails.PlayersCount > sportDetails.Players.length ?
                             <h3 style={{ color: 'green' }}>Registration open</h3> :
-                            timeRemaining === "Event over" ?
-                                <h3 style={{ color: 'red' }}>Event over</h3>
-                                :
-                                <h3 style={{ color: 'red' }}>Registration closed</h3>}
-                        {timeRemaining !== "Event over" && <>
+                            time > 0 && sportDetails.PlayersCount === sportDetails.Players.length ?
+                                <h3 style={{ color: 'orange' }}>Event full</h3> :
+                                time === 0 && sportDetails.PlayersCount > sportDetails.Players.length ?
+                                    <h3 style={{ color: 'red' }}>Event cancelled, not enouth players</h3> :
+                                    <h3 style={{ color: 'red' }}>Event over</h3>}
+                        {time > 0 && <>
                             <p>{sportDetails.PlayersCount - sportDetails.Players.length} spots remaining</p>
                             {sportDetails.Owner === user?.displayName ?
                                 <motion.div whileHover={{ scale: 1.1 }} className={classes.detailsBtn}>
@@ -100,9 +86,7 @@ const GameDetails: React.FC = () => {
                                         onClick={openDialog}
                                     >Cancel event</Button>
                                 </motion.div>
-
                                 :
-
                                 <motion.div whileHover={{ scale: 1.1 }} className={classes.detailsBtn}>
                                     <Button
                                         variant='contained'

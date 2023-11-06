@@ -1,4 +1,4 @@
-import { AppBar, Toolbar, IconButton, Typography, Stack, Button, Badge } from "@mui/material";
+import { AppBar, Toolbar, IconButton, Typography, Stack, Button } from "@mui/material";
 import { StyledEngineProvider } from '@mui/material/styles';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { auth } from "../../config/firebase";
@@ -30,6 +30,10 @@ export default function NavigationHeader() {
                             <>
                                 <Button color="inherit"><NavLink to={'/'} className={classes['links']}>Home</NavLink></Button>
                                 <Button color="inherit"><NavLink to={'/logout'} className={classes['links']}>Logout</NavLink></Button>
+                                <IconButton size="large" edge='start' color="inherit" aria-label="logo" sx={{ margin: '1px' }}
+                                    onClick={() => navigate('/profile')}>
+                                    <AccountCircleIcon />
+                                </IconButton>
                             </>
                             :
                             <>
@@ -38,10 +42,6 @@ export default function NavigationHeader() {
                             </>
                         }
                     </Stack>
-                    <IconButton size="large" edge='start' color="inherit" aria-label="logo" sx={{ margin: '1px' }}
-                        onClick={() => navigate('/profile')}>
-                        <AccountCircleIcon />
-                    </IconButton>
                     <IconButton size="large" edge='start' color="inherit" aria-label="logo" sx={{ margin: '1px' }}>
                         <FacebookIcon />
                     </IconButton>

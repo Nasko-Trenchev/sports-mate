@@ -14,7 +14,7 @@ const SportItem: React.FC<{ children: JSX.Element[] | JSX.Element, sport: string
             <NavLink to={props.path} className={({ isActive, isPending }) =>
                 isPending ? "pending" : isActive ? `${classes.active}` : ""
             }>
-                <IconButton size="large" edge='start' sx={{color: 'black'}}>
+                <IconButton size="large" edge='start' sx={{ color: 'black' }}>
                     {props.children}
                     <div>{props.sport}</div>
                 </IconButton>

@@ -13,10 +13,8 @@ const EventPage = () => {
 }
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
-    
-
-    const currentSportRef = collection(db, `${params.sport}`);
     try {
+        const currentSportRef = collection(db, `${params.sport}`);
         const data = await getDocs(currentSportRef);
         const sportsData = data.docs.map((doc) => ({ ...doc.data(), id: doc.id })) as Sports;
         ///Can be made with filter from the database
@@ -26,31 +24,31 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     }
 }
 
-export async function action({ params, request }: ActionFunctionArgs) {
+// export async function action({ params, request }: ActionFunctionArgs) {
 
-    const data = await request.formData();
-    const sport = data.get("sport")
-    const action = data.get("action")
-    const id = data.get('id')
-    const userEmail = data.get('user')
+//     const data = await request.formData();
+//     const sport = data.get("sport")
+//     const action = data.get("action")
+//     const id = data.get('id')
+//     const userEmail = data.get('user')
 
-    const docRef = doc(db, `${sport}`, `${id}`);
+//     const docRef = doc(db, `${sport}`, `${id}`);
 
-    if (action === "Join event") {
-        await updateDoc(docRef, {
-            Players: arrayUnion(userEmail)
-        })
-    }
-    else if (action === "Leave event") {
-        await updateDoc(docRef, {
-            Players: arrayRemove(userEmail)
-        })
-    }
-    else {
-        await deleteDoc(docRef);
-    }
+//     if (action === "Join event") {
+//         await updateDoc(docRef, {
+//             Players: arrayUnion(userEmail)
+//         })
+//     }
+//     else if (action === "Leave event") {
+//         await updateDoc(docRef, {
+//             Players: arrayRemove(userEmail)
+//         })
+//     }
+//     else {
+//         await deleteDoc(docRef);
+//     }
 
-    return redirect('/football')
-}
+//     return redirect('/football')
+// }
 
 export default EventPage;

@@ -4,7 +4,7 @@ import PageContent from "../components/PageContent";
 
 const ErrorPage = () => {
     const error = useRouteError();
-  
+
     let title = 'An error occured';
     let message = 'Something went wrong';
 
@@ -15,6 +15,11 @@ const ErrorPage = () => {
         if (error.status === 404) {
             message = "Could not found resource or page"
             title = "Not found"
+        }
+        if (error.status === 401) {
+            title = error.data.name;
+            message = error.data.message;
+
         }
     }
 

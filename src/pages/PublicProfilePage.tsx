@@ -22,23 +22,26 @@ export default PublicProfilePage;
 export async function loader({ request, params }: LoaderFunctionArgs) {
 
     const userId = params.profileId;
-    const userRef = doc(db, 'users', userId!);
-    const userData = await getDoc(userRef);
-    const userObject = userData.data() as profileData
-    const listRef = ref(storage, `ProfileImages/`)
-    const images = await listAll(listRef);
-
     let finalImage;
-    const image = images.items.find(img => img.name === userObject.username)
+    try {
+        const userRef = doc(db, 'users', userId!);
+        const userData = await getDoc(userRef);
+        const userObject = userData.data() as profileData
+        const listRef = ref(storage, `ProfileImages/`)
 
-    if (image) {
-        finalImage = await getDownloadURL(image)
-    }
-    else {
-        finalImage = picture
-    }
-    console.log(finalImage)
-    console.log(userObject)
+        const images = await listAll(listRef);
+        const image = images.items.find(img => img.name === userObject.username)
 
-    return { image: finalImage, user: userObject };
+        if (image) {
+            finalImage = await getDownloadURL(image)
+        }
+        else {
+            finalImage = picture
+        }
+
+        return { image: finalImage, user: userObject };
+    } catch (error) {
+
+    }
+
 }

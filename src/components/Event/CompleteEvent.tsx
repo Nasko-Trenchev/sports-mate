@@ -99,7 +99,6 @@ export default function HorizontalLinearStepper() {
     const handleNext = () => {
 
         if (activeStep === steps.length - 1) {
-
             submit({
                 sport: `${sport}`,
                 id: `${gameId}`,
