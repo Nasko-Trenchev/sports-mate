@@ -1,11 +1,12 @@
 import { Stack, TextField, Typography, Button, FormControl } from '@mui/material';
 import { useState } from 'react';
-import { useNavigate, NavLink } from 'react-router-dom';
+import { useNavigate, NavLink, useLoaderData } from 'react-router-dom';
 import { StyledEngineProvider } from '@mui/material/styles';
 import { UserAuth } from '../../contexts/UserContext';
 import { setDoc, doc } from 'firebase/firestore';
 import { db } from '../../config/firebase';
 import { User, getAuth, sendEmailVerification, sendPasswordResetEmail } from "firebase/auth";
+import { usersProfiles } from '../../pages/RegisterPage';
 
 import styles from './Register.module.css';
 
@@ -23,6 +24,8 @@ export const Register = () => {
         password: false,
         rePassword: false
     })
+
+    const users = useLoaderData() as usersProfiles;
 
     const { user } = UserAuth();
 
@@ -50,14 +53,18 @@ export const Register = () => {
         const validUsername = formInput.username.length >= 3 && formInput.username.length < 15;
         const validPassword = formInput.password.length > 6
         const passwordMatch = formInput.password === formInput.rePassword;
-        if (!validEmail || !validUsername || !validPassword || !passwordMatch) {
+        const userNameTaken = users.some(x => x.username === formInput.username)
+        if (!validEmail || !validUsername || !validPassword || !passwordMatch || userNameTaken) {
             if (!validEmail) {
                 setFormError((prev) => ({
                     ...prev,
                     email: true
                 }))
             }
-            if (!validUsername) {
+            if (!validUsername || userNameTaken) {
+                if (userNameTaken) {
+
+                }
                 setFormError((prev) => ({
                     ...prev,
                     username: true
@@ -78,7 +85,6 @@ export const Register = () => {
             return;
         }
 
-
         try {
             await createUser(formInput.email, formInput.password, formInput.username)
             await setDoc(doc(db, "users", `${formInput.username}`), {
@@ -91,12 +97,6 @@ export const Register = () => {
             navigate('/');
         } catch (error) {
             console.log(error)
-            setformInput({
-                email: '',
-                password: '',
-                rePassword: '',
-                username: ''
-            })
         }
     }
 
@@ -132,7 +132,7 @@ export const Register = () => {
                     <TextField
                         label='E-mail'
                         error={formError.email}
-                        helperText={formError.email ? "Email should have format like example@gmail.com" : "Please type in your E-mail"}
+                        helperText={formError.email ? "Accepted format: example@gmail.com" : "Please type in your E-mail"}
                         name='email'
                         variant='outlined'
                         size='small'
@@ -143,7 +143,9 @@ export const Register = () => {
                     <TextField
                         label='Username'
                         error={formError.username}
-                        helperText={formError.username ? "Username should be at least 3 characters long" : "Please type in your username"}
+                        helperText={formError.username ?
+                            formInput.username.length < 3 ? "Username should be at least 3 characters long" : "Username taken"
+                            : "Please type in your username"}
                         name='username'
                         variant='outlined'
                         size='small'
@@ -175,7 +177,7 @@ export const Register = () => {
                     />
                     <Button variant='contained' size='medium' onClick={onSubmit}>Register</Button>
                     {/* <Button variant='contained' size='medium' onClick={onEmailVerification}>Verify</Button> */}
-                    <NavLink to='/resetPassword'>Forgot your password?</NavLink>
+                    <NavLink to='/passwordReset'>Forgot your password?</NavLink>
                     {/* <Button variant='contained' size='medium' onClick={passwordReset}>Reset password</Button> */}
                 </FormControl>
             </Stack>

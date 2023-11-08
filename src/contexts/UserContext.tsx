@@ -1,5 +1,9 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from "react";
-import { createUserWithEmailAndPassword, UserCredential, signInWithEmailAndPassword, updateProfile, signOut, signInWithPopup, onAuthStateChanged, Auth, User } from 'firebase/auth';
+import {
+    createUserWithEmailAndPassword, UserCredential,
+    signInWithEmailAndPassword, updateProfile, signOut, signInWithPopup,
+    onAuthStateChanged, User, setPersistence, browserLocalPersistence
+} from 'firebase/auth';
 import { auth, googleProvider } from '../config/firebase';
 
 
@@ -31,7 +35,15 @@ export const AuthContextProvider = ({ children }: UserContextProviderProps): JSX
         })
     }
 
-    const loginUser = (email: string, password: string) => {
+    const loginUser = async (email: string, password: string) => {
+
+        // try {
+        //     await setPersistence(auth, browserLocalPersistence);
+
+        // }
+        // catch (error) {
+        //     console.log(error)
+        // }
         return signInWithEmailAndPassword(auth, email, password);
     }
 

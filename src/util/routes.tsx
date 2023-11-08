@@ -5,7 +5,9 @@ import { action as createAction } from '../pages/CreatePage';
 import { loader as gameDetailsLoader, action as gameDetailsAction } from '../pages/GameDetailsPage';
 import { action as completeAction } from '../pages/CompleteEventPage';
 import { loader as publicProfileLoader } from '../pages/PublicProfilePage';
+import { loader as registerLoader } from '../pages/RegisterPage';
 import { privateRouteloader } from './routeGuardLoader';
+import PasswordResetPage from '../pages/PasswordResetPage';
 import RootLayout from '../pages/Root';
 import CompleteEventPage from '../pages/CompleteEventPage';
 import PublicProfilePage from '../pages/PublicProfilePage';
@@ -28,7 +30,8 @@ const router = createBrowserRouter([
         children: [
             { index: true, element: <HomePage /> },
             { path: 'login', element: <LoginPage /> },
-            { path: 'register', element: <RegisterPage /> },
+            { path: 'register', element: <RegisterPage />, loader: registerLoader },
+            { path: 'passwordReset', element: <PasswordResetPage /> },
             { path: 'logout', element: <Logout /> },
             {
                 path: 'profile', id: 'profile-data', loader: profileLoader,
