@@ -5,35 +5,38 @@ import { StyledEngineProvider } from '@mui/material/styles';
 import { UserAuth } from '../../contexts/UserContext';
 import { setDoc, doc } from 'firebase/firestore';
 import { db } from '../../config/firebase';
-import { User, getAuth, sendEmailVerification, sendPasswordResetEmail } from "firebase/auth";
 import { usersProfiles } from '../../pages/RegisterPage';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import useNotification from '../../hooks/notification';
+import Snackbar from '@mui/material/Snackbar';
+import { SnackbarAlert } from '../Alert/Alert';
 
 import styles from './Register.module.css';
 
+const formInputInitialValue = {
+    email: '',
+    password: '',
+    rePassword: '',
+    username: ''
+}
+
 export const Register = () => {
-    const [formInput, setformInput] = useState({
-        email: '',
-        password: '',
-        rePassword: '',
-        username: ''
-    });
+    const [formInput, setformInput] = useState(formInputInitialValue);
 
     const [formError, setFormError] = useState({
         email: false,
+        emailTaken: false,
         username: false,
         password: false,
         rePassword: false
     })
 
     const [showPassword, setShowPassword] = useState(false);
+    const { openNotification, closeNotification, actionOption } = useNotification();
 
     const users = useLoaderData() as usersProfiles;
 
-    const { user } = UserAuth();
-
-    const email = user?.email;
     const { createUser } = UserAuth();
     const navigate = useNavigate();
 
@@ -48,6 +51,14 @@ export const Register = () => {
         setFormError(oldData => ({
             ...oldData,
             [e.target.name]: false
+        }))
+    }
+
+    const onEmailInputFocus = () => {
+        setFormError(oldData => ({
+            ...oldData,
+            'email': false,
+            'emailTaken': false,
         }))
     }
 
@@ -97,32 +108,19 @@ export const Register = () => {
             });
             navigate('/');
         } catch (error) {
-            console.log(error)
+            if (error instanceof Error) {
+                if (error.message.includes('auth/email-already-in-use')) {
+                    setFormError((prev) => ({
+                        ...prev,
+                        emailTaken: true
+                    }))
+                }
+                else {
+                    setformInput(formInputInitialValue)
+                    openNotification("Server error, please try again later", 'error')
+                }
+            }
         }
-    }
-
-    const onEmailVerification = () => {
-        const auth = getAuth();
-        sendEmailVerification(auth.currentUser as User)
-            .then(() => {
-                // Email verification sent!
-                // ...
-            });
-    }
-
-    const passwordReset = () => {
-        const auth = getAuth();
-        sendPasswordResetEmail(auth, email as string)
-            .then(() => {
-                // Password reset email sent!
-                // ..
-            })
-            .catch((error) => {
-                const errorCode = error.code;
-                const errorMessage = error.message;
-                // ..
-            });
-
     }
 
     return (
@@ -133,7 +131,10 @@ export const Register = () => {
                     <TextField
                         label='E-mail'
                         error={formError.email}
-                        helperText={formError.email ? "Accepted format: example@gmail.com" : "Please type in your E-mail"}
+                        helperText={
+                            formError.emailTaken ? <span style={{ color: '#d32f2f' }}>Email already in use</span> :
+                                formError.email ? "Accepted format: example@gmail.com" :
+                                    "Please type in your E-mail"}
                         name='email'
                         variant='outlined'
                         size='small'
@@ -141,7 +142,7 @@ export const Register = () => {
                         required
                         value={formInput.email}
                         onChange={onUserInput}
-                        onFocus={onInputFocus}
+                        onFocus={onEmailInputFocus}
                     />
                     <TextField
                         label='Username'
@@ -162,7 +163,7 @@ export const Register = () => {
                         <OutlinedInput
                             id="outlined-adornment-password"
                             type={showPassword ? 'text' : 'password'}
-                            // value={formInput.password as string}
+                            value={formInput.password}
                             onChange={onUserInput}
                             onFocus={onInputFocus}
                             label="Password"
@@ -190,6 +191,7 @@ export const Register = () => {
                         <OutlinedInput
                             id="outlined-adornment-password2"
                             type={showPassword ? 'text' : 'password'}
+                            value={formInput.rePassword}
                             onChange={onUserInput}
                             onFocus={onInputFocus}
                             label='RepeatPassword'
@@ -212,34 +214,23 @@ export const Register = () => {
                             {formError.rePassword ? "Passwords missmatch" : "Please type your password again"}
                         </FormHelperText>
                     </FormControl>
-                    {/* <TextField
-                        label='Password'
-                        error={formError.password}
-                        helperText={formError.password ? "Password should be at least 6 characters long" : "Do not share this with anyone"}
-                        name='password'
-                        type='password'
-                        size='small'
-                        required value={null}
-                        onChange={onUserInput}
-                        onFocus={onInputFocus}
-                    />
-                    <TextField
-                        label='Repeat Password'
-                        error={formError.rePassword}
-                        helperText={formError.rePassword ? "Passwords missmatch" : "Please type your password again"}
-                        name='rePassword'
-                        type='password'
-                        size='small'
-                        required value={null}
-                        onChange={onUserInput}
-                        onFocus={onInputFocus}
-                    /> */}
                     <Button variant='contained' size='medium' onClick={onSubmit}>Register</Button>
-                    {/* <Button variant='contained' size='medium' onClick={onEmailVerification}>Verify</Button> */}
                     <NavLink to='/passwordReset'>Forgot your password?</NavLink>
-                    {/* <Button variant='contained' size='medium' onClick={passwordReset}>Reset password</Button> */}
                 </FormControl>
             </Stack>
-        </StyledEngineProvider>
+            <Snackbar
+                open={actionOption.open}
+                autoHideDuration={4000}
+                onClose={closeNotification}
+                anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'center'
+                }}
+            >
+                <SnackbarAlert onClose={closeNotification} severity={actionOption.color}>
+                    {actionOption.message}
+                </SnackbarAlert>
+            </Snackbar>
+        </StyledEngineProvider >
     )
 }

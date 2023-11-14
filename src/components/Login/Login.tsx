@@ -3,6 +3,9 @@ import { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { StyledEngineProvider } from '@mui/material/styles';
 import { UserAuth } from '../../contexts/UserContext';
+import Snackbar from '@mui/material/Snackbar';
+import { SnackbarAlert } from '../Alert/Alert';
+import useNotification from '../../hooks/notification';
 
 import styles from './Login.module.css';
 
@@ -12,6 +15,8 @@ export default function Login() {
         email: '',
         password: '',
     });
+
+    const { openNotification, closeNotification, actionOption } = useNotification();
 
     let location = useLocation();
     let params = new URLSearchParams(location.search);
@@ -32,6 +37,18 @@ export default function Login() {
             await loginUser(formInput.email, formInput.password);
             navigate(`${from}`);
         } catch (error) {
+            if (error instanceof Error) {
+                console.log(error.message)
+                if (error.message.includes('auth/invalid')) {
+                    openNotification("Invalid login details. Username or password incorrect", 'error')
+                }
+                else if (error.message.includes('auth/too-many-request')) {
+                    openNotification("Access temporairly disabled due to many failed login attempts. Please change your password or try again later", 'error')
+                }
+                else {
+                    openNotification("Login temporairly unavailable, please try again later", 'error')
+                }
+            }
             setformInput({
                 email: '',
                 password: '',
@@ -50,7 +67,8 @@ export default function Login() {
                         name='email'
                         variant='outlined'
                         size='small'
-                        required value={undefined}
+                        required
+                        value={formInput.email}
                         autoFocus
                         onChange={onUserInput}
                     />
@@ -60,12 +78,26 @@ export default function Login() {
                         name='password'
                         type='password'
                         size='small'
-                        required value={undefined}
+                        required
+                        value={formInput.password}
                         onChange={onUserInput}
                     />
                     <Button variant='contained' size='medium' onClick={onSubmit}>Login</Button>
                 </FormControl>
             </Stack>
+            <Snackbar
+                open={actionOption.open}
+                autoHideDuration={4000}
+                onClose={closeNotification}
+                anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'center'
+                }}
+            >
+                <SnackbarAlert onClose={closeNotification} severity={actionOption.color}>
+                    {actionOption.message}
+                </SnackbarAlert>
+            </Snackbar>
         </StyledEngineProvider>
     )
 }
