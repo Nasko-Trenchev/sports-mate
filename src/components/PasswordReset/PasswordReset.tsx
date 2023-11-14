@@ -16,7 +16,8 @@ export const PasswordReset = () => {
         const auth = getAuth()
         sendPasswordResetEmail(auth, formInput)
             .then(() => {
-                // confirmPasswordReset(auth, )
+                // confirmPasswordReset(auth, ) - apply once App is hosted. Use the hosted link to redirect the user to app component
+                //and verify the code
                 openNotification("Password reset email sent! Please check your email", 'success');
                 // Password reset email sent!
                 // ..
@@ -40,13 +41,6 @@ export const PasswordReset = () => {
             });
     }
 
-    // const handleClose = (event: React.SyntheticEvent | Event, reason?: string) => {
-    //     if (reason === 'clickaway') {
-    //         return
-    //     }
-    //     setOpen(false);
-    // }
-
     return (
         <StyledEngineProvider injectFirst>
             <Stack spacing={3} className={classes['login-form']}>
@@ -60,7 +54,7 @@ export const PasswordReset = () => {
                         required
                         onChange={(e) => setformInput(e.target.value)}
                     />
-                    <Button variant='contained' size='medium' onClick={passwordReset} className={classes['resetBtn']}>Reset password</Button>
+                    <Button variant='contained' size='medium' onClick={passwordReset} className={classes.resetBtn}>Reset password</Button>
                     <Snackbar
                         open={actionOption.open}
                         autoHideDuration={3000}

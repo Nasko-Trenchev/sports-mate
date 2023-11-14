@@ -6,12 +6,14 @@ import { updatePassword, reauthenticateWithCredential, EmailAuthProvider } from 
 import { StyledEngineProvider } from '@mui/material/styles';
 import { auth } from '../../config/firebase';
 import { useRef, useState } from 'react';
-import { Button, IconButton, TextField } from '@mui/material';
+import { Button, IconButton, TextField, FormControl, InputAdornment, OutlinedInput, InputLabel } from '@mui/material';
 import useNotification from '../../hooks/notification';
 import { storage } from '../../config/firebase';
 import { ref, uploadBytes } from 'firebase/storage'
 import { styled } from '@mui/material/styles';
 import { ImageTypes } from '../../util/constants';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 
 const VisuallyHiddenInput = styled('input')({
@@ -30,11 +32,11 @@ const VisuallyHiddenInput = styled('input')({
 const ProfileSettings = () => {
 
     const [imageUpload, setImageUpload] = useState<File>();
+    const [password, setPassword] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
     const { openNotification, closeNotification, actionOption } = useNotification();
 
-    const fileInput = useRef<HTMLInputElement | null>(null);
-    const newPassword = useRef<HTMLInputElement | null>(null);
-
+    // const fileInput = useRef<HTMLInputElement | null>(null);
 
     const handleUpload = async () => {
         if (imageUpload === null || imageUpload === undefined) {
@@ -67,8 +69,9 @@ const ProfileSettings = () => {
 
     const handlePasswordReset = () => {
 
-        updatePassword(auth.currentUser!, newPassword.current?.value as string).then(() => {
+        updatePassword(auth.currentUser!, password).then(() => {
             // Update successful.
+            setPassword('');
             openNotification("Password was changed successfully", 'success');
         }).catch((error) => {
             // An error ocurred
@@ -86,7 +89,7 @@ const ProfileSettings = () => {
                     openNotification("You`re now able to change your password", 'success');
                     // User successfully reauthenticated. New ID tokens should be valid.
                 }).catch((error) => {
-                    openNotification("Wrong password, please login and try again!", 'error');
+                    openNotification("Wrong password, please reauthenticate and try again!", 'error');
                 })
         })
     }
@@ -114,7 +117,7 @@ const ProfileSettings = () => {
                 {!imageUpload ?
                     <Button component="label" variant="contained" startIcon={<CloudUploadIcon />}>
                         Upload file
-                        <VisuallyHiddenInput type="file" ref={fileInput} onChange={(e) => handleImageInputChange(e)} />
+                        <VisuallyHiddenInput type="file" onChange={(e) => handleImageInputChange(e)} />
                     </Button>
                     :
                     <div>
@@ -130,8 +133,47 @@ const ProfileSettings = () => {
                 }
             </div>
             <h3>Change password</h3>
-            <div className={classes.imageUploadContainer}>
-                <TextField size='small' type="text" id="password-new" ref={newPassword} placeholder='Enter your new password...' />
+            <div className={classes.passwordField}>
+                {/* <TextField
+                    size='small'
+                    type="password"
+                    id="password-new"
+                    placeholder='Enter your new password...'
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                /> */}
+                <FormControl sx={{ m: 1 }} variant="outlined">
+                    <InputLabel htmlFor="outlined-adornment-password">New password</InputLabel>
+                    <OutlinedInput
+                        id="outlined-adornment-password"
+                        type={showPassword ? 'text' : 'password'}
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        label="Password"
+                        endAdornment={
+                            <InputAdornment position="end">
+                                <IconButton
+                                    aria-label="toggle password visibility"
+                                    onClick={() => setShowPassword(!showPassword)}
+                                    onMouseDown={(e) => e.preventDefault()}
+                                    edge="end"
+                                >
+                                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                                </IconButton>
+                            </InputAdornment>
+                        }
+                    />
+                </FormControl>
+                <div>
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        size='small'
+                        onClick={handlePasswordReset}
+                    >
+                        Submit
+                    </Button>
+                </div>
             </div>
         </div>
         <Snackbar

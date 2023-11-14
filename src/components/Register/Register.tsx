@@ -1,4 +1,4 @@
-import { Stack, TextField, Typography, Button, FormControl } from '@mui/material';
+import { Stack, TextField, Typography, Button, FormControl, InputAdornment, OutlinedInput, InputLabel, IconButton, FormHelperText } from '@mui/material';
 import { useState } from 'react';
 import { useNavigate, NavLink, useLoaderData } from 'react-router-dom';
 import { StyledEngineProvider } from '@mui/material/styles';
@@ -7,6 +7,8 @@ import { setDoc, doc } from 'firebase/firestore';
 import { db } from '../../config/firebase';
 import { User, getAuth, sendEmailVerification, sendPasswordResetEmail } from "firebase/auth";
 import { usersProfiles } from '../../pages/RegisterPage';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
 import styles from './Register.module.css';
 
@@ -25,6 +27,8 @@ export const Register = () => {
         rePassword: false
     })
 
+    const [showPassword, setShowPassword] = useState(false);
+
     const users = useLoaderData() as usersProfiles;
 
     const { user } = UserAuth();
@@ -33,7 +37,7 @@ export const Register = () => {
     const { createUser } = UserAuth();
     const navigate = useNavigate();
 
-    const onUserInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const onUserInput = (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) => {
         setformInput(oldData => ({
             ...oldData,
             [e.target.name]: e.target.value
@@ -62,9 +66,6 @@ export const Register = () => {
                 }))
             }
             if (!validUsername || userNameTaken) {
-                if (userNameTaken) {
-
-                }
                 setFormError((prev) => ({
                     ...prev,
                     username: true
@@ -136,7 +137,9 @@ export const Register = () => {
                         name='email'
                         variant='outlined'
                         size='small'
-                        required value={null}
+                        autoFocus
+                        required
+                        value={formInput.email}
                         onChange={onUserInput}
                         onFocus={onInputFocus}
                     />
@@ -149,11 +152,67 @@ export const Register = () => {
                         name='username'
                         variant='outlined'
                         size='small'
-                        required value={null}
+                        required
+                        value={formInput.username}
                         onChange={onUserInput}
                         onFocus={onInputFocus}
                     />
-                    <TextField
+                    <FormControl size='small'>
+                        <InputLabel style={formError.password ? { color: '#d32f2f' } : {}} htmlFor="outlined-adornment-password">Password</InputLabel>
+                        <OutlinedInput
+                            id="outlined-adornment-password"
+                            type={showPassword ? 'text' : 'password'}
+                            // value={formInput.password as string}
+                            onChange={onUserInput}
+                            onFocus={onInputFocus}
+                            label="Password"
+                            name='password'
+                            error={formError.password}
+                            endAdornment={
+                                <InputAdornment position="end">
+                                    <IconButton
+                                        aria-label="toggle password visibility"
+                                        onClick={() => setShowPassword(!showPassword)}
+                                        onMouseDown={(e) => e.preventDefault()}
+                                        edge="end"
+                                    >
+                                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                                    </IconButton>
+                                </InputAdornment>
+                            }
+                        />
+                        <FormHelperText style={formError.password ? { color: '#d32f2f' } : {}}>
+                            {formError.password ? "Password should be at least 6 characters long" : "Do not share this with anyone"}
+                        </FormHelperText>
+                    </FormControl>
+                    <FormControl size='small'>
+                        <InputLabel htmlFor="outlined-adornment-password2" style={formError.rePassword ? { color: '#d32f2f' } : {}}>Repeat Password</InputLabel>
+                        <OutlinedInput
+                            id="outlined-adornment-password2"
+                            type={showPassword ? 'text' : 'password'}
+                            onChange={onUserInput}
+                            onFocus={onInputFocus}
+                            label='RepeatPassword'
+                            name='rePassword'
+                            error={formError.rePassword}
+                            endAdornment={
+                                <InputAdornment position="end">
+                                    <IconButton
+                                        aria-label="toggle password visibility"
+                                        onClick={() => setShowPassword(!showPassword)}
+                                        onMouseDown={(e) => e.preventDefault()}
+                                        edge="end"
+                                    >
+                                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                                    </IconButton>
+                                </InputAdornment>
+                            }
+                        />
+                        <FormHelperText style={formError.rePassword ? { color: '#d32f2f' } : {}}>
+                            {formError.rePassword ? "Passwords missmatch" : "Please type your password again"}
+                        </FormHelperText>
+                    </FormControl>
+                    {/* <TextField
                         label='Password'
                         error={formError.password}
                         helperText={formError.password ? "Password should be at least 6 characters long" : "Do not share this with anyone"}
@@ -174,7 +233,7 @@ export const Register = () => {
                         required value={null}
                         onChange={onUserInput}
                         onFocus={onInputFocus}
-                    />
+                    /> */}
                     <Button variant='contained' size='medium' onClick={onSubmit}>Register</Button>
                     {/* <Button variant='contained' size='medium' onClick={onEmailVerification}>Verify</Button> */}
                     <NavLink to='/passwordReset'>Forgot your password?</NavLink>

@@ -43,7 +43,7 @@ export default function Login() {
         <StyledEngineProvider injectFirst>
             <Stack spacing={3} className={styles['login-form']}>
                 <Typography variant='h1'>Login</Typography>
-                <FormControl>
+                <FormControl sx={{ gap: '1em' }}>
                     <TextField
                         label='E-mail'
                         helperText="Please type in your password"
@@ -51,6 +51,7 @@ export default function Login() {
                         variant='outlined'
                         size='small'
                         required value={undefined}
+                        autoFocus
                         onChange={onUserInput}
                     />
                     <TextField

@@ -17,9 +17,11 @@ import GameImageContainer from "./GameImageContainer";
 import classes from './GameDetails.module.css'
 import { useState } from "react";
 import Box from "@mui/material/Box";
+import { NavLink } from "react-router-dom";
 
 const GameDetails: React.FC = () => {
 
+    const [showMap, setShowMap] = useState(false)
     const { sport, gameId } = useParams();
     const { user } = UserAuth();
     const navigate = useNavigate()
@@ -63,7 +65,13 @@ const GameDetails: React.FC = () => {
             <div className={classes.detailsContainer}>
                 <div className={classes.description}>
                     <h1>{sportDetails.Location}</h1>
-                    <p>{fieldDetails?.street}</p>
+                    <div>
+                        <NavLink to={'/'}
+                            onMouseEnter={() => setShowMap(true)}
+                            onMouseLeave={() => setShowMap(false)}
+                        >{fieldDetails?.street}</NavLink>
+                        {showMap && <Map coordinate={fieldDetails?.coordinates!} />}
+                    </div>
                     {timeRemaining !== "Event over" && <p>{timeRemaining}</p>}
                     <div className={classes.registrationStatus}>
                         {time > 0 && sportDetails.PlayersCount > sportDetails.Players.length ?
@@ -147,7 +155,7 @@ const GameDetails: React.FC = () => {
                         </Box>
                     </Modal>
                 </div>
-            </div>
+            </div >
             <h2 className={classes.additionalHeader}>Additional info</h2>
             <div className={classes.additionalSection}>
                 <div className={classes.map}>
