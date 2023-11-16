@@ -1,7 +1,7 @@
 import { Sports } from "../../util/sportTypes";
 import { Stack, Divider, Pagination, Box } from "@mui/material";
 import { useState } from "react";
-import classes from './EventPagioation.module.css'
+import classes from './EventPagination.module.css'
 import Game from "../Game/Game";
 
 const EventPagination: React.FC<{ data: Sports }> = (props) => {

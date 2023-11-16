@@ -1,4 +1,4 @@
-import { Button } from "@mui/material";
+import { Button, Tooltip } from "@mui/material";
 import { UserAuth } from '../../contexts/UserContext';
 import { hoursLeft } from "../../util/helperFunctions";
 import { color, motion } from 'framer-motion'
@@ -9,7 +9,7 @@ import { SnackbarAlert } from '../Alert/Alert';
 import AlertDialog from '../Alert/AlertDialog';
 import useDialog from '../../hooks/dialog';
 import useNotification from '../../hooks/notification';
-import { FootballFieldsImage } from "../../util/constants";
+import { FieldsImage } from "../../util/constants";
 import Map from "../GoggleMap/GoogleMap";
 import GamePlayers from "./GamePlayers";
 import { loaderReturnArgs } from "../../pages/GameDetailsPage";
@@ -17,24 +17,25 @@ import GameImageContainer from "./GameImageContainer";
 import classes from './GameDetails.module.css'
 import { useState } from "react";
 import Box from "@mui/material/Box";
-import { NavLink } from "react-router-dom";
+import Comments from "../Comments/Comments";
+import CommentTextarea from "../Comments/TextArea";
 
 const GameDetails: React.FC = () => {
 
-    const [showMap, setShowMap] = useState(false)
     const { sport, gameId } = useParams();
     const { user } = UserAuth();
     const navigate = useNavigate()
     const submit = useSubmit();
-    const { sportDetails, users } = useRouteLoaderData('game-details') as loaderReturnArgs;
+    const { sportDetails, users, comments } = useRouteLoaderData('game-details') as loaderReturnArgs;
     const { openNotification, closeNotification, actionOption } = useNotification();
     const { closeDialog, open, openDialog } = useDialog();
-    const [showPlayers, setShowPlayers] = useState(false)
-
+    const [showPlayers, setShowPlayers] = useState(false);
 
     const { timeRemaining, time } = hoursLeft(sportDetails.Time.toDate())
 
-    const fieldDetails = FootballFieldsImage.find(field => field.location === sportDetails.Location)
+    const fieldDetails = FieldsImage.find(field => field.location === sportDetails.Location)
+
+    const remainingSpots = sportDetails.PlayersCount - sportDetails.Players.length;
 
     const handleEventClick = (e: React.MouseEvent<HTMLButtonElement>) => {
 
@@ -46,6 +47,18 @@ const GameDetails: React.FC = () => {
             sport: `${sport}`,
             id: `${sportDetails.id}`,
             user: `${user?.displayName}`,
+        },
+            { method: "post", encType: "application/json" })
+    }
+
+    const submitComment = (e: React.MouseEvent<HTMLButtonElement>, comment: string) => {
+        console.log(comment, e.currentTarget.textContent)
+        submit({
+            action: `${e.currentTarget.textContent}`,
+            sport: `${sport}`,
+            id: `${sportDetails.id}`,
+            user: `${user?.displayName}`,
+            comment: `${comment}`
         },
             { method: "post", encType: "application/json" })
     }
@@ -65,13 +78,9 @@ const GameDetails: React.FC = () => {
             <div className={classes.detailsContainer}>
                 <div className={classes.description}>
                     <h1>{sportDetails.Location}</h1>
-                    <div>
-                        <NavLink to={'/'}
-                            onMouseEnter={() => setShowMap(true)}
-                            onMouseLeave={() => setShowMap(false)}
-                        >{fieldDetails?.street}</NavLink>
-                        {showMap && <Map coordinate={fieldDetails?.coordinates!} />}
-                    </div>
+                    <Tooltip title="Show on Map" placement="top" >
+                        <p>{fieldDetails?.street}</p>
+                    </Tooltip>
                     {timeRemaining !== "Event over" && <p>{timeRemaining}</p>}
                     <div className={classes.registrationStatus}>
                         {time > 0 && sportDetails.PlayersCount > sportDetails.Players.length ?
@@ -82,7 +91,7 @@ const GameDetails: React.FC = () => {
                                     <h3 style={{ color: 'red' }}>Event cancelled, not enouth players</h3> :
                                     <h3 style={{ color: 'red' }}>Event over</h3>}
                         {time > 0 && <>
-                            <p>{sportDetails.PlayersCount - sportDetails.Players.length} spots remaining</p>
+                            <p>{remainingSpots} {remainingSpots > 1 ? "spots" : "spot"} remaining</p>
                             {sportDetails.Owner === user?.displayName ?
                                 <motion.div whileHover={{ scale: 1.1 }} className={classes.detailsBtn}>
                                     <Button
@@ -156,15 +165,16 @@ const GameDetails: React.FC = () => {
                     </Modal>
                 </div>
             </div >
-            <h2 className={classes.additionalHeader}>Additional info</h2>
+            <h2 className={classes.additionalHeader}>Comments</h2>
             <div className={classes.additionalSection}>
-                <div className={classes.map}>
+                {!comments ? <h4>There aren`t any comments about this event yet</h4> :
+                    <Comments commentsData={comments} />
+                }
+                <CommentTextarea submitComment={submitComment} />
+                {/* <div className={classes.map}>
                     <p>Event location</p>
                     <Map coordinate={fieldDetails?.coordinates!} />
-                </div>
-                <div>
-                    <h3>Comments</h3>
-                </div>
+                </div> */}
             </div>
             <AlertDialog
                 title='Confirm event deletion'

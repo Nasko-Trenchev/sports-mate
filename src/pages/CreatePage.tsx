@@ -34,5 +34,5 @@ export async function action({ params, request }: ActionFunctionArgs) {
         Completed: false,
     });
 
-    return redirect('/football')
+    return redirect(`/${params.sport}`)
 }

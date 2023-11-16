@@ -2,7 +2,7 @@ import classes from './CreateEvent.module.css'
 import { useReducer, useState } from 'react'
 import { Box, Button, FormHelperText } from '@mui/material'
 import { CreateSport } from '../../util/sportTypes';
-import { FootballFieldsImage } from '../../util/constants';
+import { FieldsImage } from '../../util/constants';
 import { auth } from '../../config/firebase';
 import { useSubmit, useParams, Form } from "react-router-dom";
 import dayjs from 'dayjs';
@@ -50,7 +50,7 @@ const formReducer = (state: CreateSport, action: ReducerAction) => {
             }
         }
         case "FIELD": {
-            const image = FootballFieldsImage.find(x => x.location === payload)
+            const image = FieldsImage.find(x => x.location === payload)
             return {
                 ...state,
                 Location: payload,

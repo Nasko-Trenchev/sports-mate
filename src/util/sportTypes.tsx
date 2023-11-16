@@ -41,3 +41,10 @@ export type combinedProfileData = {
     profile: profileData,
     image: string,
 }
+
+export type CommentsData = {
+    user: string,
+    comment: string,
+    id: string
+    date: Timestamp
+}[]

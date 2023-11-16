@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { FootballFields, FootballFieldsImage, TennisFields } from './constants';
+import { FootballFields, BasketballFields, TennisFields, VolleyballFields } from './constants';
 
 
 
@@ -64,9 +64,11 @@ export const getField = (sport: string | undefined) => {
             break;
         case 'tennis': field = TennisFields
             break;
-        case 'basketball': field = []
+        case 'basketball': field = BasketballFields
             break;
-        default: field = FootballFields
+        case 'volleyball': field = VolleyballFields
+            break;
+        default: field = []
     }
 
     return field;

@@ -1,8 +1,8 @@
 import GameDetails from "../components/Game/GameDetails";
 import { LoaderFunctionArgs, ActionFunctionArgs, redirect, json } from "react-router-dom";
-import { getDoc, doc, updateDoc, arrayUnion, arrayRemove, deleteDoc, collection, getDocs, Timestamp } from "firebase/firestore";
+import { getDoc, doc, updateDoc, arrayUnion, arrayRemove, deleteDoc, collection, getDocs, Timestamp, addDoc } from "firebase/firestore";
 import { db } from "../config/firebase";
-import { Sport } from "../util/sportTypes";
+import { Sport, CommentsData } from "../util/sportTypes";
 import { ref, getDownloadURL, listAll } from 'firebase/storage'
 import { storage } from "../config/firebase";
 import picture from '../assets/noProfile.webp'
@@ -19,6 +19,7 @@ export type constructedObject = {
 export type loaderReturnArgs = {
     sportDetails: Sport,
     users: constructedObject
+    comments: CommentsData,
 }
 
 const GameDetailsPage = () => {
@@ -44,6 +45,11 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
         const listRef = ref(storage, `ProfileImages/`)
         const images = await listAll(listRef);
 
+        const commentsRef = collection(db, `${params.sport}`, `${params.gameId}`, "Comments");
+        const commentsDocSnap = await getDocs(commentsRef);
+        console.log(commentsDocSnap)
+        const comments = commentsDocSnap.docs.map((doc) => ({ ...doc.data(), id: doc.id })) as CommentsData;
+        console.log(comments)
         let neededData = [] as constructedObject;
 
         for (const player of sportWithId.Players) {
@@ -65,7 +71,8 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
             })
         }
 
-        return { sportDetails: sportWithId, users: neededData };
+        return { sportDetails: sportWithId, users: neededData, comments: comments };
+
     } catch (error) {
         if (error instanceof Error) {
             throw json(
@@ -97,6 +104,15 @@ export async function action({ params, request }: ActionFunctionArgs) {
         else if (action === "Leave event") {
             await updateDoc(docRef, {
                 Players: arrayRemove(user)
+            })
+        }
+        else if (action === 'Submit comment') {
+            const eventCommentsRef = collection(db, `${sport}`, `${id}`, "Comments");
+            const { comment } = data;
+            await addDoc(eventCommentsRef, {
+                user,
+                comment,
+                date: Timestamp.now()
             })
         }
         else {

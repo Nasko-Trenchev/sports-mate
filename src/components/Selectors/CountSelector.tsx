@@ -17,6 +17,7 @@ const CountSelector: React.FC<CountSelectorProps> = (props) => {
     const footballCount = [10, 12, 16, 18, 22];
     const tennisCount = [2, 4];
     const basketballCount = [4, 6, 8, 10];
+    const voleyBallCount = [4, 6, 8, 10, 12];
 
     return (
         <>
@@ -47,6 +48,13 @@ const CountSelector: React.FC<CountSelectorProps> = (props) => {
                     }
                     {props.sport === 'basketball' &&
                         basketballCount.map((count) => (
+                            <MenuItem key={count} value={count}>
+                                {count}
+                            </MenuItem>
+                        ))
+                    }
+                    {props.sport === 'volleyball' &&
+                        voleyBallCount.map((count) => (
                             <MenuItem key={count} value={count}>
                                 {count}
                             </MenuItem>

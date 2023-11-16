@@ -1,6 +1,6 @@
 import CompleteEvent from "../components/Event/CompleteEvent"
-import { db } from "../config/firebase";
-import { arrayUnion, doc, increment, setDoc, Timestamp, updateDoc } from "firebase/firestore";
+import { db, auth } from "../config/firebase";
+import { addDoc, arrayUnion, doc, increment, setDoc, Timestamp, updateDoc, collection } from "firebase/firestore";
 import { ActionFunctionArgs } from "react-router-dom";
 
 const CompleteEventPage = () => {
@@ -19,17 +19,26 @@ export async function action({ params, request }: ActionFunctionArgs) {
     const { rating, sport, id, presence, comment, event } = data;
 
     const gameDocRef = doc(db, `${sport}`, `${id}`);
-    const eventCommentsRef = doc(db, `${sport}`, `${id}`, "Comments", `${id}`);
+    const eventCommentsRef = collection(db, `${sport}`, `${id}`, "Comments");
 
     const ratingArray = JSON.parse(rating);
     const presenceArray = JSON.parse(presence);
 
     if (comment !== "") {
-        await setDoc(eventCommentsRef, {
-            comments: arrayUnion({
-                comment
-            })
-        }, { merge: true })
+        // await setDoc(eventCommentsRef, {
+        //     comments: arrayUnion({
+        //         user: auth.currentUser?.displayName,
+        //         comment,
+        //         date: Timestamp.now()
+        //     }
+        //     )
+        // }, { merge: true })
+        await addDoc(eventCommentsRef, {
+            user: auth.currentUser?.displayName,
+            comment,
+            date: Timestamp.now()
+        }
+        )
     }
 
     if (rating.length > 0) {
