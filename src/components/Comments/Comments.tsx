@@ -1,26 +1,31 @@
 import { CommentsData } from '../../util/sportTypes';
-import { Stack } from '@mui/material';
+import { StyledEngineProvider } from '@mui/material/styles';
 import classes from './Comments.module.css';
+import GamePlayers from '../Game/GamePlayers';
 
 const Comments: React.FC<{ commentsData: CommentsData }> = (props) => {
     return (
-        <Stack>
-            {props.commentsData.map((entry) => (
-                <>
-                    <Stack key={entry.comment} className={classes['comments']}>
-                        <Stack className={classes['commentsUser']}>
-                            <p>{entry.user}</p>
-                            <p>{entry.date.toDate().toDateString()}</p>
-                        </Stack>
-                        <Stack className={classes['commentsUser']}>
-                            <p>{entry.comment}</p>
-                        </Stack>
-                    </Stack>
-                    <hr />
-                </>
-            )
-            )}
-        </Stack>
+        <StyledEngineProvider >
+            <div className={classes.commentsContainer}>
+                <h2>Comments</h2>
+                <div className={classes.commentSection}>
+                    {props.commentsData.map((entry) => (
+                        <div className={classes.commentContainer}>
+                            <GamePlayers image={entry.image!} displayName={entry.user} />
+                            <div className={classes.commentData} key={entry.id}>
+                                <div className={classes.comment}>
+                                    <p>{entry.comment}</p>
+                                </div>
+                                <div className={classes.commentDate}>
+                                    <p>{entry.date.toDate().toDateString()}</p>
+                                </div>
+                            </div>
+                        </div>
+                    )
+                    )}
+                </div>
+            </div>
+        </StyledEngineProvider>
     )
 }
 

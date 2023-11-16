@@ -132,7 +132,7 @@ const GameDetails: React.FC = () => {
                             key={user.users.email}
                             image={user.image}
                             displayName={user.users.username}
-                            email={user.users.email} />
+                        />
                     )}
                     {users.length > 3 &&
                         <motion.div whileHover={{ scale: 1.1 }} style={{ alignSelf: 'center' }}>
@@ -159,14 +159,15 @@ const GameDetails: React.FC = () => {
                                     key={user.users.email}
                                     image={user.image}
                                     displayName={user.users.username}
-                                    email={user.users.email} />
+                                />
                             )}
                         </Box>
                     </Modal>
                 </div>
             </div >
-            <h2 className={classes.additionalHeader}>Comments</h2>
+
             <div className={classes.additionalSection}>
+               
                 {!comments ? <h4>There aren`t any comments about this event yet</h4> :
                     <Comments commentsData={comments} />
                 }

@@ -10,9 +10,10 @@ import Typography from '@mui/material/Typography';
 import { useNavigate } from 'react-router-dom';
 import classes from './GamePlayers.module.css'
 
-const GamePlayers: React.FC<{ image: string, displayName: string, email: string }> = (props) => {
+const GamePlayers: React.FC<{ image: string, displayName: string }> = (props) => {
 
     const navigate = useNavigate();
+
     return (
         <List sx={{ width: '100%', bgcolor: 'background.paper' }} className={classes.playerProfileContainer}>
             <ListItem alignItems="center">

@@ -47,8 +47,19 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
         const commentsRef = collection(db, `${params.sport}`, `${params.gameId}`, "Comments");
         const commentsDocSnap = await getDocs(commentsRef);
-        console.log(commentsDocSnap)
         const comments = commentsDocSnap.docs.map((doc) => ({ ...doc.data(), id: doc.id })) as CommentsData;
+
+        for (const comment of comments) {
+            let profileImage;
+            const image = images.items.find(img => img.name === comment.user)
+            if (image) {
+                profileImage = await getDownloadURL(image)
+            }
+            else {
+                profileImage = picture
+            }
+            comment.image = profileImage;
+        }
         console.log(comments)
         let neededData = [] as constructedObject;
 
