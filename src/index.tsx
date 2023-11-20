@@ -1,4 +1,6 @@
 import { RouterProvider } from 'react-router-dom';
+import { Provider } from 'react-redux'
+// import store from './store';
 import router from './util/routes';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
@@ -13,9 +15,9 @@ const root = ReactDOM.createRoot(
 
 root.render(
   <React.StrictMode>
-    <AuthContextProvider>
-      <RouterProvider router={router} />
-    </AuthContextProvider>
+      <AuthContextProvider>
+        <RouterProvider router={router} />
+      </AuthContextProvider>
   </React.StrictMode>
 );
 

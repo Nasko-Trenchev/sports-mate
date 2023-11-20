@@ -1,5 +1,5 @@
 import CreateEvent from "../components/Event/CreateEvent";
-import { collection, addDoc, arrayUnion } from 'firebase/firestore';
+import { collection, addDoc, arrayUnion, doc, setDoc } from 'firebase/firestore';
 import { ActionFunctionArgs } from "react-router-dom";
 import { Timestamp } from "firebase/firestore";
 import { db } from "../config/firebase";
@@ -33,6 +33,13 @@ export async function action({ params, request }: ActionFunctionArgs) {
         PlayersCount: Number(data.get('PlayersCount')),
         Completed: false,
     });
+    try {
+        const commentsSubCollection = await setDoc(doc(db, `${params.sport}`, `${docRef.id}`, 'Comments', `${docRef.id}`), {
+            comments: []
+        });
+    } catch (error) {
+        console.log(error)
+    }
 
     return redirect(`/${params.sport}`)
 }

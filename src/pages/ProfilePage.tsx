@@ -16,6 +16,7 @@ export type profileData = {
     absent: string[],
     rating: number,
     votes: number,
+    image?: string,
 }
 
 const ProfilePage = () => {
@@ -28,7 +29,7 @@ export default ProfilePage;
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
 
-    const redirecUnAuthenticatedtUser = checkAuthentication(request);
+    const redirecUnAuthenticatedtUser = await checkAuthentication(request);
 
     if (redirecUnAuthenticatedtUser) {
         return redirecUnAuthenticatedtUser
@@ -51,7 +52,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
         return { image: finalImage, profile: finalData };
     } catch (error) {
-        
+
     }
 
 

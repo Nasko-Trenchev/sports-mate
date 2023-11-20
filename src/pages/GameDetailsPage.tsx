@@ -1,13 +1,14 @@
 import GameDetails from "../components/Game/GameDetails";
 import { LoaderFunctionArgs, ActionFunctionArgs, redirect, json } from "react-router-dom";
-import { getDoc, doc, updateDoc, arrayUnion, arrayRemove, deleteDoc, collection, getDocs, Timestamp, addDoc } from "firebase/firestore";
+import { getDoc, doc, updateDoc, arrayUnion, arrayRemove, deleteDoc, Timestamp } from "firebase/firestore";
 import { db } from "../config/firebase";
 import { Sport, CommentsData } from "../util/sportTypes";
-import { ref, getDownloadURL, listAll } from 'firebase/storage'
+import { ref, getDownloadURL, listAll, list } from 'firebase/storage'
 import { storage } from "../config/firebase";
 import picture from '../assets/noProfile.webp'
 import { profileData } from "./ProfilePage";
 import checkAuthentication from "../util/routeGuard";
+import { auth } from "../config/firebase";
 
 
 export type constructedObject = {
@@ -22,6 +23,10 @@ export type loaderReturnArgs = {
     comments: CommentsData,
 }
 
+export type commentRefData = {
+    comments: CommentsData
+}
+
 const GameDetailsPage = () => {
 
     return (
@@ -31,7 +36,8 @@ const GameDetailsPage = () => {
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
 
-    const redirecUnAuthenticatedtUser = checkAuthentication(request);
+
+    const redirecUnAuthenticatedtUser = await checkAuthentication(request);
 
     if (redirecUnAuthenticatedtUser) {
         return redirecUnAuthenticatedtUser
@@ -43,11 +49,16 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
         const sportWithId = ({ ...gameDocSnap.data(), id: gameDocSnap.id }) as Sport;
 
         const listRef = ref(storage, `ProfileImages/`)
-        const images = await listAll(listRef);
+        const images = await list(listRef, { maxResults: 100 });
 
-        const commentsRef = collection(db, `${params.sport}`, `${params.gameId}`, "Comments");
-        const commentsDocSnap = await getDocs(commentsRef);
-        const comments = commentsDocSnap.docs.map((doc) => ({ ...doc.data(), id: doc.id })) as CommentsData;
+        const commentsRef = doc(db, `${params.sport}`, `${params.gameId}`, "Comments", `${params.gameId}`)
+        const commentDocSnap = await getDoc(commentsRef);
+        const commentsDoc = commentDocSnap.data() as commentRefData;
+        const { comments } = commentsDoc;
+        // const commentWithId = ({ ...commentDocSnap.data(), id: commentDocSnap.id }) as CommentsData;
+        // const commentsRef = collection(db, `${params.sport}`, `${params.gameId}`, "Comments");
+        // const commentsDocSnap = await getDocs(commentsRef);
+        // const comments = commentsDocSnap.docs.map((doc) => ({ ...doc.data(), id: doc.id })) as CommentsData;
 
         for (const comment of comments) {
             let profileImage;
@@ -60,7 +71,9 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
             }
             comment.image = profileImage;
         }
-        console.log(comments)
+        // Can`t use PhotoUrl in UserProfile because pictures should be System.Uri -compact representation of a resource available
+        // to your application on the intranet or internet. 
+
         let neededData = [] as constructedObject;
 
         for (const player of sportWithId.Players) {
@@ -83,6 +96,8 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
         }
 
         return { sportDetails: sportWithId, users: neededData, comments: comments };
+        // return { sportDetails: sportWithId, users: neededData };
+
 
     } catch (error) {
         if (error instanceof Error) {
@@ -118,13 +133,23 @@ export async function action({ params, request }: ActionFunctionArgs) {
             })
         }
         else if (action === 'Submit comment') {
-            const eventCommentsRef = collection(db, `${sport}`, `${id}`, "Comments");
+            const eventCommentDocRef = doc(db, `${sport}`, `${id}`, "Comments", `${id}`);
             const { comment } = data;
-            await addDoc(eventCommentsRef, {
-                user,
-                comment,
-                date: Timestamp.now()
-            })
+
+            await updateDoc(eventCommentDocRef, {
+                comments: arrayUnion({
+                    user,
+                    comment,
+                    date: Timestamp.now()
+                })
+            });
+            // const eventCommentsRef = collection(db, `${sport}`, `${id}`, "Comments");
+            // const { comment } = data;
+            // await addDoc(eventCommentsRef, {
+            //     user,
+            //     comment,
+            //     date: Timestamp.now()
+            // })
         }
         else {
             await deleteDoc(docRef);

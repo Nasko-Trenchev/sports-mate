@@ -45,7 +45,6 @@ export type combinedProfileData = {
 export type CommentsData = {
     user: string,
     comment: string,
-    id: string,
     date: Timestamp,
     image?: string
 }[]

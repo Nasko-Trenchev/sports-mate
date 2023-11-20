@@ -4,7 +4,7 @@ import checkAuthentication from "./routeGuard";
 export async function privateRouteloader({ request }: LoaderFunctionArgs) {
 
 
-    const redirecUnAuthenticatedtUser = checkAuthentication(request);
+    const redirecUnAuthenticatedtUser = await checkAuthentication(request);
 
     if (redirecUnAuthenticatedtUser) {
         return redirecUnAuthenticatedtUser

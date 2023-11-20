@@ -18,7 +18,7 @@ import classes from './GameDetails.module.css'
 import { useState } from "react";
 import Box from "@mui/material/Box";
 import Comments from "../Comments/Comments";
-import CommentTextarea from "../Comments/TextArea";
+import CommentTextarea from "../Comments/CommentTextArea";
 
 const GameDetails: React.FC = () => {
 
@@ -31,6 +31,7 @@ const GameDetails: React.FC = () => {
     const { closeDialog, open, openDialog } = useDialog();
     const [showPlayers, setShowPlayers] = useState(false);
 
+    console.log(comments)
     const { timeRemaining, time } = hoursLeft(sportDetails.Time.toDate())
 
     const fieldDetails = FieldsImage.find(field => field.location === sportDetails.Location)
@@ -167,11 +168,18 @@ const GameDetails: React.FC = () => {
             </div >
 
             <div className={classes.additionalSection}>
-               
-                {!comments ? <h4>There aren`t any comments about this event yet</h4> :
-                    <Comments commentsData={comments} />
-                }
-                <CommentTextarea submitComment={submitComment} />
+                <div className={classes.gameComments}>
+                    <h2>Comments</h2>
+                    {comments.length === 0 ? (
+                        <div className={classes.noCommentsAvailable}>
+                            <h4>There aren`t any comments about this event yet </h4>
+                            <h4>Be the first to comment</h4>
+                        </div>
+                    ) :
+                        <Comments commentsData={comments} />
+                    }
+                    <CommentTextarea submitComment={submitComment} />
+                </div>
                 {/* <div className={classes.map}>
                     <p>Event location</p>
                     <Map coordinate={fieldDetails?.coordinates!} />

@@ -1,0 +1,12 @@
+
+.textAreaBox {
+    display: flex;
+    flex-direction: column;
+}
+.textAreaBox p {
+    align-self: flex-end;
+    margin: 0;
+    margin-top: 0.2em;
+    margin-right: 0.4em;
+    color: rgba(130, 130, 126, 0.655);
+}
