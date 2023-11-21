@@ -15,6 +15,7 @@ import { ImageTypes } from '../../util/constants';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import imageCompression from 'browser-image-compression';
 
 const VisuallyHiddenInput = styled('input')({
     clip: 'rect(0 0 0 0)',
@@ -43,9 +44,16 @@ const ProfileSettings = () => {
             return
         }
         else {
+
+            const options = {
+                maxSizeMB: 1,
+                maxWidthOrHeight: 128,
+                useWebWorker: true,
+            }
+            const compressedFile = await imageCompression(imageUpload, options);
             const imageRef = ref(storage, `ProfileImages/${auth?.currentUser?.displayName}`)
             setImageUpload(undefined)
-            await uploadBytes(imageRef, imageUpload)
+            await uploadBytes(imageRef, compressedFile)
             openNotification("Profile image changed successfully", 'success');
         }
 

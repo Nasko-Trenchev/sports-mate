@@ -15,9 +15,9 @@ const root = ReactDOM.createRoot(
 
 root.render(
   <React.StrictMode>
-      <AuthContextProvider>
-        <RouterProvider router={router} />
-      </AuthContextProvider>
+    <AuthContextProvider>
+      <RouterProvider router={router} />
+    </AuthContextProvider>
   </React.StrictMode>
 );
 

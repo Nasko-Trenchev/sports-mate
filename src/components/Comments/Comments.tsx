@@ -1,9 +1,14 @@
 import { CommentsData } from '../../util/sportTypes';
 import { StyledEngineProvider } from '@mui/material/styles';
+import { useRouteLoaderData } from 'react-router-dom';
 import classes from './Comments.module.css';
 import GamePlayers from '../Game/GamePlayers';
+import { loaderReturnArgs } from '../../pages/GameDetailsPage';
 
 const Comments: React.FC<{ commentsData: CommentsData }> = (props) => {
+
+    const { comments } = useRouteLoaderData('game-details') as loaderReturnArgs;
+    console.log(comments);
     return (
         <StyledEngineProvider >
             <div className={classes.commentSection}>
