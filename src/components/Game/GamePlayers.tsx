@@ -10,12 +10,12 @@ import Typography from '@mui/material/Typography';
 import { useNavigate } from 'react-router-dom';
 import classes from './GamePlayers.module.css'
 
-const GamePlayers: React.FC<{ image: string, displayName: string }> = (props) => {
+const GamePlayers: React.FC<{ image: string, displayName: string, bgColor: string }> = (props) => {
 
     const navigate = useNavigate();
 
     return (
-        <List sx={{ width: '100%', bgcolor: 'background.paper' }} className={classes.playerProfileContainer}>
+        <List sx={{ width: '100%', bgcolor: `${props.bgColor}` }} className={classes.playerProfileContainer} >
             <ListItem alignItems="center">
                 <ListItemAvatar sx={{ flex: '30%', display: 'flex', justifyContent: 'center' }}>
                     <motion.div whileHover={{ scale: 1.2 }}>
@@ -44,7 +44,7 @@ const GamePlayers: React.FC<{ image: string, displayName: string }> = (props) =>
                     }
                 />
             </ListItem>
-        </List>
+        </List >
     );
 }
 

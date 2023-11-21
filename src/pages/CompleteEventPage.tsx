@@ -19,7 +19,9 @@ export async function action({ params, request }: ActionFunctionArgs) {
     const { rating, sport, id, presence, comment, event } = data;
 
     const gameDocRef = doc(db, `${sport}`, `${id}`);
-    const eventCommentsRef = collection(db, `${sport}`, `${id}`, "Comments");
+    // const eventCommentsRef = collection(db, `${sport}`, `${id}`, "Comments");
+    const eventCommentDocRef = doc(db, `${sport}`, `${id}`, "Comments", `${id}`);
+
 
     const ratingArray = JSON.parse(rating);
     const presenceArray = JSON.parse(presence);
@@ -33,12 +35,19 @@ export async function action({ params, request }: ActionFunctionArgs) {
         //     }
         //     )
         // }, { merge: true })
-        await addDoc(eventCommentsRef, {
-            user: auth.currentUser?.displayName,
-            comment,
-            date: Timestamp.now()
-        }
-        )
+        // await addDoc(eventCommentsRef, {
+        //     user: auth.currentUser?.displayName,
+        //     comment,
+        //     date: Timestamp.now()
+        // }
+        // )
+        await updateDoc(eventCommentDocRef, {
+            comments: arrayUnion({
+                user: auth.currentUser?.displayName,
+                comment,
+                date: Timestamp.now()
+            })
+        });
     }
 
     if (rating.length > 0) {

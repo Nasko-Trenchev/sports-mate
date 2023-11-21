@@ -33,19 +33,19 @@ const CompleteEventSteps: React.FC<StepsProps> = (props) => {
                 <h3>Please mark the attendance of the players</h3>
                 <div className={classes.players}>
                     {users.map((user) =>
-                        <List className={classes.playerProfileContainer} key={user.users.email}>
+                        <List className={classes.playerProfileContainer} key={user.email}>
                             <ListItem >
                                 <ListItemAvatar>
                                     <div >
-                                        <Avatar alt={user.users.username} src={user.image} />
+                                        <Avatar alt={user.username} src={user.image} />
                                     </div>
                                 </ListItemAvatar>
                                 <ListItemText sx={{ flex: '70%' }}
-                                    primary={user.users.username}
+                                    primary={user.username}
                                 />
                                 <ListItemSecondaryAction >
                                     <Checkbox {...label}
-                                        name={user.users.username}
+                                        name={user.username}
                                         defaultChecked
                                         onChange={(e) => props.handlePresenceChange(e)} />
                                 </ListItemSecondaryAction>
@@ -66,19 +66,19 @@ const CompleteEventSteps: React.FC<StepsProps> = (props) => {
                             <ListItem >
                                 <ListItemAvatar>
                                     <div >
-                                        <Avatar alt={user.users.username} src={user.image} />
+                                        <Avatar alt={user.username} src={user.image} />
                                     </div>
 
                                 </ListItemAvatar>
                                 <ListItemText sx={{ flex: '70%' }}
-                                    primary={user.users.username}
+                                    primary={user.username}
                                 />
                                 <ListItemSecondaryAction className={classes.rating} >
                                     <Rating
                                         size='small'
-                                        name={user.users.username}
+                                        name={user.username}
                                         precision={1}
-                                        onChange={(event, value) => props.handleRatingChange(event, value, user.users.username)}
+                                        onChange={(event, value) => props.handleRatingChange(event, value, user.username)}
                                     />
                                 </ListItemSecondaryAction>
                             </ListItem>

@@ -8,13 +8,13 @@ import { loaderReturnArgs } from '../../pages/GameDetailsPage';
 const Comments: React.FC<{ commentsData: CommentsData }> = (props) => {
 
     const { comments } = useRouteLoaderData('game-details') as loaderReturnArgs;
-    console.log(comments);
+
     return (
         <StyledEngineProvider >
             <div className={classes.commentSection}>
-                {props.commentsData.sort((a, b) => Number(a.date) - Number(b.date)).map((entry) => (
+                {props.commentsData.map((entry) => (
                     <div className={classes.commentContainer}>
-                        <GamePlayers image={entry.image!} displayName={entry.user} key={entry.image} />
+                        <GamePlayers image={entry.image!} displayName={entry.user} key={entry.image} bgColor='blue'/>
                         <div className={classes.commentData} key={entry.comment}>
                             <div className={classes.comment}>
                                 <p>{entry.comment}</p>

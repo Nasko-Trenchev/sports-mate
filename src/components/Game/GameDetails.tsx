@@ -1,9 +1,9 @@
-import { Button, Tooltip } from "@mui/material";
+import { Button, Tooltip, CircularProgress } from "@mui/material";
 import { UserAuth } from '../../contexts/UserContext';
 import { hoursLeft } from "../../util/helperFunctions";
 import { color, motion } from 'framer-motion'
 import Modal from '@mui/material/Modal';
-import { useSubmit, useParams, useNavigate, useRouteLoaderData } from "react-router-dom";
+import { useSubmit, useParams, useNavigate, useRouteLoaderData, Await, useNavigation } from "react-router-dom";
 import Snackbar from '@mui/material/Snackbar';
 import { SnackbarAlert } from '../Alert/Alert';
 import AlertDialog from '../Alert/AlertDialog';
@@ -15,10 +15,11 @@ import GamePlayers from "./GamePlayers";
 import { loaderReturnArgs } from "../../pages/GameDetailsPage";
 import GameImageContainer from "./GameImageContainer";
 import classes from './GameDetails.module.css'
-import { useState } from "react";
+import { useState, Suspense } from "react";
 import Box from "@mui/material/Box";
 import Comments from "../Comments/Comments";
 import CommentTextarea from "../Comments/CommentTextArea";
+import { constructedObject } from "../../pages/GameDetailsPage";
 
 const GameDetails: React.FC = () => {
 
@@ -30,8 +31,10 @@ const GameDetails: React.FC = () => {
     const { openNotification, closeNotification, actionOption } = useNotification();
     const { closeDialog, open, openDialog } = useDialog();
     const [showPlayers, setShowPlayers] = useState(false);
+    const navigation = useNavigation();
 
-    console.log(comments)
+    const isSubmiting = navigation.state === 'submitting';
+
     const { timeRemaining, time } = hoursLeft(sportDetails.Time.toDate())
 
     const fieldDetails = FieldsImage.find(field => field.location === sportDetails.Location)
@@ -98,6 +101,7 @@ const GameDetails: React.FC = () => {
                                     <Button
                                         variant='contained'
                                         size='small'
+                                        disabled={isSubmiting}
                                         sx={{
                                             color: 'white', borderColor: 'blue', '&:hover': { borderColor: 'gray' }
                                         }}
@@ -114,7 +118,7 @@ const GameDetails: React.FC = () => {
                                             '&:disabled': { color: 'red', border: 'none' }
                                         }}
                                         disabled={sportDetails.PlayersCount === sportDetails.Players.length &&
-                                            !sportDetails.Players.some(email => email === user?.displayName)}
+                                            !sportDetails.Players.some(email => email === user?.displayName) &&  isSubmiting}
                                         onClick={(e) => handleEventClick(e)}
                                     >{sportDetails.Players.some(email => email === user?.displayName) ? "Leave event" :
                                         sportDetails.PlayersCount === sportDetails.Players.length ? "Full" : "Join event"}
@@ -128,13 +132,28 @@ const GameDetails: React.FC = () => {
                     <GameImageContainer coverImages={fieldDetails?.additionalImages!} />
                 </div>
                 <div className={classes.players}>
-                    {users.slice(0, 3).map((user) =>
+                    <Suspense fallback={<CircularProgress disableShrink sx={{ alignSelf: 'center' }} />}>
+                        <Await resolve={users}>
+                            {(defferedUsers: constructedObject) => (
+                                defferedUsers.slice(0, 3).map((user) =>
+                                    <GamePlayers
+                                        key={user.email}
+                                        image={user.image!}
+                                        displayName={user.username}
+                                        bgColor="background.paper"
+                                    />
+                                )
+                            )}
+                        </Await>
+                    </Suspense>
+                    {/* {users.slice(0, 3).map((user) =>
                         <GamePlayers
-                            key={user.users.email}
-                            image={user.image}
-                            displayName={user.users.username}
+                            key={user.email}
+                            image={user.image!}
+                            displayName={user.username}
+                            bgColor="background.paper"
                         />
-                    )}
+                    )} */}
                     {users.length > 3 &&
                         <motion.div whileHover={{ scale: 1.1 }} style={{ alignSelf: 'center' }}>
                             <Button
@@ -155,13 +174,28 @@ const GameDetails: React.FC = () => {
                         aria-describedby="modal-modal-description"
                     >
                         <Box className={classes.modalStyles}>
-                            {users.map((user) =>
+                            <Suspense fallback={<CircularProgress disableShrink sx={{ alignSelf: 'center' }} />}>
+                                <Await resolve={users}>
+                                    {(defferedUsers: constructedObject) => (
+                                        defferedUsers.map((user) =>
+                                            <GamePlayers
+                                                key={user.email}
+                                                image={user.image!}
+                                                displayName={user.username}
+                                                bgColor="background.paper"
+                                            />
+                                        )
+                                    )}
+                                </Await>
+                            </Suspense>
+                            {/* {users.map((user) =>
                                 <GamePlayers
-                                    key={user.users.email}
-                                    image={user.image}
-                                    displayName={user.users.username}
+                                    key={user.email}
+                                    image={user.image!}
+                                    displayName={user.username}
+                                    bgColor="background.paper"
                                 />
-                            )}
+                            )} */}
                         </Box>
                     </Modal>
                 </div>
@@ -169,15 +203,33 @@ const GameDetails: React.FC = () => {
 
             <div className={classes.additionalSection}>
                 <div className={classes.gameComments}>
-                    <h2>Comments</h2>
-                    {comments.length === 0 ? (
+                    <h2>Latest comments</h2>
+                    <Suspense fallback={<CircularProgress disableShrink sx={{ alignSelf: 'center' }} />}>
+                        <Await
+                            resolve={comments}>
+                            {(deferedComments) => (
+
+                                deferedComments.length === 0 ? (
+                                    <div className={classes.noCommentsAvailable}>
+                                        <h4>There aren`t any comments about this event yet </h4>
+                                        <h4>Be the first to comment</h4>
+                                    </div>
+                                ) :
+                                    <Comments commentsData={deferedComments} />
+
+                            )}
+
+
+                        </Await>
+                    </Suspense>
+                    {/* {comments.length === 0 ? (
                         <div className={classes.noCommentsAvailable}>
                             <h4>There aren`t any comments about this event yet </h4>
                             <h4>Be the first to comment</h4>
                         </div>
                     ) :
                         <Comments commentsData={comments} />
-                    }
+                    } */}
                     <CommentTextarea submitComment={submitComment} />
                 </div>
                 {/* <div className={classes.map}>
