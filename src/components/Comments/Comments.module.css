@@ -1,5 +1,5 @@
 .commentSection {
-    width: 40vw;
+    /* width: 45vw; */
     height: auto;
     display: flex;
     flex-direction: column;
@@ -7,29 +7,30 @@
     justify-items: space-around;
     margin-left: 2em;
     /* background: #1976d2; */
-    border: 0px solid black;
-    border-radius: 25px;
     padding-bottom: 1em;
 }
 
 .commentContainer {
     display: flex;
     flex-direction: row;
-    width: 35vw;
+    width: 40vw;
     margin-top: 1em;
-    border: 0px solid black;
+    border: 1px solid black;
     border-radius: 25px;
-    background-color: blue;
     overflow: hidden;
 }
 
 
 .commentData {
-    display: flex;
-    background-color: blue;
-    flex-direction: column;
-    justify-content: space-around;
-    width: 100%;
+    text-align: left;
+    flex-basis: 65%;
+    /* background-image: linear-gradient(to right top, #4e65ff, #0093ff, #00b7ff, #20d5ff, #92effd); */
+    width: auto;
+    height: auto;
+    border: 0px solid black;
+    border-radius: 25px;
+    border-top-right-radius: 25px;
+    border-bottom-right-radius: 25px;
 }
 
 .comment {
@@ -60,4 +61,8 @@
 .commentDate p {
     margin: 0;
     margin-right: 2em;
+}
+
+.commentProfile {
+   flex-basis: 35%;
 }

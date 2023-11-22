@@ -5,3 +5,8 @@
     flex-basis: 10%;
     color: black;
 }
+
+.profileDate {
+    padding: 0;
+    margin: 0;
+}

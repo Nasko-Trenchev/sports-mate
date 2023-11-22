@@ -146,13 +146,6 @@ export async function action({ params, request }: ActionFunctionArgs) {
                     date: Timestamp.now()
                 })
             });
-            // const eventCommentsRef = collection(db, `${sport}`, `${id}`, "Comments");
-            // const { comment } = data;
-            // await addDoc(eventCommentsRef, {
-            //     user,
-            //     comment,
-            //     date: Timestamp.now()
-            // })
         }
         else {
             await deleteDoc(docRef);

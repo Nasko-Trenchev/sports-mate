@@ -189,19 +189,20 @@ const GameDetails: React.FC = () => {
 
             <div className={classes.additionalSection}>
                 <div className={classes.gameComments}>
-                    <h2>Latest comments</h2>
                     <Suspense fallback={<CircularProgress disableShrink sx={{ alignSelf: 'center' }} />}>
                         <Await
                             resolve={comments}>
                             {(deferedComments) => (
-
                                 deferedComments.length === 0 ? (
                                     <div className={classes.noCommentsAvailable}>
                                         <h4>There aren`t any comments about this event yet </h4>
                                         <h4>Be the first to comment</h4>
                                     </div>
                                 ) :
-                                    <Comments commentsData={deferedComments} />
+                                    <>
+                                        <h2>Comments {`(${deferedComments.length})`}</h2>
+                                        <Comments commentsData={deferedComments} />
+                                    </>
 
                             )}
                         </Await>
@@ -209,7 +210,7 @@ const GameDetails: React.FC = () => {
                     <CommentTextarea submitComment={submitComment} />
                 </div>
                 {/* <div className={classes.map}>
-                    <p>Event location</p>
+                    <h2>Location</h2>
                     <Map coordinate={fieldDetails?.coordinates!} />
                 </div> */}
             </div>

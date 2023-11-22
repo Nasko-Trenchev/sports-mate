@@ -10,7 +10,7 @@ import Typography from '@mui/material/Typography';
 import { useNavigate } from 'react-router-dom';
 import classes from './GamePlayers.module.css'
 
-const GamePlayers: React.FC<{ image: string, displayName: string, bgColor: string }> = (props) => {
+const GamePlayers: React.FC<{ image: string, displayName: string, bgColor: string, date?: string }> = (props) => {
 
     const navigate = useNavigate();
 
@@ -40,6 +40,7 @@ const GamePlayers: React.FC<{ image: string, displayName: string, bgColor: strin
                                     value={5}
                                 />
                             </Typography>
+                            <span className={classes.profileDate}>{props.date}</span>
                         </React.Fragment>
                     }
                 />
