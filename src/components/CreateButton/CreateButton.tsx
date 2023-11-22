@@ -1,18 +1,16 @@
 import classes from './CreateButton.module.css';
 import { motion } from 'framer-motion';
 import { Button } from '@mui/material'
-import { NavLink, useParams } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
-const CreateButton = () => {
+const CreateButton: React.FC<{ style: string }> = (props) => {
 
-    const param = useParams();
     return (
-        <div className={classes.createBtnContainer}>
+        <div className={props.style === "full" ? classes.createBtnContainer : classes.createBtnEmpty}>
             <NavLink to={`create`} className={({ isActive, isPending }) =>
                 isPending ? `${classes.pending}` : isActive ? `${classes.active}` : ""
             }>
                 <motion.div
-
                     whileHover={{ scale: 1.1 }}>
                     <Button
                         variant='contained'

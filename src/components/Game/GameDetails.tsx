@@ -33,7 +33,7 @@ const GameDetails: React.FC = () => {
     const [showPlayers, setShowPlayers] = useState(false);
     const navigation = useNavigation();
 
-    const isSubmiting = navigation.state === 'submitting';
+    const isSubmiting = navigation.state === 'submitting' || navigation.state === 'loading';
 
     const { timeRemaining, time } = hoursLeft(sportDetails.Time.toDate())
 
@@ -56,7 +56,6 @@ const GameDetails: React.FC = () => {
     }
 
     const submitComment = (e: React.MouseEvent<HTMLButtonElement>, comment: string) => {
-        console.log(comment, e.currentTarget.textContent)
         submit({
             action: `${e.currentTarget.textContent}`,
             sport: `${sport}`,
@@ -115,12 +114,12 @@ const GameDetails: React.FC = () => {
                                         size='small'
                                         sx={{
                                             color: 'white', borderColor: 'blue', '&:hover': { borderColor: 'gray' },
-                                            '&:disabled': { color: 'red', border: 'none' }
+                                            '&:disabled': { color: 'white', border: 'none' }
                                         }}
                                         disabled={sportDetails.PlayersCount === sportDetails.Players.length &&
-                                            !sportDetails.Players.some(email => email === user?.displayName) &&  isSubmiting}
+                                            !sportDetails.Players.some(email => email === user?.displayName) || isSubmiting}
                                         onClick={(e) => handleEventClick(e)}
-                                    >{sportDetails.Players.some(email => email === user?.displayName) ? "Leave event" :
+                                    >{isSubmiting ? "Processing..." : sportDetails.Players.some(email => email === user?.displayName) ? "Leave event" :
                                         sportDetails.PlayersCount === sportDetails.Players.length ? "Full" : "Join event"}
                                     </Button>
                                 </motion.div>
@@ -145,28 +144,23 @@ const GameDetails: React.FC = () => {
                                 )
                             )}
                         </Await>
+                        <Await resolve={users}>
+                            {(defferedUsers: constructedObject) => (
+                                defferedUsers.length > 3 &&
+                                <motion.div whileHover={{ scale: 1.1 }} style={{ alignSelf: 'center' }}>
+                                    <Button
+                                        variant='contained'
+                                        size='small'
+                                        sx={{
+                                            color: 'white', borderColor: 'blue', '&:hover': { borderColor: 'gray' }
+                                        }}
+                                        onClick={() => setShowPlayers(true)}>
+                                        Show all Players
+                                    </Button>
+                                </motion.div>
+                            )}
+                        </Await>
                     </Suspense>
-                    {/* {users.slice(0, 3).map((user) =>
-                        <GamePlayers
-                            key={user.email}
-                            image={user.image!}
-                            displayName={user.username}
-                            bgColor="background.paper"
-                        />
-                    )} */}
-                    {users.length > 3 &&
-                        <motion.div whileHover={{ scale: 1.1 }} style={{ alignSelf: 'center' }}>
-                            <Button
-                                variant='contained'
-                                size='small'
-                                sx={{
-                                    color: 'white', borderColor: 'blue', '&:hover': { borderColor: 'gray' }
-                                }}
-                                onClick={() => setShowPlayers(true)}>
-                                Show all Players
-                            </Button>
-                        </motion.div>
-                    }
                     <Modal
                         open={showPlayers}
                         onClose={() => setShowPlayers(false)}
@@ -188,14 +182,6 @@ const GameDetails: React.FC = () => {
                                     )}
                                 </Await>
                             </Suspense>
-                            {/* {users.map((user) =>
-                                <GamePlayers
-                                    key={user.email}
-                                    image={user.image!}
-                                    displayName={user.username}
-                                    bgColor="background.paper"
-                                />
-                            )} */}
                         </Box>
                     </Modal>
                 </div>
@@ -218,18 +204,8 @@ const GameDetails: React.FC = () => {
                                     <Comments commentsData={deferedComments} />
 
                             )}
-
-
                         </Await>
                     </Suspense>
-                    {/* {comments.length === 0 ? (
-                        <div className={classes.noCommentsAvailable}>
-                            <h4>There aren`t any comments about this event yet </h4>
-                            <h4>Be the first to comment</h4>
-                        </div>
-                    ) :
-                        <Comments commentsData={comments} />
-                    } */}
                     <CommentTextarea submitComment={submitComment} />
                 </div>
                 {/* <div className={classes.map}>

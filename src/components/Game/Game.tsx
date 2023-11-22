@@ -49,7 +49,7 @@ const Game: React.FC<{ data: Sport }> = (props) => {
                     <p>{timeRemaining}</p>
                 </div>
                 <motion.div whileHover={{ scale: 1.1 }} className={classes.detailsBtn}>
-                    <Button variant='contained' size='small' onClick={() => navigate(`/${params.sport}/${props.data.id}`)}>Show details</Button>
+                    <Button variant='contained' size='small' onClick={() => navigate(`/${params.sport}/${props.data.id}`)}>View details</Button>
                 </motion.div>
             </div>
         </>

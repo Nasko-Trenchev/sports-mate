@@ -1,6 +1,12 @@
 .createBtnContainer {
-    display: flex;
-    align-items: center;
+    position: fixed;
+    left: 90%;
+    top: 12%;
+}
+
+.createBtnEmpty {
+    margin-top: 2em;
+    text-align: center;
 }
 
 .createBtnContainer button {

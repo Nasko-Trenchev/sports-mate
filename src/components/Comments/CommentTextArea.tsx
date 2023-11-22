@@ -1,8 +1,8 @@
 import { TextareaAutosize as BaseTextareaAutosize } from '@mui/base/TextareaAutosize';
 import { Button } from '@mui/material'
-import { useState } from 'react'
 import { styled } from '@mui/system';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
+import { useNavigation } from 'react-router-dom';
 import classes from './CommentTextArea.module.css'
 
 const blue = {
@@ -29,6 +29,9 @@ const grey = {
 const CommentTextarea: React.FC<{ submitComment: (e: React.MouseEvent<HTMLButtonElement>, comment: string) => void }> = (props) => {
 
   const [comment, setComment] = useState('');
+  const navigation = useNavigation();
+
+  const isSubmitting = navigation.state === 'submitting' || navigation.state === 'loading';
 
   const Textarea = useMemo(() => styled(BaseTextareaAutosize)(
     ({ theme }) => `
@@ -77,8 +80,9 @@ const CommentTextarea: React.FC<{ submitComment: (e: React.MouseEvent<HTMLButton
         sx={{
           color: 'white', borderColor: 'blue', '&:hover': { borderColor: 'gray' }
         }}
+        disabled={isSubmitting}
         onClick={(e) => props.submitComment(e, comment)}>
-        Submit comment
+        {isSubmitting ? "Submitting..." : 'Submit comment'}
       </Button>
 
     </>
