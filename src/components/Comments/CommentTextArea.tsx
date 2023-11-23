@@ -69,7 +69,7 @@ const CommentTextarea: React.FC<{ submitComment: (e: React.MouseEvent<HTMLButton
   ), [])
 
   return (
-    <>
+    <div className={classes.textAreaContainer}>
       <div className={classes.textAreaBox}>
         <Textarea value={comment} maxLength={210} onChange={(e) => setComment(e.target.value)} aria-label="empty textarea" placeholder="Type your comment..." />
         <p>{comment.length}/210</p>
@@ -84,8 +84,7 @@ const CommentTextarea: React.FC<{ submitComment: (e: React.MouseEvent<HTMLButton
         onClick={(e) => props.submitComment(e, comment)}>
         {isSubmitting ? "Submitting..." : 'Submit comment'}
       </Button>
-
-    </>
+    </div>
   )
 }
 

@@ -1,15 +1,12 @@
 import { CommentsData } from '../../util/sportTypes';
 import { StyledEngineProvider } from '@mui/material/styles';
-import { Stack, Divider, Pagination, Box } from "@mui/material";
-import { useRouteLoaderData } from 'react-router-dom';
+import { Pagination, Box } from "@mui/material";
 import classes from './Comments.module.css';
 import GamePlayers from '../Game/GamePlayers';
 import { useState } from 'react';
-import { loaderReturnArgs } from '../../pages/GameDetailsPage';
 
 const Comments: React.FC<{ commentsData: CommentsData }> = (props) => {
     const [page, setPage] = useState(1);
-    console.log(page)
 
     const itemsPerPage = 4;
 

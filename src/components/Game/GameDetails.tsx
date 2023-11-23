@@ -31,6 +31,7 @@ const GameDetails: React.FC = () => {
     const { openNotification, closeNotification, actionOption } = useNotification();
     const { closeDialog, open, openDialog } = useDialog();
     const [showPlayers, setShowPlayers] = useState(false);
+    const [showMap, setShowMap] = useState(false);
     const navigation = useNavigation();
 
     const isSubmiting = navigation.state === 'submitting' || navigation.state === 'loading';
@@ -69,21 +70,41 @@ const GameDetails: React.FC = () => {
     return (
         <>
             {(sportDetails.Owner === user?.displayName && timeRemaining === "Event over") &&
-                <motion.div style={{ textAlign: 'center', marginTop: '2em' }} whileHover={{ scale: 1.1 }}>
-                    <Button
-                        variant='contained'
-                        size='small'
-                        sx={{
-                            color: 'white', borderColor: 'blue', '&:hover': { borderColor: 'gray' }
-                        }} onClick={() => navigate(`/${sport}/${gameId}/completion`)}>Mark as completed</Button>
-                </motion.div>
+                <div style={{ display: 'flex', justifyContent: 'center', marginTop: '2em' }} >
+                    <motion.div whileHover={{ scale: 1.1 }}>
+                        <Button
+                            variant='contained'
+                            size='small'
+                            sx={{
+                                color: 'white', borderColor: 'blue', '&:hover': { borderColor: 'gray' }
+                            }} onClick={() => navigate(`/${sport}/${gameId}/completion`)}>Mark as completed
+                        </Button>
+                    </motion.div>
+                </div>
             }
             <div className={classes.detailsContainer}>
                 <div className={classes.description}>
                     <h1>{sportDetails.Location}</h1>
-                    <Tooltip title="Show on Map" placement="top" >
-                        <p>{fieldDetails?.street}</p>
+                    <Tooltip title="Show on Map" placement="top">
+                        <motion.p
+                            onClick={() => setShowMap(true)}
+                            className={classes.streetDetails}
+                            whileHover={{ scale: 1.2 }}
+                        >{fieldDetails?.street}
+                        </motion.p>
                     </Tooltip>
+                    <Modal
+                        open={showMap}
+                        onClose={() => setShowMap(false)}
+                        aria-labelledby="modal-modal-title"
+                        aria-describedby="modal-modal-description"
+                    >
+                        <div className={classes.mapModalStyles}>
+                            <div className={classes.map}>
+                                <Map coordinate={fieldDetails?.coordinates!} />
+                            </div>
+                        </div>
+                    </Modal>
                     {timeRemaining !== "Event over" && <p>{timeRemaining}</p>}
                     <div className={classes.registrationStatus}>
                         {time > 0 && sportDetails.PlayersCount > sportDetails.Players.length ?
@@ -166,6 +187,7 @@ const GameDetails: React.FC = () => {
                         onClose={() => setShowPlayers(false)}
                         aria-labelledby="modal-modal-title"
                         aria-describedby="modal-modal-description"
+
                     >
                         <Box className={classes.modalStyles}>
                             <Suspense fallback={<CircularProgress disableShrink sx={{ alignSelf: 'center' }} />}>

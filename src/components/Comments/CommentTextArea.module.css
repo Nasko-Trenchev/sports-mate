@@ -10,3 +10,13 @@
     margin-right: 0.4em;
     color: rgba(130, 130, 126, 0.655);
 }
+
+.textAreaContainer {
+    display: flex;
+    flex-direction: column;
+}
+
+.textAreaContainer button {
+    align-self: center;
+    width: 45%;
+}

@@ -1,15 +1,10 @@
 .map {
-    /* width: 25vw;
-    height: 40vh; */
+    width: 50vw;
+    height: 70vh;
     /* display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: space-between; */
-    flex-basis: 50%;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
 }
 
 .registrationStatus {
@@ -57,12 +52,25 @@
     left: 50%;
     transform: translate(-50%, -50%);
     min-width: 25vw;
+    max-width: 45vw;
+    max-height: 100vh;
+    background-color: 'background.paper';
+    border: '2px solid #000';
+    box-shadow: 24;
+    overflow-y: scroll;
+}
+
+.mapModalStyles {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    min-width: 25vw;
     max-width: 30vw;
     max-height: 55vh;
     background-color: 'background.paper';
     border: '2px solid #000';
     box-shadow: 24;
-    overflow-y: scroll;
 }
 
 .additionalHeader {
@@ -76,7 +84,6 @@
     justify-content: center;
     width: 100%;
     margin-top: 2em;
-    border: 1px solid black;
 }
 
 .gameComments {
@@ -92,4 +99,11 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+
+.streetDetails {
+    font-weight: bold;
+    font-style: oblique;
+    color: #1976d2;
+    cursor: pointer;
 }
