@@ -1,5 +1,5 @@
 import classes from './CompleteEventSteps.module.css'
-import { useRouteLoaderData } from "react-router-dom";
+import { useRouteLoaderData, Await } from "react-router-dom";
 import { ListItemSecondaryAction } from '@mui/material';
 import { loaderReturnArgs } from "../../pages/GameDetailsPage";
 import Checkbox from '@mui/material/Checkbox';
@@ -8,10 +8,12 @@ import TextField from '@mui/material/TextField/TextField';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
-import { Rating } from '@mui/material';
+import { Rating, CircularProgress } from '@mui/material';
 import { SelectChangeEvent } from '@mui/material/Select';
 import Avatar from '@mui/material/Avatar';
 import { StyledEngineProvider } from '@mui/material/styles';
+import { Suspense } from 'react';
+import { constructedObject } from '../../pages/GameDetailsPage';
 
 type StepsProps = {
     step: number,
@@ -22,36 +24,43 @@ type StepsProps = {
 
 const CompleteEventSteps: React.FC<StepsProps> = (props) => {
 
-
     const { sportDetails, users } = useRouteLoaderData('game-details') as loaderReturnArgs;
 
     const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
+
+    console.log(users);
 
     if (props.step === 0) {
         return (
             <StyledEngineProvider>
                 <h3>Please mark the attendance of the players</h3>
                 <div className={classes.players}>
-                    {users.map((user) =>
-                        <List className={classes.playerProfileContainer} key={user.email}>
-                            <ListItem >
-                                <ListItemAvatar>
-                                    <div >
-                                        <Avatar alt={user.username} src={user.image} />
-                                    </div>
-                                </ListItemAvatar>
-                                <ListItemText sx={{ flex: '70%' }}
-                                    primary={user.username}
-                                />
-                                <ListItemSecondaryAction >
-                                    <Checkbox {...label}
-                                        name={user.username}
-                                        defaultChecked
-                                        onChange={(e) => props.handlePresenceChange(e)} />
-                                </ListItemSecondaryAction>
-                            </ListItem>
-                        </List>
-                    )}
+                    <Suspense fallback={<CircularProgress disableShrink sx={{ alignSelf: 'center' }} />}>
+                        <Await resolve={users}>
+                            {(defferedUsers: constructedObject) => (
+                                defferedUsers.map((user) =>
+                                    <List className={classes.playerProfileContainer} key={user.email}>
+                                        <ListItem >
+                                            <ListItemAvatar>
+                                                <div >
+                                                    <Avatar alt={user.username} src={user.image} />
+                                                </div>
+                                            </ListItemAvatar>
+                                            <ListItemText sx={{ flex: '70%' }}
+                                                primary={user.username}
+                                            />
+                                            <ListItemSecondaryAction >
+                                                <Checkbox {...label}
+                                                    name={user.username}
+                                                    defaultChecked
+                                                    onChange={(e) => props.handlePresenceChange(e)} />
+                                            </ListItemSecondaryAction>
+                                        </ListItem>
+                                    </List>
+                                )
+                            )}
+                        </Await>
+                    </Suspense>
                 </div>
             </StyledEngineProvider>
         )
@@ -61,29 +70,34 @@ const CompleteEventSteps: React.FC<StepsProps> = (props) => {
             <StyledEngineProvider>
                 <h3>Please rate the performance of the players</h3>
                 <div className={classes.players}>
-                    {users.map((user) =>
-                        <List className={classes.playersRatingContainer}>
-                            <ListItem >
-                                <ListItemAvatar>
-                                    <div >
-                                        <Avatar alt={user.username} src={user.image} />
-                                    </div>
+                    <Suspense fallback={<CircularProgress disableShrink sx={{ alignSelf: 'center' }} />}>
+                        <Await resolve={users}>
+                            {(defferedUsers: constructedObject) => (
+                                defferedUsers.map((user) =>
+                                    <List className={classes.playersRatingContainer}>
+                                        <ListItem >
+                                            <ListItemAvatar>
+                                                <div >
+                                                    <Avatar alt={user.username} src={user.image} />
+                                                </div>
 
-                                </ListItemAvatar>
-                                <ListItemText sx={{ flex: '70%' }}
-                                    primary={user.username}
-                                />
-                                <ListItemSecondaryAction className={classes.rating} >
-                                    <Rating
-                                        size='small'
-                                        name={user.username}
-                                        precision={1}
-                                        onChange={(event, value) => props.handleRatingChange(event, value, user.username)}
-                                    />
-                                </ListItemSecondaryAction>
-                            </ListItem>
-                        </List>
-                    )}
+                                            </ListItemAvatar>
+                                            <ListItemText sx={{ flex: '70%' }}
+                                                primary={user.username}
+                                            />
+                                            <ListItemSecondaryAction className={classes.rating} >
+                                                <Rating
+                                                    size='small'
+                                                    name={user.username}
+                                                    precision={1}
+                                                    onChange={(event, value) => props.handleRatingChange(event, value, user.username)}
+                                                />
+                                            </ListItemSecondaryAction>
+                                        </ListItem>
+                                    </List>
+                                ))}
+                        </Await>
+                    </Suspense>
                 </div>
             </StyledEngineProvider>
         )
