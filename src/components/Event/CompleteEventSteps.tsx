@@ -24,11 +24,9 @@ type StepsProps = {
 
 const CompleteEventSteps: React.FC<StepsProps> = (props) => {
 
-    const { sportDetails, users } = useRouteLoaderData('game-details') as loaderReturnArgs;
+    const { users } = useRouteLoaderData('game-details') as loaderReturnArgs;
 
     const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
-
-    console.log(users);
 
     if (props.step === 0) {
         return (
