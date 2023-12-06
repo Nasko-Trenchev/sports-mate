@@ -15,14 +15,13 @@ const Comments: React.FC<{ commentsData: CommentsData }> = (props) => {
 
     const displayedItems = props.commentsData.slice(startIndex, endIndex);
 
-
     return (
         <StyledEngineProvider >
             <div className={classes.commentSection}>
                 {displayedItems.map((entry, index) => (
                     <div className={classes.commentContainer} key={index}>
                         <div className={classes.commentProfile}>
-                            <GamePlayers date={entry.date.toDate().toDateString()} image={entry.image!} displayName={entry.user} key={entry.image} bgColor='white' />
+                            <GamePlayers date={entry.date.toDate().toDateString()} image={entry.image!} displayName={entry.user} key={entry.image} />
                         </div>
                         <div className={classes.commentData}>
                             <div className={classes.comment}>
