@@ -29,20 +29,22 @@ const GameImageContainer: React.FC<{ coverImages: string[] }> = (props) => {
 
     return (
         <StyledEngineProvider>
-            <Stack height={"100%"} sx={{borderRadius: '1em'}}>
-                <div className={classes.sliderStyles}>
-                    <div className={classes.leftArrow} onClick={goToPrevious}><ArrowBackIosIcon sx={{ fontSize: '32px' }} /></div>
-                    <div className={classes.rightArrow} onClick={goToNext}><ArrowForwardIosIcon sx={{ fontSize: '32px' }} /></div>
-                    <div className={classes.coverImageContainer}>
-                        <img src={props.coverImages?.[currentIndex]} alt="coverPhoto" />
+            <div className={classes.images}>
+                <Stack height={"100%"} sx={{ borderRadius: '1em' }}>
+                    <div className={classes.sliderStyles}>
+                        <div className={classes.leftArrow} onClick={goToPrevious}><ArrowBackIosIcon sx={{ fontSize: '32px' }} /></div>
+                        <div className={classes.rightArrow} onClick={goToNext}><ArrowForwardIosIcon sx={{ fontSize: '32px' }} /></div>
+                        <div className={classes.coverImageContainer}>
+                            <img src={props.coverImages?.[currentIndex]} alt="coverPhoto" />
+                        </div>
+                        <div className={classes.slideDots}>
+                            {props.coverImages?.map((slide, slideInex) => (
+                                <div key={slideInex} onClick={() => goToSlide(slideInex)}><FiberManualRecordIcon sx={{ fontSize: '16px' }} /></div>
+                            ))}
+                        </div>
                     </div>
-                    <div className={classes.slideDots}>
-                        {props.coverImages?.map((slide, slideInex) => (
-                            <div key={slideInex} onClick={() => goToSlide(slideInex)}><FiberManualRecordIcon sx={{ fontSize: '16px' }} /></div>
-                        ))}
-                    </div>
-                </div>
-            </Stack>
+                </Stack>
+            </div>
         </StyledEngineProvider>
     )
 }

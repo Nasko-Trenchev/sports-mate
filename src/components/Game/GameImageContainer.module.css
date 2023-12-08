@@ -1,3 +1,10 @@
+.images {
+    flex-basis: 30%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .sliderStyles {
     height: 100%;
     position: relative;

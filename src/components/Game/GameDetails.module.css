@@ -19,13 +19,6 @@
     justify-content: center;
 }
 
-.images {
-    flex-basis: 30%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
 .detailsContainer {
     margin: auto;
     margin-top: 5em;
@@ -38,27 +31,6 @@
     border-radius: 2em;
 }
 
-.players {
-    display: flex;
-    flex-basis: 20%;
-    justify-content: center;
-    align-items: flex-start;
-    flex-direction: column;
-}
-
-.modalStyles {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    min-width: 25vw;
-    max-width: 45vw;
-    max-height: 100vh;
-    background-color: 'background.paper';
-    border: '2px solid #000';
-    box-shadow: 24;
-    overflow-y: scroll;
-}
 
 .mapModalStyles {
     position: absolute;
