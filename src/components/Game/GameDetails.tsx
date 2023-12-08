@@ -1,15 +1,12 @@
-import { Button, Tooltip, CircularProgress, Modal } from "@mui/material";
+import { Button, CircularProgress, Modal } from "@mui/material";
 import { UserAuth } from '../../contexts/UserContext';
 import { hoursLeft } from "../../util/helperFunctions";
-import { color, motion } from 'framer-motion'
-import { useSubmit, useParams, useNavigate, useRouteLoaderData, Await, useNavigation } from "react-router-dom";
+import { motion } from 'framer-motion'
+import { useSubmit, useParams, useNavigate, useRouteLoaderData, Await } from "react-router-dom";
 import Snackbar from '@mui/material/Snackbar';
 import { SnackbarAlert } from '../Alert/Alert';
-import AlertDialog from '../Alert/AlertDialog';
-import useDialog from '../../hooks/dialog';
 import useNotification from '../../hooks/notification';
 import { FieldsImage } from "../../util/constants";
-import Map from "../GoggleMap/GoogleMap";
 import GamePlayers from "./GamePlayers";
 import { loaderReturnArgs } from "../../pages/GameDetailsPage";
 import GameImageContainer from "./GameImageContainer";
@@ -29,12 +26,7 @@ const GameDetails: React.FC = () => {
     const submit = useSubmit();
     const { sportDetails, users, comments } = useRouteLoaderData('game-details') as loaderReturnArgs;
     const { openNotification, closeNotification, actionOption } = useNotification();
-    // const { closeDialog, open, openDialog } = useDialog();
     const [showPlayers, setShowPlayers] = useState(false);
-    // const [showMap, setShowMap] = useState(false);
-    const navigation = useNavigation();
-
-    const isSubmiting = navigation.state === 'submitting' || navigation.state === 'loading';
 
     const { timeRemaining, time } = hoursLeft(sportDetails.Time.toDate())
 
@@ -44,7 +36,7 @@ const GameDetails: React.FC = () => {
 
     const handleEventClick = (e: React.MouseEvent<HTMLButtonElement>) => {
 
-        if (e.currentTarget.textContent === "Confirm" || 'Cancel event') {
+        if (e.currentTarget.textContent === "Confirm") {
             openNotification("Event cancelled successfully", 'success');
         }
         submit({
@@ -90,78 +82,12 @@ const GameDetails: React.FC = () => {
                             size='small'
                             sx={{
                                 color: 'white', borderColor: 'blue', '&:hover': { borderColor: 'gray' }
-                            }} onClick={handleEventClick}>Cancel event
+                            }} onClick={handleEventClick}>Delete event
                         </Button>
                     </motion.div>
                 </div>
             }
             <div className={classes.detailsContainer}>
-                {/* <div className={classes.description}>
-                    <h1>{sportDetails.Location}</h1>
-                    <Tooltip title="Show on Google Maps" placement="top">
-                        <motion.p
-                            onClick={() => setShowMap(true)}
-                            className={classes.streetDetails}
-                            whileHover={{ scale: 1.2 }}
-                        >{fieldDetails?.street}
-                        </motion.p>
-                    </Tooltip>
-                    <Modal
-                        open={showMap}
-                        onClose={() => setShowMap(false)}
-                        aria-labelledby="modal-modal-title"
-                        aria-describedby="modal-modal-description"
-                    >
-                        <div className={classes.mapModalStyles}>
-                            <div className={classes.map}>
-                                <Map coordinate={fieldDetails?.coordinates!} />
-                            </div>
-                        </div>
-                    </Modal>
-                    {timeRemaining !== "Event over" && <p>{timeRemaining}</p>}
-                    <div className={classes.registrationStatus}>
-                        {time > 0 && sportDetails.PlayersCount > sportDetails.Players.length ?
-                            <h3 style={{ color: 'green' }}>Registration open</h3> :
-                            time > 0 && sportDetails.PlayersCount === sportDetails.Players.length ?
-                                <h3 style={{ color: 'orange' }}>Event full</h3> :
-                                time === 0 && sportDetails.PlayersCount > sportDetails.Players.length ?
-                                    <h3 style={{ color: 'red' }}>Event cancelled, not enouth players</h3> :
-                                    <h3 style={{ color: 'red' }}>Event over</h3>}
-                        {time > 0 &&
-                            <>
-                                <p>{remainingSpots} {remainingSpots > 1 ? "spots" : "spot"} remaining</p>
-                                {sportDetails.Owner === user?.displayName ?
-                                    <motion.div whileHover={{ scale: 1.1 }} className={classes.detailsBtn}>
-                                        <Button
-                                            variant='contained'
-                                            size='small'
-                                            disabled={isSubmiting}
-                                            sx={{
-                                                color: 'white', borderColor: 'blue', '&:hover': { borderColor: 'gray' }
-                                            }}
-                                            onClick={openDialog}
-                                        >Cancel event</Button>
-                                    </motion.div>
-                                    :
-                                    <motion.div whileHover={{ scale: 1.1 }} className={classes.detailsBtn}>
-                                        <Button
-                                            variant='contained'
-                                            size='small'
-                                            sx={{
-                                                color: 'white', borderColor: 'blue', '&:hover': { borderColor: 'gray' },
-                                                '&:disabled': { color: 'white', border: 'none' }
-                                            }}
-                                            disabled={sportDetails.PlayersCount === sportDetails.Players.length &&
-                                                !sportDetails.Players.some(email => email === user?.displayName) || isSubmiting}
-                                            onClick={(e) => handleEventClick(e)}
-                                        >{isSubmiting ? "Processing..." : sportDetails.Players.some(email => email === user?.displayName) ? "Leave event" :
-                                            sportDetails.PlayersCount === sportDetails.Players.length ? "Full" : "Join event"}
-                                        </Button>
-                                    </motion.div>
-                                }
-                            </>}
-                    </div >
-                </div> */}
                 <GameDetailsDescription handleEventClick={handleEventClick} />
                 <div className={classes.images}>
                     <GameImageContainer coverImages={fieldDetails?.additionalImages!} />
@@ -244,13 +170,6 @@ const GameDetails: React.FC = () => {
                     <CommentTextarea submitComment={submitComment} />
                 </div>
             </div>
-            {/* <AlertDialog
-                title='Confirm event deletion'
-                confirmationText="This action can`t be reverted! You`ll need to create another event if you proceed"
-                open={open}
-                confirm={(e) => handleEventClick(e)}
-                cancel={closeDialog}
-            /> */}
             <Snackbar
                 open={actionOption.open}
                 autoHideDuration={3000}
