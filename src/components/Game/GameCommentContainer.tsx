@@ -6,8 +6,7 @@ import { loaderReturnArgs } from "../../pages/GameDetailsPage";
 import Comments from "../Comments/Comments";
 import CommentTextarea from "../Comments/CommentTextArea";
 
-
-const GameCommentContainer: React.FC<{ submitComment: (e: React.MouseEvent<HTMLButtonElement>, comment: string) => void }> = (props) => {
+const GameCommentContainer = () => {
 
     const { comments } = useRouteLoaderData('game-details') as loaderReturnArgs;
 
@@ -31,7 +30,7 @@ const GameCommentContainer: React.FC<{ submitComment: (e: React.MouseEvent<HTMLB
                     )}
                 </Await>
             </Suspense>
-            <CommentTextarea submitComment={props.submitComment} />
+            <CommentTextarea />
         </div>
     )
 }

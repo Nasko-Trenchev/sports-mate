@@ -44,17 +44,6 @@ const GameDetails: React.FC = () => {
             { method: "post", encType: "application/json" })
     }
 
-    const submitComment = (e: React.MouseEvent<HTMLButtonElement>, comment: string) => {
-        submit({
-            action: `${e.currentTarget.textContent}`,
-            sport: `${sport}`,
-            id: `${sportDetails.id}`,
-            user: `${user?.displayName}`,
-            comment: `${comment}`
-        },
-            { method: "post", encType: "application/json" })
-    }
-
     return (
         <>
             {(sportDetails.Owner === user?.displayName && timeRemaining === "Event over" && remainingSpots === 0) &&
@@ -89,7 +78,7 @@ const GameDetails: React.FC = () => {
                 <GamePlayersContainer />
             </div >
             <div className={classes.additionalSection}>
-                <GameCommentContainer submitComment={submitComment} />
+                <GameCommentContainer />
             </div>
             <Snackbar
                 open={actionOption.open}

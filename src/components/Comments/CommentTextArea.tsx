@@ -1,8 +1,11 @@
 import { TextareaAutosize as BaseTextareaAutosize } from '@mui/base/TextareaAutosize';
 import { Button } from '@mui/material'
 import { styled } from '@mui/system';
+import { useSubmit, useParams, useRouteLoaderData, useNavigation } from "react-router-dom";
 import { useMemo, useState } from 'react';
-import { useNavigation } from 'react-router-dom';
+import { loaderReturnArgs } from "../../pages/GameDetailsPage";
+import { UserAuth } from '../../contexts/UserContext';
+
 import classes from './CommentTextArea.module.css'
 
 const blue = {
@@ -26,10 +29,26 @@ const grey = {
   800: '#303740',
   900: '#1C2025',
 };
-const CommentTextarea: React.FC<{ submitComment: (e: React.MouseEvent<HTMLButtonElement>, comment: string) => void }> = (props) => {
+const CommentTextarea = () => {
 
   const [comment, setComment] = useState('');
+  const { sport } = useParams();
+  const { user } = UserAuth();
+  const { sportDetails } = useRouteLoaderData('game-details') as loaderReturnArgs;
+  const submit = useSubmit();
   const navigation = useNavigation();
+
+  const submitComment = (e: React.MouseEvent<HTMLButtonElement>, comment: string) => {
+    setComment('');
+    submit({
+      action: `${e.currentTarget.textContent}`,
+      sport: `${sport}`,
+      id: `${sportDetails.id}`,
+      user: `${user?.displayName}`,
+      comment: `${comment}`
+    },
+      { method: "post", encType: "application/json" })
+  }
 
   const isSubmitting = navigation.state === 'submitting' || navigation.state === 'loading';
 
@@ -81,7 +100,7 @@ const CommentTextarea: React.FC<{ submitComment: (e: React.MouseEvent<HTMLButton
           color: 'white', borderColor: 'blue', '&:hover': { borderColor: 'gray' }
         }}
         disabled={isSubmitting}
-        onClick={(e) => props.submitComment(e, comment)}>
+        onClick={(e) => submitComment(e, comment)}>
         {isSubmitting ? "Submitting..." : 'Submit comment'}
       </Button>
     </div>
