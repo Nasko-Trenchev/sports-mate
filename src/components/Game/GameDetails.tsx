@@ -1,20 +1,19 @@
-import { Button, CircularProgress } from "@mui/material";
+import { Button, Snackbar } from "@mui/material";
 import { UserAuth } from '../../contexts/UserContext';
 import { hoursLeft } from "../../util/helperFunctions";
 import { motion } from 'framer-motion'
-import { useSubmit, useParams, useNavigate, useRouteLoaderData, Await } from "react-router-dom";
-import Snackbar from '@mui/material/Snackbar';
+import { useSubmit, useParams, useNavigate, useRouteLoaderData } from "react-router-dom";
 import { SnackbarAlert } from '../Alert/Alert';
 import useNotification from '../../hooks/notification';
 import { FieldsImage } from "../../util/constants";
 import { loaderReturnArgs } from "../../pages/GameDetailsPage";
 import GameImageContainer from "./GameImageContainer";
-import classes from './GameDetails.module.css'
-import { Suspense } from "react";
-import Comments from "../Comments/Comments";
-import CommentTextarea from "../Comments/CommentTextArea";
 import GameDetailsDescription from "./GameDetailsDescription";
 import GamePlayersContainer from "./GamePlayersContainer";
+import GameCommentContainer from "./GameCommentContainer";
+
+import classes from './GameDetails.module.css'
+
 
 const GameDetails: React.FC = () => {
 
@@ -22,7 +21,7 @@ const GameDetails: React.FC = () => {
     const { user } = UserAuth();
     const navigate = useNavigate()
     const submit = useSubmit();
-    const { sportDetails, comments } = useRouteLoaderData('game-details') as loaderReturnArgs;
+    const { sportDetails } = useRouteLoaderData('game-details') as loaderReturnArgs;
     const { openNotification, closeNotification, actionOption } = useNotification();
 
     const { timeRemaining, time } = hoursLeft(sportDetails.Time.toDate())
@@ -90,27 +89,7 @@ const GameDetails: React.FC = () => {
                 <GamePlayersContainer />
             </div >
             <div className={classes.additionalSection}>
-                <div className={classes.gameComments}>
-                    <Suspense fallback={<CircularProgress disableShrink sx={{ alignSelf: 'center' }} />}>
-                        <Await
-                            resolve={comments}>
-                            {(deferedComments) => (
-                                deferedComments.length === 0 ? (
-                                    <div className={classes.noCommentsAvailable}>
-                                        <h4>There aren`t any comments about this event yet </h4>
-                                        <h4>Be the first to comment</h4>
-                                    </div>
-                                ) :
-                                    <>
-                                        <h2>Comments {`(${deferedComments.length})`}</h2>
-                                        <Comments commentsData={deferedComments} />
-                                    </>
-
-                            )}
-                        </Await>
-                    </Suspense>
-                    <CommentTextarea submitComment={submitComment} />
-                </div>
+                <GameCommentContainer submitComment={submitComment} />
             </div>
             <Snackbar
                 open={actionOption.open}

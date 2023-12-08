@@ -1,0 +1,14 @@
+.gameComments {
+    width: 45vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5em;
+}
+
+.noCommentsAvailable {
+    width: 40vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
