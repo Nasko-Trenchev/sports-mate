@@ -81,7 +81,7 @@ const Event: React.FC = () => {
             <div className={classes.emptyEventsPage}>
                 <h1>Currently there aren`t any {params.sport} events </h1>
                 <h2>Be the first one to create one</h2>
-                <CreateButton style={"empty"} />
+                <CreateButton path={params.sport!} style={"empty"} />
             </div>
         )
     }
@@ -90,7 +90,7 @@ const Event: React.FC = () => {
 
     return (
         <StyledEngineProvider>
-            <CreateButton style={"full"} />
+            <CreateButton path={params.sport!} style={"full"} />
             <h1>Meet your new {params.sport} mates</h1>
             <div className={classes.filterSection}>
                 <motion.div whileHover={{ scale: 1.1 }}>

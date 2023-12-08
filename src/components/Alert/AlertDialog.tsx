@@ -19,7 +19,6 @@ type alertActions = {
 
 const AlertDialog: React.FC<alertActions> = (props) => {
 
-    console.log("Loaded")
     const theme = useTheme();
     const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
     return (

@@ -18,15 +18,6 @@ export default async function checkAuthentication(request: Request) {
     })
 
     return user;
- 
-    // let params = new URLSearchParams();
-    // params.set("from", new URL(request.url).pathname);
-
-    // if (!user) {
-    //     return redirect("/login?" + params.toString());
-    // }
-
-    // return null;
 }
 
 

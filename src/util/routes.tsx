@@ -21,6 +21,7 @@ import RegisterPage from '../pages/RegisterPage';
 import ProfileSettingsPage from '../pages/ProfileSettingsPage';
 import ProfilePage from '../pages/ProfilePage';
 import Logout from '../pages/LogoutPage';
+import PostDeletePage from '../pages/PostDeletePage';
 
 const router = createBrowserRouter([
     {
@@ -55,7 +56,8 @@ const router = createBrowserRouter([
                             {
                                 index: true, element: <GameDetailsPage />, action: gameDetailsAction
                             },
-                            { path: 'completion', element: <CompleteEventPage />, action: completeAction }
+                            { path: 'completion', element: <CompleteEventPage />, action: completeAction },
+
                         ]
                     },
                 ]
@@ -68,7 +70,9 @@ const router = createBrowserRouter([
                     },
                     { path: ':profileId', id: 'public-profile', element: <PublicProfilePage />, loader: publicProfileLoader }
                 ]
-            }
+            },
+            //Can`t have this nested as the parent loader loads for every child route
+            { path: ':sport/:gameId/postDelete', element: <PostDeletePage />, loader: privateRouteloader }
         ]
     }
 ])

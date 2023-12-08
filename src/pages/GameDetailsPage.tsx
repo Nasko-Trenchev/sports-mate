@@ -1,6 +1,6 @@
 import GameDetails from "../components/Game/GameDetails";
 import { LoaderFunctionArgs, ActionFunctionArgs, redirect, json, defer } from "react-router-dom";
-import { getDoc, doc, updateDoc, arrayUnion, arrayRemove, deleteDoc, Timestamp } from "firebase/firestore";
+import { getDoc, doc, updateDoc, arrayUnion, arrayRemove, deleteDoc, Timestamp, deleteField, collection, getDocs } from "firebase/firestore";
 import { db } from "../config/firebase";
 import { Sport, CommentsData } from "../util/sportTypes";
 import { ref, getDownloadURL, listAll, list } from 'firebase/storage'
@@ -40,7 +40,6 @@ const GameDetailsPage = () => {
 export async function loader({ request, params }: LoaderFunctionArgs) {
 
     const redirecUnAuthenticatedtUser = await checkAuthentication(request);
-
     if (redirecUnAuthenticatedtUser) {
         return redirecUnAuthenticatedtUser
     }
@@ -107,7 +106,8 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
             throw json(
                 {
                     name: "Something went wrong",
-                    message: "Refresh the page and try again later"
+                    // message: "Refresh the page and try again later"
+                    message: error.message
                 },
                 { status: 401 }
             );
@@ -148,8 +148,16 @@ export async function action({ params, request }: ActionFunctionArgs) {
             });
         }
         else {
+            const commentsRef = doc(db, `${sport}`, `${id}`, `Comments`, `${id}`);
+            let collectionSnapshot = await getDocs(collection(db, `${sport}`, `${id}`, `Comments`));
+            await updateDoc(commentsRef, {
+                comments: deleteField()
+            });
+            for (const doc of collectionSnapshot.docs) {
+                await deleteDoc(doc.ref);
+            }
             await deleteDoc(docRef);
-            return redirect(`/${sport}`)
+            return redirect(`/${sport}/${id}/postDelete`)
         }
 
         return redirect(`/${sport}/${id}`)
@@ -158,7 +166,8 @@ export async function action({ params, request }: ActionFunctionArgs) {
             throw json(
                 {
                     name: "Something went wrong",
-                    message: "Refresh the page and try again later"
+                    // message: "Refresh the page and try again later"
+                    message: error.message
                 },
                 { status: 401 }
             );
