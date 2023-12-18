@@ -12,7 +12,7 @@ export default async function checkAuthentication(request: Request) {
             if (!currentUser) {
                 resolve(redirect("/login?" + params.toString()))
             }
-
+             
             resolve(null);
         })
     })

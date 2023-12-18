@@ -7,8 +7,7 @@ import FacebookIcon from '@mui/icons-material/Facebook';
 import InstagramIcon from '@mui/icons-material/Instagram';
 import SportsSoccerSharpIcon from '@mui/icons-material/SportsSoccerSharp';
 import classes from './NavigationHeader.module.css';
-
-
+import ProfileIcon from "../Profile/ProfileIcon";
 
 export default function NavigationHeader() {
 
@@ -30,10 +29,11 @@ export default function NavigationHeader() {
                             <>
                                 <Button color="inherit"><NavLink to={'/'} className={classes['links']}>Home</NavLink></Button>
                                 <Button color="inherit"><NavLink to={'/logout'} className={classes['links']}>Logout</NavLink></Button>
-                                <IconButton size="large" edge='start' color="inherit" aria-label="logo" sx={{ margin: '1px' }}
+                                <ProfileIcon />
+                                {/* <IconButton size="large" edge='start' color="inherit" aria-label="logo" sx={{ margin: '1px' }}
                                     onClick={() => navigate('/profile')}>
                                     <AccountCircleIcon />
-                                </IconButton>
+                                </IconButton> */}
                             </>
                             :
                             <>

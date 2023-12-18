@@ -1,8 +1,6 @@
 import dayjs from 'dayjs';
 import { FootballFields, BasketballFields, TennisFields, VolleyballFields } from './constants';
 
-
-
 export const hoursLeft = (timeLeft: Date) => {
 
     const startDate = dayjs();
@@ -32,7 +30,7 @@ export const hoursLeft = (timeLeft: Date) => {
             timeRemaining: `Time left: ${minutes} ${minutes > 1 ? 'minutes' : 'minute'}`
         }
     }
-    if (minutes < -1) {
+    if (minutes < 0) {
         return {
             time: 0,
             timeRemaining: `Event over`

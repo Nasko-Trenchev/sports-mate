@@ -4,7 +4,7 @@ import { styled } from '@mui/system';
 import { useSubmit, useParams, useRouteLoaderData, useNavigation } from "react-router-dom";
 import { useMemo, useState } from 'react';
 import { loaderReturnArgs } from "../../pages/GameDetailsPage";
-import { UserAuth } from '../../contexts/UserContext';
+import { UserAuth } from '../../contexts/AuthContext';
 
 import classes from './CommentTextArea.module.css'
 

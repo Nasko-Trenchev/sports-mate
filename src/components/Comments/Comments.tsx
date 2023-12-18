@@ -19,9 +19,10 @@ const Comments: React.FC<{ commentsData: CommentsData }> = (props) => {
         <StyledEngineProvider >
             <div className={classes.commentSection}>
                 {displayedItems.map((entry, index) => (
+                    //Index is not suitable for key if we have functionallity for editing comments on later stage
                     <div className={classes.commentContainer} key={index}>
                         <div className={classes.commentProfile}>
-                            <GamePlayers date={entry.date.toDate().toDateString()} image={entry.image!} displayName={entry.user} key={entry.image} />
+                            <GamePlayers date={entry.date.toDate().toDateString()} image={entry.image!} displayName={entry.user} key={index} />
                         </div>
                         <div className={classes.commentData}>
                             <div className={classes.comment}>

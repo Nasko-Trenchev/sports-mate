@@ -3,7 +3,6 @@ import checkAuthentication from "./routeGuard";
 
 export async function privateRouteloader({ request }: LoaderFunctionArgs) {
 
-
     const redirecUnAuthenticatedtUser = await checkAuthentication(request);
 
     if (redirecUnAuthenticatedtUser) {
@@ -11,5 +10,4 @@ export async function privateRouteloader({ request }: LoaderFunctionArgs) {
     }
 
     return null;
-
 }

@@ -2,10 +2,10 @@ import { Stack, TextField, Typography, Button, FormControl } from '@mui/material
 import { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { StyledEngineProvider } from '@mui/material/styles';
-import { UserAuth } from '../../contexts/UserContext';
+import { UserAuth } from '../../contexts/AuthContext';
 import Snackbar from '@mui/material/Snackbar';
 import { SnackbarAlert } from '../Alert/Alert';
-import useNotification from '../../hooks/notification';
+import useNotification from '../../hooks/useNotification';
 
 import styles from './Login.module.css';
 

@@ -2,13 +2,13 @@ import { Stack, TextField, Typography, Button, FormControl, InputAdornment, Outl
 import { useState } from 'react';
 import { useNavigate, NavLink, useLoaderData } from 'react-router-dom';
 import { StyledEngineProvider } from '@mui/material/styles';
-import { UserAuth } from '../../contexts/UserContext';
+import { UserAuth } from '../../contexts/AuthContext';
 import { setDoc, doc } from 'firebase/firestore';
 import { db } from '../../config/firebase';
 import { usersProfiles } from '../../pages/RegisterPage';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import useNotification from '../../hooks/notification';
+import useNotification from '../../hooks/useNotification';
 import Snackbar from '@mui/material/Snackbar';
 import { SnackbarAlert } from '../Alert/Alert';
 

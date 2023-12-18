@@ -5,7 +5,7 @@ import { auth } from '../../config/firebase';
 import { useRef, useState } from 'react';
 import { Button, Rating, Box } from '@mui/material';
 import { useRouteLoaderData, NavLink } from 'react-router-dom';
-import useNotification from '../../hooks/notification';
+import useNotification from '../../hooks/useNotification';
 import { storage } from '../../config/firebase';
 import { ref, uploadBytes } from 'firebase/storage'
 import { combinedProfileData } from '../../util/sportTypes';

@@ -5,10 +5,11 @@ import SportsSoccerSharpIcon from '@mui/icons-material/SportsSoccerSharp';
 import SportsTennisIcon from '@mui/icons-material/SportsTennis';
 import SportsBasketballIcon from '@mui/icons-material/SportsBasketball';
 import SportsVolleyballIcon from '@mui/icons-material/SportsVolleyball';
-import classes from './HomePage.module.css';
+import classes from './Index.module.css';
 import SportItem from "../Layout/SportItem";
 
-const HomePage = () => {
+const Index = () => {
+
     return (
         <StyledEngineProvider>
             <motion.div className={classes.mainContainer}
@@ -42,4 +43,4 @@ const HomePage = () => {
     )
 }
 
-export default HomePage;
+export default Index;

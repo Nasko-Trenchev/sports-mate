@@ -1,6 +1,6 @@
 import { Stack, TextField, Typography, Button, FormControl, Snackbar } from '@mui/material';
 import { useState } from 'react';
-import useNotification from '../../hooks/notification';
+import useNotification from '../../hooks/useNotification';
 import { StyledEngineProvider } from '@mui/material/styles';
 import { getAuth, sendPasswordResetEmail, confirmPasswordReset } from "firebase/auth";
 import { SnackbarAlert } from '../Alert/Alert';

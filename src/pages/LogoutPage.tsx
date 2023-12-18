@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useCallback, useEffect } from "react";
-import { UserAuth } from "../contexts/UserContext";
+import { UserAuth } from "../contexts/AuthContext";
 export default function Logout() {
 
     const { signOutUser } = UserAuth();
