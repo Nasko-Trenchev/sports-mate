@@ -32,9 +32,10 @@ export async function action({ params, request }: ActionFunctionArgs) {
         Time: timeAsTimeStamp,
         PlayersCount: Number(data.get('PlayersCount')),
         Completed: false,
+        sport: data.get("sport")
     });
     try {
-        const commentsSubCollection = await setDoc(doc(db, `${params.sport}`, `${docRef.id}`, 'Comments', `${docRef.id}`), {
+        await setDoc(doc(db, `${params.sport}`, `${docRef.id}`, 'Comments', `${docRef.id}`), {
             comments: []
         });
     } catch (error) {

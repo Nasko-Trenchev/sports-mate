@@ -1,16 +1,27 @@
 import { useRouteLoaderData } from "react-router-dom";
-import { publicProfileData } from "../../pages/PublicProfilePage";
 import { profileData } from "../../pages/ProfilePage";
+import { Rating } from "@mui/material";
+import { useState } from 'react';
 import Game from "../Game/Game";
 
 const PublicProfile = () => {
-    const { image, user } = useRouteLoaderData('public-profile') as publicProfileData;
-    console.log(user)
-    console.log(image)
+    const [starts, setStars] = useState(0);
+    const user = useRouteLoaderData('public-profile') as profileData;
+
+    const handleStarsChange = (e: React.SyntheticEvent<Element, Event>, value: number | null) => {
+        console.log(value)
+    }
+
     return (
         <>
             {user.GamesPlayed.length > 0 && user.GamesPlayed.map(game => <Game data={game} />)}
             <div>It works!</div>
+            <Rating
+                size='small'
+                precision={0.5}
+                value={starts}
+                onChange={(event, value) => handleStarsChange(event, value)}
+            />
         </>
     )
 }

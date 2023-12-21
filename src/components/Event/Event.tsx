@@ -8,7 +8,7 @@ import { SkillLevels } from '../../util/constants'
 import { motion } from 'framer-motion';
 import { getField } from '../../util/helperFunctions';
 import CreateButton from '../CreateButton/CreateButton';
-import { Sports } from '../../util/sportTypes';
+import { GamesTypes } from '../../util/sportTypes';
 import { useState } from 'react';
 import { isEventOver } from '../../util/helperFunctions';
 import FieldSelector from '../Selectors/FieldSelector';
@@ -23,7 +23,7 @@ const initialState = {
 
 const Event: React.FC = () => {
     const params = useParams();
-    const data = useRouteLoaderData('sport-details') as Sports
+    const data = useRouteLoaderData('sport-details') as GamesTypes
     const [filteredData, setFilteredData] = useState(data)
     const [showFilter, setShowFilter] = useState(false)
     const [filters, setFilters] = useState(initialState)
@@ -81,7 +81,7 @@ const Event: React.FC = () => {
             <div className={classes.emptyEventsPage}>
                 <h1>Currently there aren`t any {params.sport} events </h1>
                 <h2>Be the first one to create one</h2>
-                <CreateButton path={params.sport!} style={"empty"} />
+                <CreateButton path={`${params.sport!}/create`} style={"empty"} />
             </div>
         )
     }
@@ -90,7 +90,7 @@ const Event: React.FC = () => {
 
     return (
         <StyledEngineProvider>
-            <CreateButton path={params.sport!} style={"full"} />
+            <CreateButton path={`${params.sport!}/create`} style={"full"} />
             <h1>Meet your new {params.sport} mates</h1>
             <div className={classes.filterSection}>
                 <motion.div whileHover={{ scale: 1.1 }}>

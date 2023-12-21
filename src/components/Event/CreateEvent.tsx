@@ -1,7 +1,7 @@
 import classes from './CreateEvent.module.css'
 import { useReducer, useState } from 'react'
 import { Box, Button, FormHelperText } from '@mui/material'
-import { CreateSport } from '../../util/sportTypes';
+import { CreateGame } from '../../util/sportTypes';
 import { FieldsImage } from '../../util/constants';
 import { auth } from '../../config/firebase';
 import { useSubmit, useParams, Form } from "react-router-dom";
@@ -9,7 +9,7 @@ import dayjs from 'dayjs';
 import { SkillLevels } from '../../util/constants'
 import Snackbar from '@mui/material/Snackbar';
 import { SnackbarAlert } from '../Alert/Alert';
-import useNotification from '../../hooks/notification';
+import useNotification from '../../hooks/useNotification';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -31,6 +31,8 @@ const reducerInitialValue = {
     id: '',
     PlayersCount: '',
     Completed: false,
+    Raters: [],
+    sport: ''
 }
 
 interface ReducerAction {
@@ -38,7 +40,7 @@ interface ReducerAction {
     payload: any;
 }
 
-const formReducer = (state: CreateSport, action: ReducerAction) => {
+const formReducer = (state: CreateGame, action: ReducerAction) => {
 
     const { type, payload } = action;
     switch (type) {
@@ -124,6 +126,7 @@ const CreateEvent = () => {
                 Time: `${formState.Time}`,
                 id: '',
                 PlayersCount: `${formState.PlayersCount}`,
+                sport: `${params.sport}`
             }, { method: 'post' })
 
         }

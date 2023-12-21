@@ -1,73 +1,27 @@
 import classes from './Profile.module.css';
-import { updatePassword, reauthenticateWithCredential, EmailAuthProvider } from "firebase/auth";
 import { StyledEngineProvider } from '@mui/material/styles';
-import { auth } from '../../config/firebase';
-import { useRef, useState } from 'react';
-import { Button, Rating, Box } from '@mui/material';
+import { Button, Rating } from '@mui/material';
 import { useRouteLoaderData, NavLink } from 'react-router-dom';
-import useNotification from '../../hooks/useNotification';
-import { storage } from '../../config/firebase';
-import { ref, uploadBytes } from 'firebase/storage'
 import { combinedProfileData } from '../../util/sportTypes';
+import CreateButton from '../CreateButton/CreateButton';
 
 
 const Profile = () => {
 
-    const [imageUpload, setImageUpload] = useState<File>();
-    const newPassword = useRef<HTMLInputElement | null>(null);
-    const { openNotification, closeNotification, actionOption } = useNotification();
-
     const { image, profile } = useRouteLoaderData('profile-data') as combinedProfileData
 
-    const fileInput = useRef<HTMLInputElement | null>(null);
     const ratingValue = Math.round(profile.rating / profile.votes)
 
-    const handleImageInputChange = (event: React.FormEvent) => {
-        const files = (event.target as HTMLInputElement).files
-
-        if (files && files.length > 0) {
-            setImageUpload(files[0])
-        }
-    }
-
-    const handleUpload = async () => {
-        if (imageUpload === null || imageUpload === undefined) {
-            return
-        }
-        else {
-            const imageRef = ref(storage, `ProfileImages/${auth?.currentUser?.email}`)
-            await uploadBytes(imageRef, imageUpload)
-        }
-
-    }
-    const handlePasswordReset = () => {
-
-        updatePassword(auth.currentUser!, newPassword.current?.value as string).then(() => {
-            // Update successful.
-            openNotification("Password was changed successfully", 'success');
-        }).catch((error) => {
-            // An error ocurred
-            // ...
-
-            const userProvidedPassword = prompt("Please type in your old password again")
-
-            const credential = EmailAuthProvider.credential(
-                auth?.currentUser?.email!,
-                userProvidedPassword!
-            )
-
-            reauthenticateWithCredential(auth.currentUser!, credential)
-                .then(result => {
-                    openNotification("You`re now able to change your password", 'success');
-                    // User successfully reauthenticated. New ID tokens should be valid.
-                }).catch((error) => {
-                    openNotification("Wrong password, please login and try again!", 'error');
-                })
-        })
-    }
+    const pendingGames = profile.GamesPlayed.filter(x => x.HasRated === false).length;
 
     return (
         <StyledEngineProvider>
+            {pendingGames > 0 &&
+                <div>
+                    <h1>You have {pendingGames} pending completion {pendingGames > 1 ? "games" : "game"}</h1>
+                    <CreateButton style='empty' text='Go to complete page' path={`profile/complete`} />
+                </div>
+            }
             <div className={classes.profileHeader}>
                 <div className={classes.profileImgContainer}>
                     <img src={image} alt="profilePicture" />

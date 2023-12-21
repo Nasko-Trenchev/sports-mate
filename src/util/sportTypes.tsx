@@ -11,6 +11,7 @@ export type Sport = {
     id: string,
     PlayersCount: number,
     Completed: boolean,
+    HasRated?: boolean,
 }
 
 export type Sports = {
@@ -23,6 +24,7 @@ export type Sports = {
     id: string,
     PlayersCount: number,
     Completed: boolean,
+    HasRated?: boolean,
 }[]
 
 export type CreateSport = {

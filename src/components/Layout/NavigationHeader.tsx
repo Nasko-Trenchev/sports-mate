@@ -30,10 +30,6 @@ export default function NavigationHeader() {
                                 <Button color="inherit"><NavLink to={'/'} className={classes['links']}>Home</NavLink></Button>
                                 <Button color="inherit"><NavLink to={'/logout'} className={classes['links']}>Logout</NavLink></Button>
                                 <ProfileIcon />
-                                {/* <IconButton size="large" edge='start' color="inherit" aria-label="logo" sx={{ margin: '1px' }}
-                                    onClick={() => navigate('/profile')}>
-                                    <AccountCircleIcon />
-                                </IconButton> */}
                             </>
                             :
                             <>

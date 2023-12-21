@@ -7,7 +7,7 @@ import { StyledEngineProvider } from '@mui/material/styles';
 import { auth } from '../../config/firebase';
 import { useRef, useState } from 'react';
 import { Button, IconButton, TextField, FormControl, InputAdornment, OutlinedInput, InputLabel } from '@mui/material';
-import useNotification from '../../hooks/notification';
+import useNotification from '../../hooks/useNotification';
 import { storage } from '../../config/firebase';
 import { ref, uploadBytes } from 'firebase/storage'
 import { styled } from '@mui/material/styles';

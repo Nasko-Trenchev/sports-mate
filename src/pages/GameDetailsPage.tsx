@@ -2,18 +2,17 @@ import GameDetails from "../components/Game/GameDetails";
 import { LoaderFunctionArgs, ActionFunctionArgs, redirect, json, defer } from "react-router-dom";
 import { getDoc, doc, updateDoc, arrayUnion, arrayRemove, deleteDoc, Timestamp, deleteField, collection, getDocs } from "firebase/firestore";
 import { db } from "../config/firebase";
-import { Sport, CommentsData } from "../util/sportTypes";
+import { GameType, CommentsData, GamesTypes } from "../util/sportTypes";
 import { ref, getDownloadURL, listAll, list } from 'firebase/storage'
 import { storage } from "../config/firebase";
 import picture from '../assets/noProfile.webp'
 import { profileData } from "./ProfilePage";
-import { Sports } from "../util/sportTypes";
 import checkAuthentication from "../util/routeGuard";
 
 export type constructedObject = {
     username: string;
     email: string;
-    GamesPlayed: Sports;
+    GamesPlayed: GamesTypes;
     absent: string[];
     rating: number;
     votes: number;
@@ -21,7 +20,7 @@ export type constructedObject = {
 }[];
 
 export type loaderReturnArgs = {
-    sportDetails: Sport,
+    sportDetails: GameType,
     users: constructedObject
     comments: CommentsData,
 }
@@ -47,7 +46,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     try {
         const gameDocRef = doc(db, `${params.sport}`, `${params.gameId}`)
         const gameDocSnap = await getDoc(gameDocRef)
-        const sportWithId = ({ ...gameDocSnap.data(), id: gameDocSnap.id }) as Sport;
+        const sportWithId = ({ ...gameDocSnap.data(), id: gameDocSnap.id }) as GameType;
 
         const listRef = ref(storage, `ProfileImages/`)
         const images = await list(listRef, { maxResults: 100 });

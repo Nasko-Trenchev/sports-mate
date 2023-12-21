@@ -78,6 +78,7 @@ const formReducer = (state: reducerStateType, action: ReducerAction) => {
 const steps = ['Mark players presence', 'Rate players', 'Add additional information'];
 
 export default function HorizontalLinearStepper() {
+
     const [activeStep, setActiveStep] = useState(0);
     // const [skipped, setSkipped] = useState(new Set<number>());
     const [formState, dispatchFormState] = useReducer(formReducer, reducerInitialValue);
@@ -105,7 +106,7 @@ export default function HorizontalLinearStepper() {
                 rating: JSON.stringify(formState.Rating),
                 presence: JSON.stringify(formState.Presence),
                 comment: `${formState.Comment}`,
-                event: JSON.stringify(sportDetails)
+                game: JSON.stringify(sportDetails)
             },
                 { method: "post", encType: "application/json" })
         }

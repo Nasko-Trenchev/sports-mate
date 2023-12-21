@@ -26,7 +26,7 @@ const PostDelete = () => {
             </div>
             <div className={classes.createContainer}>
                 <h3>Create another {params.sport} event</h3>
-                <CreateButton path={params.sport!} style="empty" />
+                <CreateButton path={`${params.sport!}/create`} style="empty" />
             </div>
         </div>
     )

@@ -5,8 +5,8 @@ import { useRouteLoaderData, useNavigation } from "react-router-dom";
 import { FieldsImage } from "../../util/constants";
 import { hoursLeft } from "../../util/helperFunctions";
 import { useState } from "react";
-import useDialog from '../../hooks/dialog';
-import { UserAuth } from '../../contexts/UserContext';
+import useDialog from '../../hooks/useDialog';
+import { UserAuth } from '../../contexts/AuthContext';
 import AlertDialog from '../Alert/AlertDialog';
 import Map from "../GoggleMap/GoogleMap";
 

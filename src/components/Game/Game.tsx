@@ -5,13 +5,13 @@ import StarsIcon from '@mui/icons-material/Stars';
 import ThreePIcon from '@mui/icons-material/ThreeP';
 import { motion } from 'framer-motion';
 import { Button } from '@mui/material';
-import { Sport } from '../../util/sportTypes';
+import { GameType } from '../../util/sportTypes';
 import { useParams, useNavigate } from "react-router-dom";
 import dayjs from 'dayjs';
 import { hoursLeft } from '../../util/helperFunctions';
 
 
-const Game: React.FC<{ data: Sport }> = (props) => {
+const Game: React.FC<{ data: GameType }> = (props) => {
 
     const params = useParams();
     const navigate = useNavigate()
@@ -49,7 +49,7 @@ const Game: React.FC<{ data: Sport }> = (props) => {
                     <p>{timeRemaining}</p>
                 </div>
                 <motion.div whileHover={{ scale: 1.1 }} className={classes.detailsBtn}>
-                    <Button variant='contained' size='small' onClick={() => navigate(`/${params.sport}/${props.data.id}`)}>View details</Button>
+                    <Button variant='contained' size='small' onClick={() => navigate(`/${props.data.sport}/${props.data.id}`)}>View details</Button>
                 </motion.div>
             </div>
         </>
