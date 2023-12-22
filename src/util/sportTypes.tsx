@@ -1,21 +1,8 @@
 import { Timestamp } from "firebase/firestore"
 import { profileData } from "../pages/ProfilePage"
 
-export type Sport = {
+export type GameType = {
     Image: string | undefined,
-    Location: string,
-    Owner: string | null | undefined,
-    Players: string[],
-    SkillLevel: string,
-    Time: Timestamp,
-    id: string,
-    PlayersCount: number,
-    Completed: boolean,
-    HasRated?: boolean,
-}
-
-export type Sports = {
-    Image: string
     Location: string,
     Owner: string,
     Players: string[],
@@ -25,9 +12,24 @@ export type Sports = {
     PlayersCount: number,
     Completed: boolean,
     HasRated?: boolean,
+    sport: string
+}
+
+export type GamesTypes = {
+    Image: string | undefined,
+    Location: string,
+    Owner: string,
+    Players: string[],
+    SkillLevel: string,
+    Time: Timestamp,
+    id: string,
+    PlayersCount: number,
+    Completed: boolean,
+    HasRated?: boolean,
+    sport: string
 }[]
 
-export type CreateSport = {
+export type CreateGame = {
     Image: string | undefined,
     Location: string,
     Owner: string | null | undefined,
@@ -37,6 +39,7 @@ export type CreateSport = {
     id: string,
     PlayersCount: number,
     Completed: boolean,
+    sport: string
 }
 
 export type combinedProfileData = {

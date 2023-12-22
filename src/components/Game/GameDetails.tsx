@@ -23,7 +23,7 @@ const GameDetails: React.FC = () => {
     const submit = useSubmit();
     const { sportDetails } = useRouteLoaderData('game-details') as loaderReturnArgs;
     const { openNotification, closeNotification, actionOption } = useNotification();
- 
+
     const { timeRemaining, time } = hoursLeft(sportDetails.Time.toDate())
 
     const fieldDetails = FieldsImage.find(field => field.location === sportDetails.Location)
@@ -46,7 +46,7 @@ const GameDetails: React.FC = () => {
 
     return (
         <>
-            {(sportDetails.Owner === user?.displayName && timeRemaining === "Event over" && remainingSpots === 0) &&
+            {(sportDetails.Owner === user?.displayName && timeRemaining === "Event over" && remainingSpots === 0 && sportDetails.Completed === false) &&
                 <div style={{ display: 'flex', justifyContent: 'center', marginTop: '2em' }} >
                     <motion.div whileHover={{ scale: 1.1 }}>
                         <Button

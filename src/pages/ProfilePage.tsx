@@ -5,18 +5,18 @@ import { db, auth } from "../config/firebase";
 import { ref, getDownloadURL, listAll } from 'firebase/storage'
 import { storage } from "../config/firebase";
 import picture from '../assets/noProfile.webp'
-import { Sports } from "../util/sportTypes";
 import checkAuthentication from "../util/routeGuard";
 
 
 export type profileData = {
     username: string,
     email: string,
-    GamesPlayed: Sports
+    pastGameIds: string[],
+    pendingCompletionGames: string[],
     absent: string[],
     rating: number,
     votes: number,
-    image?: string,
+    image?: string
 }
 
 const ProfilePage = () => {
@@ -52,7 +52,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
         return { image: finalImage, profile: finalData };
     } catch (error) {
-
+        console.log(error)
     }
 
 

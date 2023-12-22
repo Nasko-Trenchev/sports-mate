@@ -12,13 +12,13 @@ const Profile = () => {
 
     const ratingValue = Math.round(profile.rating / profile.votes)
 
-    const pendingGames = profile.GamesPlayed.filter(x => x.HasRated === false).length;
+    const pendingGames = profile.pendingCompletionGames;
 
     return (
         <StyledEngineProvider>
-            {pendingGames > 0 &&
+            {pendingGames.length > 0 &&
                 <div>
-                    <h1>You have {pendingGames} pending completion {pendingGames > 1 ? "games" : "game"}</h1>
+                    <h1>You have {pendingGames.length} pending completion {pendingGames.length > 1 ? "games" : "game"}</h1>
                     <CreateButton style='empty' text='Go to complete page' path={`profile/complete`} />
                 </div>
             }
@@ -30,7 +30,7 @@ const Profile = () => {
             </div>
             <div className={classes.profileContainer}>
                 <div>
-                    <p>Total events attended: {profile.GamesPlayed.length}</p>
+                    <p>Total events attended: {profile.pastGameIds.length}</p>
                     <div className={classes.ratingSection}>
                         <h2>Your rating:</h2>
                         <div className={classes.ratingFlexContainer}>

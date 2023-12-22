@@ -7,10 +7,6 @@ import { profileData } from "./ProfilePage";
 import picture from '../assets/noProfile.webp'
 
 
-export type publicProfileData = {
-    user: profileData;
-    image: string;
-}
 const PublicProfilePage = () => {
     return (
         <PublicProfile />
@@ -38,8 +34,9 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
         else {
             finalImage = picture
         }
+        userObject.image = finalImage;
 
-        return { image: finalImage, user: userObject };
+        return userObject;
     } catch (error) {
 
     }

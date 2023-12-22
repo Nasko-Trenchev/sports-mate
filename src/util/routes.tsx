@@ -6,13 +6,15 @@ import { loader as gameDetailsLoader, action as gameDetailsAction } from '../pag
 import { action as completeAction } from '../pages/CompleteEventPage';
 import { loader as publicProfileLoader } from '../pages/PublicProfilePage';
 import { loader as registerLoader } from '../pages/RegisterPage';
+import { loader as profileGameLoader } from '../pages/ProfilePastGamesPage'
+import { loader as profileGameCompletionLoader } from '../pages/ProfileGameCompletionPage';
 import { privateRouteloader } from './routeGuardLoader';
 import PasswordResetPage from '../pages/PasswordResetPage';
 import RootLayout from '../pages/Root';
 import CompleteEventPage from '../pages/CompleteEventPage';
 import PublicProfilePage from '../pages/PublicProfilePage';
 import ErrorPage from '../pages/ErrorPage';
-import HomePage from '../components/HomePage/HomePage';
+import HomePage from '../pages/HomePage';
 import EventPage from '../pages/EventPage';
 import LoginPage from '../pages/LoginPage';
 import CreatePage from '../pages/CreatePage';
@@ -22,6 +24,8 @@ import ProfileSettingsPage from '../pages/ProfileSettingsPage';
 import ProfilePage from '../pages/ProfilePage';
 import Logout from '../pages/LogoutPage';
 import PostDeletePage from '../pages/PostDeletePage';
+import ProfilePastGamesPage from '../pages/ProfilePastGamesPage';
+import ProfileGameCompletionPage from '../pages/ProfileGameCompletionPage';
 
 const router = createBrowserRouter([
     {
@@ -38,7 +42,14 @@ const router = createBrowserRouter([
                 path: 'profile', id: 'profile-data', loader: profileLoader,
                 children: [
                     { index: true, element: <ProfilePage /> },
-                    { path: 'settings', element: <ProfileSettingsPage />, loader: privateRouteloader }
+                    { path: 'settings', element: <ProfileSettingsPage /> },
+                    {
+                        path: 'complete',
+                        children: [
+                            { index: true, element: <ProfilePastGamesPage />, loader: profileGameLoader },
+                            { path: ':sport/:gameId', element: <ProfileGameCompletionPage />, loader: profileGameCompletionLoader }
+                        ]
+                    }
                 ]
             },
             {
@@ -71,7 +82,7 @@ const router = createBrowserRouter([
                     { path: ':profileId', id: 'public-profile', element: <PublicProfilePage />, loader: publicProfileLoader }
                 ]
             },
-            //Can`t have this nested as the parent loader loads for every child route
+            //Can`t have this route nested as the parent loader loads for every child route
             { path: ':sport/:gameId/postDelete', element: <PostDeletePage />, loader: privateRouteloader }
         ]
     }

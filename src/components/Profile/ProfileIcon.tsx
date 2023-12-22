@@ -18,7 +18,7 @@ const ProfileIcon = () => {
         const getUser = async () => {
             const user = await getDoc(doc(db, `users`, `${auth.currentUser?.displayName!}`))
             const userData = user.data() as profileData;
-            const count = userData.GamesPlayed.filter(x => x.HasRated === false).length;
+            const count = userData.pendingCompletionGames.length;
             setNotification(count)
         }
 

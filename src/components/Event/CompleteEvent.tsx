@@ -7,6 +7,7 @@ import Typography from '@mui/material/Typography';
 import CompleteEventSteps from './CompleteEventSteps';
 import { SelectChangeEvent } from '@mui/material/Select';
 import { useReducer, useState } from 'react'
+import { auth } from '../../config/firebase';
 import { useSubmit, useParams, useNavigate, useRouteLoaderData } from 'react-router-dom';
 import { loaderReturnArgs } from "../../pages/GameDetailsPage";
 import classes from './CompleteEvent.module.css'
@@ -106,7 +107,8 @@ export default function HorizontalLinearStepper() {
                 rating: JSON.stringify(formState.Rating),
                 presence: JSON.stringify(formState.Presence),
                 comment: `${formState.Comment}`,
-                game: JSON.stringify(sportDetails)
+                game: JSON.stringify(sportDetails),
+                user: `${auth.currentUser?.displayName}`
             },
                 { method: "post", encType: "application/json" })
         }

@@ -14,7 +14,6 @@ const PublicProfile = () => {
 
     return (
         <>
-            {user.GamesPlayed.length > 0 && user.GamesPlayed.map(game => <Game data={game} />)}
             <div>It works!</div>
             <Rating
                 size='small'

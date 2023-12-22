@@ -2,12 +2,12 @@ import { collection, getDocs } from "firebase/firestore"
 import { Register } from "../components/Register/Register"
 import { db } from "../config/firebase";
 import { LoaderFunctionArgs } from "react-router-dom";
-import { Sports } from "../util/sportTypes";
 
 export type usersProfiles = {
     username: string,
     email: string,
-    GamesPlayed: Sports
+    pastGameIds: string[],
+    pendingCompletionGames: string[],
     absent: string[],
     rating: number,
     votes: number,

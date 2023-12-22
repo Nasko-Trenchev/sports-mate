@@ -102,7 +102,8 @@ export const Register = () => {
             await setDoc(doc(db, "users", `${formInput.username}`), {
                 username: formInput.username,
                 email: formInput.email,
-                GamesPlayed: [],
+                pastGameIds: [],
+                pendingCompletionGames: [],
                 votes: 0,
                 rating: 0,
             });

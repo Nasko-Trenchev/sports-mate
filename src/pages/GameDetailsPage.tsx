@@ -12,7 +12,8 @@ import checkAuthentication from "../util/routeGuard";
 export type constructedObject = {
     username: string;
     email: string;
-    GamesPlayed: GamesTypes;
+    pastGameIds: string[];
+    pendingCompletionGames: string[];
     absent: string[];
     rating: number;
     votes: number;
