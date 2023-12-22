@@ -7,7 +7,6 @@ import { action as completeAction } from '../pages/CompleteEventPage';
 import { loader as publicProfileLoader } from '../pages/PublicProfilePage';
 import { loader as registerLoader } from '../pages/RegisterPage';
 import { loader as profileGameLoader } from '../pages/ProfilePastGamesPage'
-import { loader as profileGameCompletionLoader } from '../pages/ProfileGameCompletionPage';
 import { privateRouteloader } from './routeGuardLoader';
 import PasswordResetPage from '../pages/PasswordResetPage';
 import RootLayout from '../pages/Root';
@@ -25,7 +24,6 @@ import ProfilePage from '../pages/ProfilePage';
 import Logout from '../pages/LogoutPage';
 import PostDeletePage from '../pages/PostDeletePage';
 import ProfilePastGamesPage from '../pages/ProfilePastGamesPage';
-import ProfileGameCompletionPage from '../pages/ProfileGameCompletionPage';
 
 const router = createBrowserRouter([
     {
@@ -43,13 +41,7 @@ const router = createBrowserRouter([
                 children: [
                     { index: true, element: <ProfilePage /> },
                     { path: 'settings', element: <ProfileSettingsPage /> },
-                    {
-                        path: 'complete',
-                        children: [
-                            { index: true, element: <ProfilePastGamesPage />, loader: profileGameLoader },
-                            { path: ':sport/:gameId', element: <ProfileGameCompletionPage />, loader: profileGameCompletionLoader }
-                        ]
-                    }
+                    { path: 'complete', element: <ProfilePastGamesPage />, loader: profileGameLoader }
                 ]
             },
             {

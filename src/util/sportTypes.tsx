@@ -11,7 +11,6 @@ export type GameType = {
     id: string,
     PlayersCount: number,
     Completed: boolean,
-    HasRated?: boolean,
     sport: string
 }
 
@@ -25,7 +24,6 @@ export type GamesTypes = {
     id: string,
     PlayersCount: number,
     Completed: boolean,
-    HasRated?: boolean,
     sport: string
 }[]
 

@@ -1,11 +1,10 @@
-import { useRouteLoaderData, useNavigate, useLoaderData } from 'react-router-dom';
+import Game from '../Game/Game';
+import { useNavigate, useLoaderData } from 'react-router-dom';
 import { Stack } from '@mui/material';
 import { motion } from 'framer-motion';
 import { Button } from '@mui/material';
-import Game from '../Game/Game';
 import { profileData } from '../../pages/ProfilePage';
 import { GamesTypes } from '../../util/sportTypes';
-import { combinedProfileData } from '../../util/sportTypes';
 import classes from './ProfilePastGames.module.css'
 
 type profileGamesData = {
@@ -14,9 +13,7 @@ type profileGamesData = {
 }
 const ProfilePastGames = () => {
 
-    // const { profile } = useRouteLoaderData('profile-data') as combinedProfileData
-    const { user, pendingGames } = useLoaderData() as profileGamesData;
-    console.log(pendingGames);
+    const { pendingGames } = useLoaderData() as profileGamesData;
     const navigate = useNavigate();
 
     return (

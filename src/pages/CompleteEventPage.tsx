@@ -1,6 +1,6 @@
 import CompleteEvent from "../components/Event/CompleteEvent"
 import { db, auth } from "../config/firebase";
-import { addDoc, arrayUnion, doc, increment, setDoc, Timestamp, updateDoc, collection, getDoc, arrayRemove } from "firebase/firestore";
+import { arrayUnion, doc, increment, setDoc, Timestamp, updateDoc, getDoc, arrayRemove } from "firebase/firestore";
 import { profileData } from "./ProfilePage";
 import { LoaderFunctionArgs, ActionFunctionArgs, json, defer } from "react-router-dom";
 import checkAuthentication from "../util/routeGuard";

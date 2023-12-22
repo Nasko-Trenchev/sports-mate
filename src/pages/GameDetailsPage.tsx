@@ -2,7 +2,7 @@ import GameDetails from "../components/Game/GameDetails";
 import { LoaderFunctionArgs, ActionFunctionArgs, redirect, json, defer } from "react-router-dom";
 import { getDoc, doc, updateDoc, arrayUnion, arrayRemove, deleteDoc, Timestamp, deleteField, collection, getDocs } from "firebase/firestore";
 import { db } from "../config/firebase";
-import { GameType, CommentsData, GamesTypes } from "../util/sportTypes";
+import { GameType, CommentsData } from "../util/sportTypes";
 import { ref, getDownloadURL, listAll, list } from 'firebase/storage'
 import { storage } from "../config/firebase";
 import picture from '../assets/noProfile.webp'
