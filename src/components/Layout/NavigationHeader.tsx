@@ -2,7 +2,6 @@ import { AppBar, Toolbar, IconButton, Typography, Stack, Button } from "@mui/mat
 import { StyledEngineProvider } from '@mui/material/styles';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { auth } from "../../config/firebase";
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import InstagramIcon from '@mui/icons-material/Instagram';
 import SportsSoccerSharpIcon from '@mui/icons-material/SportsSoccerSharp';

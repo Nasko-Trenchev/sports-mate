@@ -4,9 +4,17 @@ import { doc, getDoc } from "firebase/firestore";
 import { db, storage } from "../config/firebase";
 import { ref, getDownloadURL, listAll } from 'firebase/storage'
 import { profileData } from "./ProfilePage";
+import { GamesTypes, GameType } from "../util/sportTypes";
 import picture from '../assets/noProfile.webp'
 
 
+export type publicProfileData = {
+    user: profileData,
+    footballGames: GamesTypes,
+    tennisGames: GamesTypes,
+    basketballGames: GamesTypes,
+    volleyballGames: GamesTypes
+}
 const PublicProfilePage = () => {
     return (
         <PublicProfile />
@@ -19,14 +27,20 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
     const userId = params.profileId;
     let finalImage;
+    const footballGames = [] as GamesTypes;
+    const tennisGames = [] as GamesTypes;
+    const basketballGames = [] as GamesTypes;
+    const volleyballGames = [] as GamesTypes;
+
+
     try {
         const userRef = doc(db, 'users', userId!);
         const userData = await getDoc(userRef);
-        const userObject = userData.data() as profileData
+        const user = userData.data() as profileData
         const listRef = ref(storage, `ProfileImages/`)
 
         const images = await listAll(listRef);
-        const image = images.items.find(img => img.name === userObject.username)
+        const image = images.items.find(img => img.name === user.username)
 
         if (image) {
             finalImage = await getDownloadURL(image)
@@ -34,9 +48,31 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
         else {
             finalImage = picture
         }
-        userObject.image = finalImage;
 
-        return userObject;
+        user.image = finalImage;
+
+        for (const gameId of user.pastGameIds) {
+            const id = gameId.split(":")[0];
+            const sport = gameId.split(":")[1];
+            const completedGameRef = await getDoc(doc(db, sport, id))
+            const completedGame = completedGameRef.data() as GameType
+            completedGame.id = id;
+            switch (completedGame.sport) {
+                case "football": footballGames.push(completedGame)
+                    break;
+                case "tennis": tennisGames.push(completedGame)
+                    break;
+                case "basketball": basketballGames.push(completedGame)
+                    break;
+                case "volleyball": volleyballGames.push(completedGame)
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        return { user, footballGames, basketballGames, volleyballGames, tennisGames }
+
     } catch (error) {
 
     }

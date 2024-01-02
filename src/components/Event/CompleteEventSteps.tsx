@@ -72,7 +72,7 @@ const CompleteEventSteps: React.FC<StepsProps> = (props) => {
                         <Await resolve={users}>
                             {(defferedUsers: constructedObject) => (
                                 defferedUsers.map((user) =>
-                                    <List className={classes.playersRatingContainer}>
+                                    <List className={classes.playersRatingContainer} key={user.email}>
                                         <ListItem >
                                             <ListItemAvatar>
                                                 <div >

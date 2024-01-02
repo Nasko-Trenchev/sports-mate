@@ -46,59 +46,8 @@ const Profile = () => {
                     </div>
                 </div>
                 <Button variant='contained'><NavLink to={'settings'} className={classes['links']}>Settings</NavLink></Button>
-
-                {/* <div>
-                    <p>{imageUpload?.name}</p>
-                    {!imageUpload ? (
-                        <Button
-                            variant="contained"
-                            color="primary"
-                            onClick={() => fileInput.current!.click()}
-                        >
-                            upload file
-                        </Button>
-                    ) : (
-                        <Button
-                            variant="contained"
-                            color="primary"
-                            onClick={handleUpload}
-                        >
-                            Save file
-                        </Button>
-                    )}
-
-
-
-                    <input
-                        ref={fileInput}
-                        type="file"
-                        style={{ display: 'none' }}
-                        onChange={(e) => handleImageInputChange(e)}
-                    />
-                </div>
-                <label htmlFor="password-new">New password</label>
-                <input type="text" id="password-new" ref={newPassword} />
-                <input type="file" onChange={(e) => handleImageInputChange(e)} />
-                <button onClick={handleUpload}>Upload image</button>
-                <div>
-                    <button onClick={handlePasswordReset}>Enter </button>
-                </div> */}
             </div>
-            {/* <Snackbar
-                open={actionOption.open}
-                autoHideDuration={2000}
-                onClose={closeNotification.bind(actionOption.color)}
-                anchorOrigin={{
-                    vertical: 'bottom',
-                    horizontal: 'center'
-                }}
-
-            >
-                <SnackbarAlert onClose={closeNotification.bind(actionOption.color)} severity={actionOption.color}>
-                    {actionOption.message}
-                </SnackbarAlert>
-            </Snackbar> */}
-
+           
         </StyledEngineProvider>
     )
 }

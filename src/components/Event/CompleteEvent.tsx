@@ -181,7 +181,9 @@ export default function HorizontalLinearStepper() {
                 <>
                     <Typography sx={{ mt: 2, mb: 1, textAlign: 'center', marginTop: '5em' }}>
                         All steps completed - you&apos;re finished!
-                        <p>Thank you!</p>
+                        <div>
+                            <Typography>Thank you!</Typography>
+                        </div>
                     </Typography>
                     <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', pt: 2 }}>
                         {/* <Box sx={{ flex: '1 1 auto'}} /> */}

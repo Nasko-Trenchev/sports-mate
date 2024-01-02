@@ -21,7 +21,7 @@ const ProfilePastGames = () => {
             <h1>Select game to mark as completed</h1>
             <Stack sx={{ width: '75%', margin: 'auto', marginTop: '5em' }}>
                 {pendingGames.map(game =>
-                    <Stack sx={{ gap: '1.5em' }}>
+                    <Stack sx={{ gap: '1.5em' }} key={game.id}>
                         <motion.div
                             whileHover={{ scale: 1.1 }}
                             className={classes.detailsBtn}

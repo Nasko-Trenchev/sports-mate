@@ -13,6 +13,7 @@ import { db } from "../../config/firebase";
 const ProfileIcon = () => {
 
     const [notification, setNotification] = useState<number | null>(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const getUser = async () => {
@@ -21,20 +22,16 @@ const ProfileIcon = () => {
             const count = userData.pendingCompletionGames.length;
             setNotification(count)
         }
-
         getUser()
     }, [])
-    const navigate = useNavigate();
 
     return (
-
         <IconButton size="large" edge='start' color="inherit" aria-label="logo" sx={{ margin: '1px' }}
             onClick={() => navigate('/profile')}>
             <Badge badgeContent={notification} color="primary">
                 <AccountCircleIcon />
             </Badge>
         </IconButton >
-
     )
 }
 

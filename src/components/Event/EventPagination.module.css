@@ -1,5 +1,7 @@
 .gamesContainer {
-    width: 80vw;
+    /* min-width: 65vw;
     margin-left: auto;
-    margin-right: auto;
+    margin-right: auto; */
+    margin: auto;
+    margin-top: 0;
 }

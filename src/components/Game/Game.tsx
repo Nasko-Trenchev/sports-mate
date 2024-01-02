@@ -6,14 +6,13 @@ import ThreePIcon from '@mui/icons-material/ThreeP';
 import { motion } from 'framer-motion';
 import { Button } from '@mui/material';
 import { GameType } from '../../util/sportTypes';
-import { useParams, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import dayjs from 'dayjs';
 import { hoursLeft } from '../../util/helperFunctions';
 
 
 const Game: React.FC<{ data: GameType }> = (props) => {
 
-    const params = useParams();
     const navigate = useNavigate()
 
     const { timeRemaining } = hoursLeft(props.data.Time.toDate())
