@@ -4,7 +4,9 @@ import { loaderReturnArgs } from "../../pages/GameDetailsPage";
 import { useRouteLoaderData, useNavigation } from "react-router-dom";
 import { FieldsImage } from "../../util/constants";
 import { hoursLeft } from "../../util/helperFunctions";
+import { getUserRating } from "../../util/helperFunctions";
 import { useState } from "react";
+import { isPlayerSkillLevelEnought } from '../../util/helperFunctions';
 import useDialog from '../../hooks/useDialog';
 import { UserAuth } from '../../contexts/AuthContext';
 import AlertDialog from '../Alert/AlertDialog';
@@ -15,17 +17,19 @@ import classes from './GameDetailsDescription.module.css';
 const GameDetailsDescription: React.FC<{ handleEventClick: (e: React.MouseEvent<HTMLButtonElement>) => void }> = (props) => {
 
     const [showMap, setShowMap] = useState(false);
-
-    const { sportDetails} = useRouteLoaderData('game-details') as loaderReturnArgs;
+    const { sportDetails, dbUser } = useRouteLoaderData('game-details') as loaderReturnArgs;
     const { user } = UserAuth();
     const navigation = useNavigation();
     const { closeDialog, open, openDialog } = useDialog();
+
     const { timeRemaining, time } = hoursLeft(sportDetails.Time.toDate())
     const isSubmiting = navigation.state === 'submitting' || navigation.state === 'loading';
-
     const fieldDetails = FieldsImage.find(field => field.location === sportDetails.Location)
     const remainingSpots = sportDetails.PlayersCount - sportDetails.Players.length;
 
+    const playerEligible = isPlayerSkillLevelEnought(dbUser, sportDetails.SkillLevel, sportDetails.sport)
+    const userRating = getUserRating(dbUser).find(entry => entry.sport.toLowerCase() === sportDetails.sport)?.rating;
+    console.log(userRating)
     return (
         <div className={classes.description}>
             <h1>{sportDetails.Location}</h1>
@@ -74,21 +78,28 @@ const GameDetailsDescription: React.FC<{ handleEventClick: (e: React.MouseEvent<
                                 >Cancel event</Button>
                             </motion.div>
                             :
-                            <motion.div whileHover={{ scale: 1.1 }} className={classes.detailsBtn}>
-                                <Button
-                                    variant='contained'
-                                    size='small'
-                                    sx={{
-                                        color: 'white', borderColor: 'blue', '&:hover': { borderColor: 'gray' },
-                                        '&:disabled': { color: 'white', border: 'none' }
-                                    }}
-                                    disabled={(sportDetails.PlayersCount === sportDetails.Players.length &&
-                                        !sportDetails.Players.some(email => email === user?.displayName)) || isSubmiting}
-                                    onClick={(e) => props.handleEventClick(e)}
-                                >{isSubmiting ? "Processing..." : sportDetails.Players.some(email => email === user?.displayName) ? "Leave event" :
-                                    sportDetails.PlayersCount === sportDetails.Players.length ? "Full" : "Join event"}
-                                </Button>
-                            </motion.div>
+                            <>
+                                <motion.div whileHover={{ scale: 1.1 }} className={classes.detailsBtn}>
+                                    <Button
+                                        variant='contained'
+                                        size='small'
+                                        sx={{
+                                            color: 'white', borderColor: 'blue', '&:hover': { borderColor: 'gray' },
+                                            '&:disabled': { color: 'white', border: 'none' }
+                                        }}
+                                        disabled={(sportDetails.PlayersCount === sportDetails.Players.length &&
+                                            !sportDetails.Players.some(email => email === user?.displayName)) || isSubmiting || !playerEligible}
+                                        onClick={(e) => props.handleEventClick(e)}
+                                    >{isSubmiting ? "Processing..." : sportDetails.Players.some(email => email === user?.displayName) ? "Leave event" :
+                                        sportDetails.PlayersCount === sportDetails.Players.length ? "Full" : "Join event"}
+                                    </Button>
+                                </motion.div>
+                                {!playerEligible &&
+                                    <div>
+                                        <p>You`re not eligible for this event</p>
+                                        <p>Your {sportDetails.sport} rating is {userRating} stars</p>
+                                    </div>}
+                            </>
                         }
                     </>}
             </div >

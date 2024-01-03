@@ -1,7 +1,7 @@
 import GameDetails from "../components/Game/GameDetails";
 import { LoaderFunctionArgs, ActionFunctionArgs, redirect, json, defer } from "react-router-dom";
 import { getDoc, doc, updateDoc, arrayUnion, arrayRemove, deleteDoc, Timestamp, deleteField, collection, getDocs } from "firebase/firestore";
-import { db } from "../config/firebase";
+import { db, auth } from "../config/firebase";
 import { GameType, CommentsData } from "../util/sportTypes";
 import { ref, getDownloadURL, listAll, list } from 'firebase/storage'
 import { storage } from "../config/firebase";
@@ -30,6 +30,7 @@ export type loaderReturnArgs = {
     sportDetails: GameType,
     users: constructedObject
     comments: CommentsData,
+    dbUser: profileData;
 }
 
 export type commentRefData = {
@@ -51,6 +52,10 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     }
 
     try {
+
+        const user = await getDoc(doc(db, `users`, `${auth.currentUser?.displayName!}`))
+        const userData = user.data() as profileData;
+
         const gameDocRef = doc(db, `${params.sport}`, `${params.gameId}`)
         const gameDocSnap = await getDoc(gameDocRef)
         const sportWithId = ({ ...gameDocSnap.data(), id: gameDocSnap.id }) as GameType;
@@ -105,7 +110,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
             return neededData;
         }
 
-        return defer({ sportDetails: sportWithId, users: combinedProfile(), comments: combinedComments() });
+        return defer({ sportDetails: sportWithId, dbUser: userData, users: combinedProfile(), comments: combinedComments() });
 
     } catch (error) {
         if (error instanceof Error) {

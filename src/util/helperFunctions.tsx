@@ -1,6 +1,7 @@
 import dayjs from 'dayjs';
 import { FootballFields, BasketballFields, TennisFields, VolleyballFields } from './constants';
 import { profileData } from '../pages/ProfilePage';
+import { SkillLevelCodes } from './constants';
 
 export const hoursLeft = (timeLeft: Date) => {
 
@@ -114,4 +115,24 @@ export const getUserRating = (user: profileData) => {
         rating: basketballRating,
         votes: user.basketballVotes
     }]
+}
+
+
+export const isPlayerSkillLevelEnought = (user: profileData, eventSkillLevel: string, sport: string) => {
+
+    const userRating = getUserRating(user).find(x => x.sport.toLowerCase() === sport);
+    const eventSkill = SkillLevelCodes[eventSkillLevel as keyof typeof SkillLevelCodes];
+
+    if (eventSkill === 1 || eventSkill == 2) {
+        return true;
+    }
+
+    if (userRating && userRating.votes) {
+
+        if (userRating?.rating >= eventSkill && userRating.votes > 4) {
+            return true
+        }
+    }
+
+    return false;
 }

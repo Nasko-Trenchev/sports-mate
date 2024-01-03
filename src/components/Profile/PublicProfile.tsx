@@ -24,6 +24,7 @@ function a11yProps(index: number) {
 const PublicProfile = () => {
 
     const { user, footballGames, basketballGames, tennisGames, volleyballGames } = useRouteLoaderData('public-profile') as publicProfileData;
+    const { profileId } = useParams();
     const [value, setValue] = useState(0);
     const [playerStats, showPlayerStats] = useState(false);
 
@@ -35,13 +36,11 @@ const PublicProfile = () => {
         showPlayerStats(prev => !prev)
     }
 
-    const { profileId } = useParams();
     const noDataAvailable = (sport: string) => {
         return <div className={classes.noDataAvailableYet}>
             <h2>{profileId} hasn`t played any {sport} games yet</h2>
         </div>
     }
-
 
     return (
         <StyledEngineProvider>

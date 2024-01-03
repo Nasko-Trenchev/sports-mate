@@ -1,6 +1,14 @@
 
 export const ImageTypes = ["jpg", "jpeg", "jfif", "pjpeg", "pjp", "png", "webp", "avif", "apng", "gif"];
-export const SkillLevels = ["Beginner", "Advanced", "Expert", "Proffesional"]
+export const SkillLevels = ["Novice", "Beginner", "Advanced", "Expert", "Proffesional"]
+
+export enum SkillLevelCodes {
+    Novice = 1,
+    Beginner,
+    Advanced,
+    Expert,
+    Proffesional,
+}
 
 export const FootballFields = [
     "Sofia Sport 1",
