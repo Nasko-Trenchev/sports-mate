@@ -10,7 +10,7 @@ const Profile = () => {
 
     const { image, profile } = useRouteLoaderData('profile-data') as combinedProfileData
 
-    const ratingValue = Math.round(profile.rating / profile.votes)
+    // const ratingValue = Math.round(profile.rating / profile.votes)
 
     const pendingGames = profile.pendingCompletionGames;
 
@@ -34,14 +34,14 @@ const Profile = () => {
                     <div className={classes.ratingSection}>
                         <h2>Your rating:</h2>
                         <div className={classes.ratingFlexContainer}>
-                            <Rating
+                            {/* <Rating
                                 size='small'
                                 sx={{ alignItems: 'center' }}
                                 precision={1}
                                 readOnly
                                 value={ratingValue}
                             />
-                            <p>{profile.votes} votes</p>
+                            <p>{profile.votes} votes</p> */}
                         </div>
                     </div>
                 </div>

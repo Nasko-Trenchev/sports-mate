@@ -1,0 +1,27 @@
+.ratingFlexContainer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 1em;
+    padding: 0.3em;
+}
+
+.ratingFlexContainer h3 {
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+}
+
+/* .ratingSection {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+}
+
+.ratingSection h2 {
+    margin-right: 0.5em;
+}
+
+.ratingSection p {
+    margin: 0;
+    font-size: 0.9em;
+} */

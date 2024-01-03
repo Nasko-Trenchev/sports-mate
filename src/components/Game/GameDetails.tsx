@@ -59,7 +59,7 @@ const GameDetails: React.FC = () => {
                     </motion.div>
                 </div>
             }
-            {(sportDetails.Owner === user?.displayName && time === 0) &&
+            {(sportDetails.Owner === user?.displayName && time === 0 && sportDetails.Completed === false) &&
                 <div style={{ display: 'flex', justifyContent: 'center', marginTop: '2em' }} >
                     <motion.div whileHover={{ scale: 1.1 }}>
                         <Button

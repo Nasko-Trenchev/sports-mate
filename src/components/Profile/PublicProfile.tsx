@@ -1,7 +1,9 @@
 import { useRouteLoaderData } from "react-router-dom";
 import { publicProfileData } from "../../pages/PublicProfilePage";
+import { motion } from "framer-motion";
 import { useState } from "react";
-import { Rating } from '@mui/material';
+import ProfileRating from "./ProfileRating";
+import { getUserRating } from "../../util/helperFunctions";
 import EventPagination from "../Event/EventPagination";
 import classes from './PublicProfile.module.css'
 import CustomTabPanel from "./ProfileTabs";
@@ -9,6 +11,7 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import { StyledEngineProvider } from '@mui/material/styles';
 import Box from '@mui/material/Box';
+import { Button } from "@mui/material";
 import { useParams } from "react-router-dom";
 
 function a11yProps(index: number) {
@@ -22,24 +25,23 @@ const PublicProfile = () => {
 
     const { user, footballGames, basketballGames, tennisGames, volleyballGames } = useRouteLoaderData('public-profile') as publicProfileData;
     const [value, setValue] = useState(0);
+    const [playerStats, showPlayerStats] = useState(false);
 
-    const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+    const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
         setValue(newValue);
     };
 
+    const handleStatsChange = () => {
+        showPlayerStats(prev => !prev)
+    }
+
     const { profileId } = useParams();
-
-    const ratingValue = Math.round(user.rating / user.votes)
-
-    const noDataAvailable = (sport: any) => {
+    const noDataAvailable = (sport: string) => {
         return <div className={classes.noDataAvailableYet}>
             <h2>{profileId} hasn`t played any {sport} games yet</h2>
         </div>
     }
 
-    // const handleStarsChange = (e: React.SyntheticEvent<Element, Event>, value: number | null) => {
-    //     console.log(value)
-    // }
 
     return (
         <StyledEngineProvider>
@@ -50,26 +52,25 @@ const PublicProfile = () => {
                 <h1>{user.username}</h1>
             </div>
             <div className={classes.profileContainer}>
-                <div>
-                    <p>Total events attended: {user.pastGameIds.length}</p>
-                    <div className={classes.ratingSection}>
-                        <h2>Overall rating:</h2>
-                        <div className={classes.ratingFlexContainer}>
-                            <Rating
-                                size='small'
-                                sx={{ alignItems: 'center' }}
-                                precision={1}
-                                readOnly
-                                value={ratingValue}
-                            />
-                            <p>{user.votes} votes</p>
-                        </div>
-                    </div>
-                </div>
+                <motion.div
+                    whileHover={{ scale: 1.1 }} className={classes.statsButton}>
+                    <Button
+                        onClick={handleStatsChange}
+                        variant='contained'
+                        size='small'
+                    >Player`s statistics</Button>
+                </motion.div>
+                {playerStats && <motion.div
+                    initial={{ opacity: 0, y: -30 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.7 }}>
+                    <h4>Total events attended: {user.pastGameIds.length}</h4>
+                    <ProfileRating userRating={getUserRating(user)} />
+                </motion.div>}
             </div>
             <Box className={classes.pastGamesContainer} sx={{ width: '60%' }}>
                 <Box sx={{ borderBottom: 1, borderColor: 'divider' }} >
-                    <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
+                    <Tabs value={value} onChange={handleTabChange} aria-label="basic tabs example">
                         <Tab label="Football" {...a11yProps(0)} />
                         <Tab label="Tennis" {...a11yProps(1)} />
                         <Tab label="Basketball" {...a11yProps(2)} />

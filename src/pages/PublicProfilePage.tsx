@@ -1,5 +1,5 @@
 import PublicProfile from "../components/Profile/PublicProfile";
-import { LoaderFunctionArgs } from "react-router-dom";
+import { LoaderFunctionArgs, json } from "react-router-dom";
 import { doc, getDoc } from "firebase/firestore";
 import { db, storage } from "../config/firebase";
 import { ref, getDownloadURL, listAll } from 'firebase/storage'
@@ -32,7 +32,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     const basketballGames = [] as GamesTypes;
     const volleyballGames = [] as GamesTypes;
 
-
+    console.log(userId)
     try {
         const userRef = doc(db, 'users', userId!);
         const userData = await getDoc(userRef);
@@ -50,8 +50,8 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
         }
 
         user.image = finalImage;
-
         for (const gameId of user.pastGameIds) {
+            console.log(gameId)
             const id = gameId.split(":")[0];
             const sport = gameId.split(":")[1];
             const completedGameRef = await getDoc(doc(db, sport, id))
@@ -74,7 +74,16 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
         return { user, footballGames, basketballGames, volleyballGames, tennisGames }
 
     } catch (error) {
-
+        if (error instanceof Error) {
+            throw json(
+                {
+                    name: "Something went wrong",
+                    // message: "Refresh the page and try again later"
+                    message: error.message
+                },
+                { status: 401 }
+            );
+        }
     }
 
 }

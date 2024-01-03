@@ -14,8 +14,16 @@ export type profileData = {
     pastGameIds: string[],
     pendingCompletionGames: string[],
     absent: string[],
-    rating: number,
-    votes: number,
+    footballRating?: number,
+    footballVotes?: number,
+    tennisRating?: number,
+    tennisVotes?: number,
+    volleyballRating?: number,
+    volleyballVotes?: number,
+    basketballRating?: number,
+    basketballVotes?: number,
+    // rating: number,
+    // votes: number,
     image?: string
 }
 

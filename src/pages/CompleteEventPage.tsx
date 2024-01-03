@@ -98,9 +98,11 @@ export async function action({ params, request }: ActionFunctionArgs) {
     if (rating.length > 0) {
         for (const data of ratingArray) {
             const userRef = doc(db, 'users', `${data.username}`);
+            const objectRatingRef = `${sport}Rating`
+            const objectVotesRef = `${sport}Votes`
             await updateDoc(userRef, {
-                rating: increment(data.rating),
-                votes: increment(1)
+                [objectRatingRef]: increment(data.rating),
+                [objectVotesRef]: increment(1)
             })
         }
     }
@@ -116,6 +118,7 @@ export async function action({ params, request }: ActionFunctionArgs) {
 
     const gameData = JSON.parse(game) as GameType
     const GameWithId = `${id}:${sport}`
+    console.log(GameWithId)
 
     if (auth.currentUser?.displayName !== gameData.Owner) {
         const userRef = doc(db, 'users', auth.currentUser?.displayName!);
@@ -135,7 +138,7 @@ export async function action({ params, request }: ActionFunctionArgs) {
         }
         else {
             await updateDoc(userRef, {
-                pastGameIds: arrayUnion(gameData.id),
+                pastGameIds: arrayUnion(GameWithId),
             })
         }
     }

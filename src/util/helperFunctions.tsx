@@ -1,5 +1,6 @@
 import dayjs from 'dayjs';
 import { FootballFields, BasketballFields, TennisFields, VolleyballFields } from './constants';
+import { profileData } from '../pages/ProfilePage';
 
 export const hoursLeft = (timeLeft: Date) => {
 
@@ -70,4 +71,47 @@ export const getField = (sport: string | undefined) => {
     }
 
     return field;
+}
+
+export const getUserRating = (user: profileData) => {
+
+    let footballRating = 0;
+    let tennisRating = 0;
+    let basketballRating = 0;
+    let volleyballRating = 0;
+
+    if (user.footballVotes && user.footballRating) {
+        footballRating = Math.round(user.footballRating / user.footballVotes);
+    }
+
+    if (user.tennisRating && user.tennisVotes) {
+        tennisRating = Math.round(user.tennisRating / user.tennisVotes);
+    }
+    if (user.volleyballRating && user.volleyballVotes) {
+        basketballRating = Math.round(user.volleyballRating / user.volleyballVotes);
+    }
+    if (user.basketballRating && user.basketballVotes) {
+        volleyballRating = Math.round(user.basketballRating / user.basketballVotes);
+    }
+
+    return [{
+        sport: "Football",
+        rating: footballRating,
+        votes: user.footballVotes
+    },
+    {
+        sport: "Tennis",
+        rating: tennisRating,
+        votes: user.tennisVotes
+    },
+    {
+        sport: "Volleyball",
+        rating: volleyballRating,
+        votes: user.volleyballVotes
+    },
+    {
+        sport: "Basketball",
+        rating: basketballRating,
+        votes: user.basketballVotes
+    }]
 }

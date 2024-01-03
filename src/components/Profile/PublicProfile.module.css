@@ -1,9 +1,17 @@
 .profileContainer {
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
 }
+
+.statsButton {
+    margin-top: 3em;
+}
+
+/* .profileContainer h4 {
+    margin-top: 0;
+} */
 
 .profileHeader {
     display: flex;
@@ -62,4 +70,3 @@
 .noDataAvailableYet {
     margin: auto;
 }
-

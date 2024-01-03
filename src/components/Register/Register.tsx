@@ -104,8 +104,6 @@ export const Register = () => {
                 email: formInput.email,
                 pastGameIds: [],
                 pendingCompletionGames: [],
-                votes: 0,
-                rating: 0,
             });
             navigate('/');
         } catch (error) {

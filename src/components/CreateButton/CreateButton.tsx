@@ -15,7 +15,7 @@ const CreateButton: React.FC<{ style: string, path: string, text?: string }> = (
                     <Button
                         variant='contained'
                         size='small'
-                    >{props.text ? props.text: "Create event"}</Button>
+                    >{props.text ? props.text : "Create event"}</Button>
                 </motion.div>
             </NavLink>
         </div>
