@@ -95,7 +95,7 @@ const GameDetailsDescription: React.FC<{ handleEventClick: (e: React.MouseEvent<
                                     </Button>
                                 </motion.div>
                                 {!playerEligible &&
-                                    <div>
+                                    <div className={classes.notEligibleContainer}>
                                         <p>You`re not eligible for this event</p>
                                         <p>Your {sportDetails.sport} rating is {userRating} stars</p>
                                     </div>}

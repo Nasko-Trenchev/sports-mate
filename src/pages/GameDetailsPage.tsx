@@ -7,6 +7,7 @@ import { ref, getDownloadURL, listAll, list } from 'firebase/storage'
 import { storage } from "../config/firebase";
 import picture from '../assets/noProfile.webp'
 import { profileData } from "./ProfilePage";
+import { isPlayerSkillLevelEnought } from "../util/helperFunctions";
 import checkAuthentication from "../util/routeGuard";
 
 export type constructedObject = {
@@ -132,18 +133,21 @@ export async function action({ params, request }: ActionFunctionArgs) {
     try {
         const data = await request.json()
 
-        const { action, sport, id, user } = data;
+        const { action, sport, id, displayName, user, skill } = data;
 
         const docRef = doc(db, `${sport}`, `${id}`);
 
         if (action === "Join event") {
-            await updateDoc(docRef, {
-                Players: arrayUnion(user)
-            })
+            const playerEligible = isPlayerSkillLevelEnought(user, skill, sport)
+            if (playerEligible) {
+                await updateDoc(docRef, {
+                    Players: arrayUnion(displayName)
+                })
+            }
         }
         else if (action === "Leave event") {
             await updateDoc(docRef, {
-                Players: arrayRemove(user)
+                Players: arrayRemove(displayName)
             })
         }
         else if (action === 'Submit comment') {
@@ -152,7 +156,7 @@ export async function action({ params, request }: ActionFunctionArgs) {
 
             await updateDoc(eventCommentDocRef, {
                 comments: arrayUnion({
-                    user,
+                    user: displayName,
                     comment,
                     date: Timestamp.now()
                 })

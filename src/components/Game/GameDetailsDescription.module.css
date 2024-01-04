@@ -38,3 +38,8 @@
 .registrationStatus {
     text-align: center;
 }
+
+.notEligibleContainer p {
+    font-weight: 500;
+    color: red;
+}

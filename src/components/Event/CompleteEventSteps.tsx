@@ -13,6 +13,7 @@ import { SelectChangeEvent } from '@mui/material/Select';
 import Avatar from '@mui/material/Avatar';
 import { StyledEngineProvider } from '@mui/material/styles';
 import { Suspense } from 'react';
+import { UserAuth } from '../../contexts/AuthContext';
 import { constructedObject } from '../../pages/GameDetailsPage';
 
 type StepsProps = {
@@ -25,7 +26,7 @@ type StepsProps = {
 const CompleteEventSteps: React.FC<StepsProps> = (props) => {
 
     const { users } = useRouteLoaderData('game-details') as loaderReturnArgs;
-
+    const { user } = UserAuth()
     const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
 
     if (props.step === 0) {
@@ -36,7 +37,7 @@ const CompleteEventSteps: React.FC<StepsProps> = (props) => {
                     <Suspense fallback={<CircularProgress disableShrink sx={{ alignSelf: 'center' }} />}>
                         <Await resolve={users}>
                             {(defferedUsers: constructedObject) => (
-                                defferedUsers.map((user) =>
+                                defferedUsers.filter(entry => entry.username !== user?.displayName).map((user) =>
                                     <List className={classes.playerProfileContainer} key={user.email}>
                                         <ListItem >
                                             <ListItemAvatar>
@@ -71,7 +72,7 @@ const CompleteEventSteps: React.FC<StepsProps> = (props) => {
                     <Suspense fallback={<CircularProgress disableShrink sx={{ alignSelf: 'center' }} />}>
                         <Await resolve={users}>
                             {(defferedUsers: constructedObject) => (
-                                defferedUsers.map((user) =>
+                                defferedUsers.filter(entry => entry.username !== user?.displayName).map((user) =>
                                     <List className={classes.playersRatingContainer} key={user.email}>
                                         <ListItem >
                                             <ListItemAvatar>

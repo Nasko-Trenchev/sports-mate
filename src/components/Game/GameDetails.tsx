@@ -21,7 +21,7 @@ const GameDetails: React.FC = () => {
     const { user } = UserAuth();
     const navigate = useNavigate()
     const submit = useSubmit();
-    const { sportDetails } = useRouteLoaderData('game-details') as loaderReturnArgs;
+    const { sportDetails, dbUser } = useRouteLoaderData('game-details') as loaderReturnArgs;
     const { openNotification, closeNotification, actionOption } = useNotification();
 
     const { timeRemaining, time } = hoursLeft(sportDetails.Time.toDate())
@@ -39,7 +39,9 @@ const GameDetails: React.FC = () => {
             action: `${e.currentTarget.textContent}`,
             sport: `${sport}`,
             id: `${sportDetails.id}`,
-            user: `${user?.displayName}`,
+            displayName: `${user?.displayName}`,
+            user: `${dbUser}`,
+            skill: `${sportDetails.SkillLevel}`
         },
             { method: "post", encType: "application/json" })
     }
