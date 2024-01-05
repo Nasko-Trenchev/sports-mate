@@ -15,6 +15,7 @@ import { StyledEngineProvider } from '@mui/material/styles';
 import { Suspense } from 'react';
 import { UserAuth } from '../../contexts/AuthContext';
 import { constructedObject } from '../../pages/GameDetailsPage';
+import CompleteEventRating from './CompleteEventRating';
 
 type StepsProps = {
     step: number,
@@ -74,7 +75,7 @@ const CompleteEventSteps: React.FC<StepsProps> = (props) => {
                             {(defferedUsers: constructedObject) => (
                                 defferedUsers.filter(entry => entry.username !== user?.displayName).map((user) =>
                                     <List className={classes.playersRatingContainer} key={user.email}>
-                                        <ListItem >
+                                        <ListItem>
                                             <ListItemAvatar>
                                                 <div >
                                                     <Avatar alt={user.username} src={user.image} />
@@ -85,12 +86,13 @@ const CompleteEventSteps: React.FC<StepsProps> = (props) => {
                                                 primary={user.username}
                                             />
                                             <ListItemSecondaryAction className={classes.rating} >
-                                                <Rating
+                                                <CompleteEventRating handleRatingChange={props.handleRatingChange} userName={user.username} key={user.username} />
+                                                {/* <Rating
                                                     size='small'
                                                     name={user.username}
                                                     precision={1}
                                                     onChange={(event, value) => props.handleRatingChange(event, value, user.username)}
-                                                />
+                                                /> */}
                                             </ListItemSecondaryAction>
                                         </ListItem>
                                     </List>

@@ -86,9 +86,9 @@ export const FieldsImage = [
 ]
 
 export const ratingLabels: { [index: string]: string } = {
-    1: 'Useless',
-    2: 'Poor',
-    3: 'Ok',
-    4: 'Good',
-    5: 'Excellent',
+    1: 'Novice',
+    2: 'Beginner',
+    3: 'Advanced',
+    4: 'Expert',
+    5: 'Professional',
 };
