@@ -1,0 +1,20 @@
+.helpSectionTitle {
+    font-family: 'Inter', sans-serif;
+    font-weight: bold;
+    text-decoration: none;
+    color: black;
+    margin-top: 1.5em;
+}
+
+.helpSectionContainer {
+    width: 65%;
+    margin: auto;
+}
+
+.helpSectionP {
+    color: rgb(107 114 128);
+    font-weight: 300;
+    font-size: 1.5em;
+    margin-top: 0.05em;
+    text-align: center;
+}
