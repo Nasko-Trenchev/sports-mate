@@ -73,7 +73,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
 }
 
-export async function action({ params, request }: ActionFunctionArgs) {
+export async function action({ request }: ActionFunctionArgs) {
 
     const data = await request.json()
 
@@ -118,7 +118,6 @@ export async function action({ params, request }: ActionFunctionArgs) {
 
     const gameData = JSON.parse(game) as GameType
     const GameWithId = `${id}:${sport}`
-    console.log(GameWithId)
 
     if (auth.currentUser?.displayName !== gameData.Owner) {
         const userRef = doc(db, 'users', auth.currentUser?.displayName!);

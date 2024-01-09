@@ -22,8 +22,6 @@ export type profileData = {
     volleyballVotes?: number,
     basketballRating?: number,
     basketballVotes?: number,
-    // rating: number,
-    // votes: number,
     image?: string
 }
 

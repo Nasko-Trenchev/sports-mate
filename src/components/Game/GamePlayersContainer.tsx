@@ -23,6 +23,7 @@ const GamePlayersContainer = () => {
                                     key={user.email}
                                     image={user.image!}
                                     displayName={user.username}
+                                    user={user}
                                 />
                             )
                         )}
@@ -60,6 +61,7 @@ const GamePlayersContainer = () => {
                                             key={user.email}
                                             image={user.image!}
                                             displayName={user.username}
+                                            user={user}
                                         />
                                     )
                                 )}

@@ -23,16 +23,15 @@ const PublicProfilePage = () => {
 
 export default PublicProfilePage;
 
-export async function loader({ request, params }: LoaderFunctionArgs) {
+export async function loader({ params }: LoaderFunctionArgs) {
 
     const userId = params.profileId;
-    let finalImage;
     const footballGames = [] as GamesTypes;
     const tennisGames = [] as GamesTypes;
     const basketballGames = [] as GamesTypes;
     const volleyballGames = [] as GamesTypes;
-
-    console.log(userId)
+    
+    let finalImage;
     try {
         const userRef = doc(db, 'users', userId!);
         const userData = await getDoc(userRef);
@@ -51,7 +50,6 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
         user.image = finalImage;
         for (const gameId of user.pastGameIds) {
-            console.log(gameId)
             const id = gameId.split(":")[0];
             const sport = gameId.split(":")[1];
             const completedGameRef = await getDoc(doc(db, sport, id))

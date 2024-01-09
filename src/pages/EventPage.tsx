@@ -11,7 +11,7 @@ const EventPage = () => {
     )
 }
 
-export async function loader({ request, params }: LoaderFunctionArgs) {
+export async function loader({ params }: LoaderFunctionArgs) {
     try {
         const currentSportRef = collection(db, `${params.sport}`);
         const data = await getDocs(currentSportRef);

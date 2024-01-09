@@ -15,7 +15,7 @@ const CreatePage = () => {
 
 export default CreatePage;
 
-export async function loader({ request, params }: LoaderFunctionArgs) {
+export async function loader({ request }: LoaderFunctionArgs) {
 
     const redirecUnAuthenticatedtUser = await checkAuthentication(request);
 

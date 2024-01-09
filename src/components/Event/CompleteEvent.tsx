@@ -98,20 +98,22 @@ export default function HorizontalLinearStepper() {
     //     return skipped.has(step);
     // };
 
-    const handleNext = () => {
+    const submitReview = () => {
+        submit({
+            sport: `${sport}`,
+            id: `${gameId}`,
+            rating: JSON.stringify(formState.Rating),
+            presence: JSON.stringify(formState.Presence),
+            comment: `${formState.Comment}`,
+            game: JSON.stringify(sportDetails),
+            user: `${auth.currentUser?.displayName}`
+        },
+            { method: "post", encType: "application/json" })
 
-        if (activeStep === steps.length - 1) {
-            submit({
-                sport: `${sport}`,
-                id: `${gameId}`,
-                rating: JSON.stringify(formState.Rating),
-                presence: JSON.stringify(formState.Presence),
-                comment: `${formState.Comment}`,
-                game: JSON.stringify(sportDetails),
-                user: `${auth.currentUser?.displayName}`
-            },
-                { method: "post", encType: "application/json" })
-        }
+        navigate('/')
+    }
+
+    const handleNext = () => {
 
         // let newSkipped = skipped;
         // if (isStepSkipped(activeStep)) {
@@ -180,14 +182,14 @@ export default function HorizontalLinearStepper() {
             {activeStep === steps.length ? (
                 <>
                     <Typography sx={{ mt: 2, mb: 1, textAlign: 'center', marginTop: '5em' }}>
-                        All steps completed - you&apos;re finished!
+                        All steps completed - you&apos;re ready to submit your review!
                         <div>
-                            <Typography>Thank you!</Typography>
+                            <span>Thank you!</span>
                         </div>
                     </Typography>
                     <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', pt: 2 }}>
                         {/* <Box sx={{ flex: '1 1 auto'}} /> */}
-                        <Button variant='contained' sx={{ justifySelf: 'center' }} onClick={() => navigate('/')}>Back to homepage</Button>
+                        <Button variant='contained' sx={{ justifySelf: 'center' }} onClick={submitReview}>Submit and back to homepage</Button>
                     </Box>
                 </>
             ) : (
@@ -215,7 +217,7 @@ export default function HorizontalLinearStepper() {
                             </Button>
                         )} */}
                         <Button onClick={handleNext}>
-                            {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
+                            {activeStep === steps.length ? 'Finish' : 'Next'}
                         </Button>
                     </Box>
                 </>

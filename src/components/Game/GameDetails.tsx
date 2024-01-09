@@ -1,11 +1,11 @@
 import { Button, Snackbar } from "@mui/material";
 import { UserAuth } from '../../contexts/AuthContext';
-import { hoursLeft } from "../../util/helperFunctions";
 import { motion } from 'framer-motion'
 import { useSubmit, useParams, useNavigate, useRouteLoaderData } from "react-router-dom";
 import { SnackbarAlert } from '../Alert/Alert';
 import useNotification from '../../hooks/useNotification';
 import { FieldsImage } from "../../util/constants";
+import { isEventOver } from "../../util/helperFunctions";
 import { loaderReturnArgs } from "../../pages/GameDetailsPage";
 import GameImageContainer from "./GameImageContainer";
 import GameDetailsDescription from "./GameDetailsDescription";
@@ -24,7 +24,7 @@ const GameDetails: React.FC = () => {
     const { sportDetails, dbUser } = useRouteLoaderData('game-details') as loaderReturnArgs;
     const { openNotification, closeNotification, actionOption } = useNotification();
 
-    const { timeRemaining, time } = hoursLeft(sportDetails.Time.toDate())
+    const eventFinished = isEventOver(sportDetails.Time.toDate())
 
     const fieldDetails = FieldsImage.find(field => field.location === sportDetails.Location)
 
@@ -48,7 +48,7 @@ const GameDetails: React.FC = () => {
 
     return (
         <>
-            {(sportDetails.Owner === user?.displayName && timeRemaining === "Event over" && remainingSpots === 0 && sportDetails.Completed === false) &&
+            {(sportDetails.Owner === user?.displayName && eventFinished && remainingSpots === 0 && sportDetails.Completed === false) &&
                 <div style={{ display: 'flex', justifyContent: 'center', marginTop: '2em' }} >
                     <motion.div whileHover={{ scale: 1.1 }}>
                         <Button
@@ -61,7 +61,7 @@ const GameDetails: React.FC = () => {
                     </motion.div>
                 </div>
             }
-            {(sportDetails.Owner === user?.displayName && time === 0 && sportDetails.Completed === false) &&
+            {(sportDetails.Owner === user?.displayName && eventFinished && sportDetails.Completed === false) &&
                 <div style={{ display: 'flex', justifyContent: 'center', marginTop: '2em' }} >
                     <motion.div whileHover={{ scale: 1.1 }}>
                         <Button

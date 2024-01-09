@@ -49,5 +49,6 @@ export type CommentsData = {
     user: string,
     comment: string,
     date: Timestamp,
-    image?: string
+    image?: string,
+    owner: profileData;
 }[]

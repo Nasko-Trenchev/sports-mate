@@ -1,6 +1,6 @@
 import classes from './Profile.module.css';
 import { StyledEngineProvider } from '@mui/material/styles';
-import { Button, Rating } from '@mui/material';
+import { Button } from '@mui/material';
 import { useRouteLoaderData, NavLink } from 'react-router-dom';
 import { combinedProfileData } from '../../util/sportTypes';
 import CreateButton from '../CreateButton/CreateButton';
@@ -9,8 +9,6 @@ import CreateButton from '../CreateButton/CreateButton';
 const Profile = () => {
 
     const { image, profile } = useRouteLoaderData('profile-data') as combinedProfileData
-
-    // const ratingValue = Math.round(profile.rating / profile.votes)
 
     const pendingGames = profile.pendingCompletionGames;
 
@@ -34,20 +32,12 @@ const Profile = () => {
                     <div className={classes.ratingSection}>
                         <h2>Your rating:</h2>
                         <div className={classes.ratingFlexContainer}>
-                            {/* <Rating
-                                size='small'
-                                sx={{ alignItems: 'center' }}
-                                precision={1}
-                                readOnly
-                                value={ratingValue}
-                            />
-                            <p>{profile.votes} votes</p> */}
                         </div>
                     </div>
                 </div>
                 <Button variant='contained'><NavLink to={'settings'} className={classes['links']}>Settings</NavLink></Button>
             </div>
-           
+
         </StyledEngineProvider>
     )
 }

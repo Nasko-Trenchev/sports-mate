@@ -74,7 +74,10 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
             for (const comment of latestComments) {
                 let profileImage;
+                const commentOwner = await getDoc(doc(db, `users`, `${comment.user}`))
+                const commentOwnerData = commentOwner.data() as profileData;
                 const image = images.items.find(img => img.name === comment.user)
+
                 if (image) {
                     profileImage = await getDownloadURL(image)
                 }
@@ -82,6 +85,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
                     profileImage = picture
                 }
                 comment.image = profileImage;
+                comment.owner = commentOwnerData;
             }
             return latestComments;
         }
@@ -133,7 +137,7 @@ export async function action({ params, request }: ActionFunctionArgs) {
     try {
         const data = await request.json()
 
-        const { action, sport, id, displayName, user, skill } = data;
+        const { action, sport, id, user, skill, displayName, comment } = data;
 
         const docRef = doc(db, `${sport}`, `${id}`);
 
@@ -152,11 +156,10 @@ export async function action({ params, request }: ActionFunctionArgs) {
         }
         else if (action === 'Submit comment') {
             const eventCommentDocRef = doc(db, `${sport}`, `${id}`, "Comments", `${id}`);
-            const { comment } = data;
 
             await updateDoc(eventCommentDocRef, {
                 comments: arrayUnion({
-                    user: displayName,
+                    user: user,
                     comment,
                     date: Timestamp.now()
                 })

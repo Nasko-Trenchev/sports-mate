@@ -32,7 +32,7 @@ export const hoursLeft = (timeLeft: Date) => {
             timeRemaining: `Time left: ${minutes} ${minutes > 1 ? 'minutes' : 'minute'}`
         }
     }
-    if (minutes < 0) {
+    if (minutes <= 0) {
         return {
             time: 0,
             timeRemaining: `Event over`
@@ -45,9 +45,9 @@ export const hoursLeft = (timeLeft: Date) => {
     }
 }
 
-export const isEventOver = (timeLeft: Date) => {
+export const isEventOver = (dueDate: Date) => {
     const startDate = dayjs();
-    const endDate = dayjs(timeLeft)
+    const endDate = dayjs(dueDate)
     if (startDate < endDate) {
         return true
     }
@@ -135,4 +135,26 @@ export const isPlayerSkillLevelEnought = (user: profileData, eventSkillLevel: st
     }
 
     return false;
+}
+
+export const getPalyerLevelAsString = (votes: number | undefined, rating: number | undefined) => {
+    if (votes === undefined || votes < 5) {
+        return `Not enought votes yet. A minimum of 5 votes are required to confirm that skill. 
+        Received ${votes !== undefined ? votes : "none"} so far.`
+    }
+    let tooltipTitle;
+    switch (rating) {
+        case 5: tooltipTitle = "Professional";
+            break;
+        case 4: tooltipTitle = "Expert";
+            break;
+        case 3: tooltipTitle = "Advanced";
+            break;
+        case 2: tooltipTitle = "Beginner";
+            break;
+        case 1: tooltipTitle = "Novice";
+            break;
+    }
+
+    return `${tooltipTitle} (${votes} votes).`
 }

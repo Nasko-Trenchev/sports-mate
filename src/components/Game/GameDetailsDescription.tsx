@@ -24,9 +24,9 @@ const GameDetailsDescription: React.FC<{ handleEventClick: (e: React.MouseEvent<
 
     const { timeRemaining, time } = hoursLeft(sportDetails.Time.toDate())
     const isSubmiting = navigation.state === 'submitting' || navigation.state === 'loading';
+   
     const fieldDetails = FieldsImage.find(field => field.location === sportDetails.Location)
     const remainingSpots = sportDetails.PlayersCount - sportDetails.Players.length;
-
     const playerEligible = isPlayerSkillLevelEnought(dbUser, sportDetails.SkillLevel, sportDetails.sport)
     const userRating = getUserRating(dbUser).find(entry => entry.sport.toLowerCase() === sportDetails.sport)?.rating;
    
