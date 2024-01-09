@@ -7,6 +7,7 @@ import { action as completeAction } from '../pages/CompleteEventPage';
 import { loader as publicProfileLoader } from '../pages/PublicProfilePage';
 import { loader as registerLoader } from '../pages/RegisterPage';
 import { loader as profileGameLoader } from '../pages/ProfilePastGamesPage'
+import { loader as CreatePageLoader } from '../pages/CreatePage'
 import { privateRouteloader } from './routeGuardLoader';
 import PasswordResetPage from '../pages/PasswordResetPage';
 import RootLayout from '../pages/Root';
@@ -24,6 +25,7 @@ import ProfilePage from '../pages/ProfilePage';
 import Logout from '../pages/LogoutPage';
 import PostDeletePage from '../pages/PostDeletePage';
 import ProfilePastGamesPage from '../pages/ProfilePastGamesPage';
+import HelpSectionPage from '../pages/HelpSectionPage';
 
 const router = createBrowserRouter([
     {
@@ -35,6 +37,7 @@ const router = createBrowserRouter([
             { path: 'login', element: <LoginPage /> },
             { path: 'register', element: <RegisterPage />, loader: registerLoader },
             { path: 'passwordReset', element: <PasswordResetPage /> },
+            { path: 'helpSection', element: <HelpSectionPage /> },
             { path: 'logout', element: <Logout /> },
             {
                 path: 'profile', id: 'profile-data', loader: profileLoader,
@@ -52,7 +55,7 @@ const router = createBrowserRouter([
                     {
                         index: true, element: <EventPage />
                     },
-                    { path: 'create', element: <CreatePage />, action: createAction, loader: privateRouteloader },
+                    { path: 'create', element: <CreatePage />, action: createAction, loader: CreatePageLoader },
                     {
                         path: ':gameId', id: 'game-details', loader: gameDetailsLoader,
                         children: [

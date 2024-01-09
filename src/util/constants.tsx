@@ -1,6 +1,6 @@
 
 export const ImageTypes = ["jpg", "jpeg", "jfif", "pjpeg", "pjp", "png", "webp", "avif", "apng", "gif"];
-export const SkillLevels = ["Novice", "Beginner", "Advanced", "Expert", "Proffesional"]
+export const SkillLevels = ["Novice", "Beginner", "Advanced", "Expert", "Professional"]
 
 export enum SkillLevelCodes {
     Novice = 1,
@@ -92,3 +92,9 @@ export const ratingLabels: { [index: string]: string } = {
     4: 'Expert',
     5: 'Professional',
 };
+
+export const helpRules = [
+    {
+        title: "What is "
+    }
+]

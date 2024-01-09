@@ -2,6 +2,7 @@ import { AppBar, Toolbar, IconButton, Typography, Stack, Button } from "@mui/mat
 import { StyledEngineProvider } from '@mui/material/styles';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { auth } from "../../config/firebase";
+import LiveHelpIcon from '@mui/icons-material/LiveHelp';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import InstagramIcon from '@mui/icons-material/Instagram';
 import SportsSoccerSharpIcon from '@mui/icons-material/SportsSoccerSharp';
@@ -40,8 +41,10 @@ export default function NavigationHeader() {
                     <IconButton size="large" edge='start' color="inherit" aria-label="logo" sx={{ margin: '1px' }}>
                         <FacebookIcon />
                     </IconButton>
-                    <IconButton size="large" edge='start' color="inherit" aria-label="logo" sx={{ margin: '1px' }}>
-                        <InstagramIcon />
+                    <IconButton size="large" edge='start' color="inherit" aria-label="logo" sx={{ margin: '1px' }}
+                        onClick={() => navigate('/helpSection')}
+                    >
+                        <LiveHelpIcon />
                     </IconButton>
                 </Toolbar>
             </AppBar>

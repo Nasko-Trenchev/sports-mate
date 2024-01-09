@@ -29,7 +29,7 @@ const GameDetailsDescription: React.FC<{ handleEventClick: (e: React.MouseEvent<
 
     const playerEligible = isPlayerSkillLevelEnought(dbUser, sportDetails.SkillLevel, sportDetails.sport)
     const userRating = getUserRating(dbUser).find(entry => entry.sport.toLowerCase() === sportDetails.sport)?.rating;
-    console.log(userRating)
+   
     return (
         <div className={classes.description}>
             <h1>{sportDetails.Location}</h1>

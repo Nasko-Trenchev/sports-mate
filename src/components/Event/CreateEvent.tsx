@@ -4,8 +4,9 @@ import { Box, Button, FormHelperText } from '@mui/material'
 import { CreateGame } from '../../util/sportTypes';
 import { FieldsImage } from '../../util/constants';
 import { auth } from '../../config/firebase';
-import { useSubmit, useParams, Form } from "react-router-dom";
+import { useSubmit, useParams, Form, useLoaderData } from "react-router-dom";
 import dayjs from 'dayjs';
+import SkillSelector from '../Selectors/SkillSelector';
 import { SkillLevels } from '../../util/constants'
 import Snackbar from '@mui/material/Snackbar';
 import { SnackbarAlert } from '../Alert/Alert';
@@ -16,8 +17,10 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { MobileDateTimePicker } from '@mui/x-date-pickers/MobileDateTimePicker';
 import { StyledEngineProvider } from '@mui/material/styles'
 import { getField } from '../../util/helperFunctions';
+import { isPlayerSkillLevelEnought } from '../../util/helperFunctions';
 import FieldSelector from '../Selectors/FieldSelector';
 import CountSelector from '../Selectors/CountSelector';
+import { profileData } from '../../pages/ProfilePage';
 
 const date = new Date();
 
@@ -39,6 +42,15 @@ interface ReducerAction {
     type: string;
     payload: any;
 }
+
+type createEventLoaderData = {
+    user: profileData;
+}
+
+export type availableSkills = {
+    skill: string,
+    eligible: boolean;
+}[]
 
 const formReducer = (state: CreateGame, action: ReducerAction) => {
 
@@ -87,12 +99,25 @@ const CreateEvent = () => {
         'dateError': false
     })
 
+    const { user } = useLoaderData() as createEventLoaderData;
     const submit = useSubmit();
     const params = useParams();
 
     const { openNotification, closeNotification, actionOption } = useNotification();
 
     const field = getField(params.sport)
+
+    const avaialbleSkillsToPlayer = SkillLevels.reduce((acc, curr) => {
+
+        if (isPlayerSkillLevelEnought(user, curr, params.sport!)) {
+            acc.push({ skill: curr, eligible: false })
+        }
+        else {
+            acc.push({ skill: curr, eligible: true })
+        }
+
+        return acc;
+    }, [] as availableSkills)
 
     const submitHandler = () => {
 
@@ -137,10 +162,10 @@ const CreateEvent = () => {
             <Box className={classes.createContainer}>
                 <h1>Create {`${params.sport}`} event</h1>
                 <Form className={classes.formContainer}>
-                    <FieldSelector
+                    <SkillSelector
                         id="skill"
                         dispatch={(e) => dispatchFormState({ type: "SKILL", payload: e.target.value })}
-                        fields={SkillLevels}
+                        skills={avaialbleSkillsToPlayer}
                         value={formState.SkillLevel}
                         name='SkillLevel'
                         labelText='Select skill'

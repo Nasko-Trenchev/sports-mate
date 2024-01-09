@@ -129,7 +129,7 @@ export const isPlayerSkillLevelEnought = (user: profileData, eventSkillLevel: st
 
     if (userRating && userRating.votes) {
 
-        if (userRating?.rating >= eventSkill && userRating.votes > 4) {
+        if (userRating?.rating >= eventSkill && userRating.votes >= 5) {
             return true
         }
     }

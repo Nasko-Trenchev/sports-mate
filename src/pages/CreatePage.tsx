@@ -1,10 +1,10 @@
 import CreateEvent from "../components/Event/CreateEvent";
-import { collection, addDoc, arrayUnion, doc, setDoc } from 'firebase/firestore';
-import { ActionFunctionArgs } from "react-router-dom";
+import { collection, addDoc, arrayUnion, doc, setDoc, getDoc } from 'firebase/firestore';
+import { ActionFunctionArgs, LoaderFunctionArgs, redirect } from "react-router-dom";
+import checkAuthentication from "../util/routeGuard";
 import { Timestamp } from "firebase/firestore";
-import { db } from "../config/firebase";
-
-import { redirect } from "react-router-dom";
+import { db, auth } from "../config/firebase";
+import { profileData } from "./ProfilePage";
 
 const CreatePage = () => {
 
@@ -14,6 +14,25 @@ const CreatePage = () => {
 }
 
 export default CreatePage;
+
+export async function loader({ request, params }: LoaderFunctionArgs) {
+
+    const redirecUnAuthenticatedtUser = await checkAuthentication(request);
+
+    if (redirecUnAuthenticatedtUser) {
+        return redirecUnAuthenticatedtUser
+    }
+
+    try {
+        const user = await getDoc(doc(db, `users`, `${auth.currentUser?.displayName!}`))
+        const userData = user.data() as profileData;
+        return { user: userData }
+
+    } catch (error) {
+        console.log(error)
+    }
+
+}
 
 export async function action({ params, request }: ActionFunctionArgs) {
 
