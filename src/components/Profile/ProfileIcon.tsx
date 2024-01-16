@@ -1,14 +1,12 @@
 import { IconButton } from "@mui/material";
+import { onSnapshot, query, where, collection } from "firebase/firestore";
 import Badge from '@mui/material/Badge';
 import { useNavigate } from 'react-router-dom';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { useEffect, useState } from "react";
-import React from "react";
-import { getDoc, doc } from "firebase/firestore";
 import { profileData } from "../../pages/ProfilePage";
 import { auth } from "../../config/firebase";
 import { db } from "../../config/firebase";
-
 
 const ProfileIcon = () => {
 
@@ -16,13 +14,27 @@ const ProfileIcon = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        const getUser = async () => {
-            const user = await getDoc(doc(db, `users`, `${auth.currentUser?.displayName!}`))
-            const userData = user.data() as profileData;
-            const count = userData.pendingCompletionGames.length;
-            setNotification(count)
+        const q = query(collection(db, "users"), where("username", "==", `${auth.currentUser?.displayName}`));
+        const unsubscribe = onSnapshot(q, (snapshot) => {
+            snapshot.docChanges().forEach((change) => {
+                if (change.type === "added") {
+                    const userData = change.doc.data() as profileData;
+                    const count = userData.pendingCompletionGames.length;
+                    setNotification(count)
+                }
+                if (change.type === "modified") {
+                    const userData = change.doc.data() as profileData;
+                    const count = userData.pendingCompletionGames.length;
+                    setNotification(count)
+                }
+            });
+        }, (error) => {
+            console.log(error)
+        })
+
+        return () => {
+            unsubscribe();
         }
-        getUser()
     }, [])
 
     return (
@@ -35,4 +47,4 @@ const ProfileIcon = () => {
     )
 }
 
-export default React.memo(ProfileIcon);
+export default ProfileIcon;

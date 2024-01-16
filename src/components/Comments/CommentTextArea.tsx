@@ -90,7 +90,12 @@ const CommentTextarea = () => {
   return (
     <div className={classes.textAreaContainer}>
       <div className={classes.textAreaBox}>
-        <Textarea value={comment} maxLength={210} onChange={(e) => setComment(e.target.value)} aria-label="empty textarea" placeholder="Type your comment..." />
+        <Textarea
+          value={comment}
+          maxLength={210}
+          onChange={(e) => setComment(e.target.value)}
+          aria-label="empty textarea"
+          placeholder="Type your comment..." />
         <p>{comment.length}/210</p>
       </div>
       <Button

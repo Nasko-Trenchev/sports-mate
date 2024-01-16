@@ -22,7 +22,11 @@ const Comments: React.FC<{ commentsData: CommentsData }> = (props) => {
                     //Index is not suitable for key if we have functionallity for editing comments on later stage
                     <div className={classes.commentContainer} key={index}>
                         <div className={classes.commentProfile}>
-                            <GamePlayers user={entry.owner} date={entry.date.toDate().toDateString()} image={entry.image!} displayName={entry.user} key={index} />
+                            <GamePlayers
+                                user={entry.owner}
+                                date={entry.date.toDate().toDateString()}
+                                image={entry.image!}
+                                displayName={entry.user} key={index} />
                         </div>
                         <div className={classes.commentData}>
                             <div className={classes.comment}>
