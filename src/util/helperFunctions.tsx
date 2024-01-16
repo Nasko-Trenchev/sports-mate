@@ -48,10 +48,11 @@ export const hoursLeft = (timeLeft: Date) => {
 export const isEventOver = (dueDate: Date) => {
     const startDate = dayjs();
     const endDate = dayjs(dueDate)
-    if (startDate < endDate) {
+    const difference = startDate.diff(endDate);
+    if (difference > 0) {
         return true
     }
-    return false
+    return false;
 }
 
 export const getField = (sport: string | undefined) => {

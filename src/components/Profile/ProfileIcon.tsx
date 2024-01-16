@@ -17,12 +17,7 @@ const ProfileIcon = () => {
         const q = query(collection(db, "users"), where("username", "==", `${auth.currentUser?.displayName}`));
         const unsubscribe = onSnapshot(q, (snapshot) => {
             snapshot.docChanges().forEach((change) => {
-                if (change.type === "added") {
-                    const userData = change.doc.data() as profileData;
-                    const count = userData.pendingCompletionGames.length;
-                    setNotification(count)
-                }
-                if (change.type === "modified") {
+                if (change.type === "added" || change.type === "modified") {
                     const userData = change.doc.data() as profileData;
                     const count = userData.pendingCompletionGames.length;
                     setNotification(count)

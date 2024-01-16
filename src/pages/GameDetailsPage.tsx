@@ -5,6 +5,7 @@ import { db, auth } from "../config/firebase";
 import { GameType, CommentsData } from "../util/sportTypes";
 import { ref, getDownloadURL, listAll, list } from 'firebase/storage'
 import { storage } from "../config/firebase";
+import { Actions } from '../util/constants';
 import picture from '../assets/noProfile.webp'
 import { profileData } from "./ProfilePage";
 import { isPlayerSkillLevelEnought } from "../util/helperFunctions";
@@ -141,7 +142,7 @@ export async function action({ params, request }: ActionFunctionArgs) {
 
         const docRef = doc(db, `${sport}`, `${id}`);
 
-        if (action === "Join event") {
+        if (action === Actions.Join) {
             const playerEligible = isPlayerSkillLevelEnought(user, skill, sport)
             if (playerEligible) {
                 await updateDoc(docRef, {
@@ -149,12 +150,12 @@ export async function action({ params, request }: ActionFunctionArgs) {
                 })
             }
         }
-        else if (action === "Leave event") {
+        else if (action === Actions.Leave) {
             await updateDoc(docRef, {
                 Players: arrayRemove(displayName)
             })
         }
-        else if (action === 'Submit comment') {
+        else if (action === Actions.Submit) {
             const eventCommentDocRef = doc(db, `${sport}`, `${id}`, "Comments", `${id}`);
 
             await updateDoc(eventCommentDocRef, {

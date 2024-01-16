@@ -10,6 +10,7 @@ import { isPlayerSkillLevelEnought } from '../../util/helperFunctions';
 import useDialog from '../../hooks/useDialog';
 import { UserAuth } from '../../contexts/AuthContext';
 import AlertDialog from '../Alert/AlertDialog';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
 import Map from "../GoggleMap/GoogleMap";
 
 import classes from './GameDetailsDescription.module.css';
@@ -24,23 +25,26 @@ const GameDetailsDescription: React.FC<{ handleEventClick: (e: React.MouseEvent<
 
     const { timeRemaining, time } = hoursLeft(sportDetails.Time.toDate())
     const isSubmiting = navigation.state === 'submitting' || navigation.state === 'loading';
-   
+
     const fieldDetails = FieldsImage.find(field => field.location === sportDetails.Location)
     const remainingSpots = sportDetails.PlayersCount - sportDetails.Players.length;
     const playerEligible = isPlayerSkillLevelEnought(dbUser, sportDetails.SkillLevel, sportDetails.sport)
     const userRating = getUserRating(dbUser).find(entry => entry.sport.toLowerCase() === sportDetails.sport)?.rating;
-   
+
     return (
         <div className={classes.description}>
             <h1>{sportDetails.Location}</h1>
-            <Tooltip title="Show on Google Maps" placement="top">
-                <motion.p
-                    onClick={() => setShowMap(true)}
-                    className={classes.streetDetails}
-                    whileHover={{ scale: 1.2 }}
-                >{fieldDetails?.street}
-                </motion.p>
-            </Tooltip>
+            <Tooltip title="Show on Google Maps" placement="top" >
+                <div className={classes.addressContainer}>
+                    <LocationOnIcon />
+                    <p
+                        onClick={() => setShowMap(true)}
+                        className={classes.streetDetails}
+                    >
+                        {fieldDetails?.street}
+                    </p>
+                </div>
+            </Tooltip >
             <Modal
                 open={showMap}
                 onClose={() => setShowMap(false)}
@@ -110,7 +114,7 @@ const GameDetailsDescription: React.FC<{ handleEventClick: (e: React.MouseEvent<
                 confirm={(e) => props.handleEventClick(e)}
                 cancel={closeDialog}
             />
-        </div>)
+        </div >)
 }
 
 export default GameDetailsDescription;

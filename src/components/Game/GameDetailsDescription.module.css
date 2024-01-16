@@ -7,9 +7,7 @@
 }
 
 .streetDetails {
-    font-weight: bold;
     font-style: oblique;
-    color: #1976d2;
     cursor: pointer;
 }
 
@@ -42,4 +40,10 @@
 .notEligibleContainer p {
     font-weight: 500;
     color: red;
+}
+
+.addressContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

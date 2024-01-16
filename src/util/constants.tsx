@@ -10,6 +10,13 @@ export enum SkillLevelCodes {
     Proffesional,
 }
 
+export const Actions = {
+    Delete: "Delete event",
+    Leave: "Leave event",
+    Join: "Join event",
+    Submit: "Submit Comment"
+}
+
 export const FootballFields = [
     "Sofia Sport 1",
     "RD Sport",

@@ -214,13 +214,13 @@ const CreateEvent = () => {
             <Snackbar
                 open={actionOption.open}
                 autoHideDuration={3000}
-                onClose={closeNotification.bind(actionOption.color)}
+                onClose={(event) => closeNotification(event, undefined, actionOption.color)}
                 anchorOrigin={{
                     vertical: 'bottom',
                     horizontal: 'center'
                 }}
             >
-                <SnackbarAlert onClose={closeNotification.bind(actionOption.color)} severity={actionOption.color}>
+                <SnackbarAlert onClose={(e) => closeNotification(e, undefined ,actionOption.color)} severity={actionOption.color}>
                     {actionOption.message}
                 </SnackbarAlert>
             </Snackbar>
